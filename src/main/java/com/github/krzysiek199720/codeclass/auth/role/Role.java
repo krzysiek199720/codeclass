@@ -2,13 +2,16 @@ package com.github.krzysiek199720.codeclass.auth.role;
 
 import com.github.krzysiek199720.codeclass.auth.permission.Permission;
 import com.github.krzysiek199720.codeclass.core.core.AbstractModel;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
