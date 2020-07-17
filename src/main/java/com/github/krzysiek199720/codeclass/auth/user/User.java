@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.krzysiek199720.codeclass.auth.role.Role;
 import com.github.krzysiek199720.codeclass.core.core.AbstractModel;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.Length;
@@ -18,6 +19,7 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 
 @Entity
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(schema = "auth", name = "user")
 @SequenceGenerator(schema = "auth", name = "id_generator", sequenceName = "user_seq_id", allocationSize = 1)
 
