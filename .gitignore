@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+# db access
+src/main/resources/application-dbcred.properties
