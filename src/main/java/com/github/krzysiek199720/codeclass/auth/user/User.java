@@ -2,6 +2,7 @@ package com.github.krzysiek199720.codeclass.auth.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.krzysiek199720.codeclass.auth.role.Role;
+import com.github.krzysiek199720.codeclass.core.core.AbstractModel;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -10,7 +11,6 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -23,11 +23,7 @@ import java.time.LocalDateTime;
 
 @SQLDelete(sql = "UPDATE auth.user SET deletedat = now() WHERE id = ?")
 @Where(clause = "deletedat IS NULL")
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_generator")
-    private Long id;
+public class User extends AbstractModel {
 
     @NotEmpty
     @Email
@@ -50,20 +46,6 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    @Column(name = "createdat")
-    protected LocalDateTime createdAt = LocalDateTime.now();
-
-    @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    @Column(name = "modifiedat")
-    protected LocalDateTime modifiedAt = LocalDateTime.now();
-
-    @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    @Column(name = "deletedat")
-    protected LocalDateTime deletedAt;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "roleid", nullable = false)

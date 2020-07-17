@@ -1,7 +1,7 @@
 package com.github.krzysiek199720.codeclass.auth.role;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.krzysiek199720.codeclass.auth.permission.Permission;
+import com.github.krzysiek199720.codeclass.core.core.AbstractModel;
 import lombok.*;
 import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.Length;
@@ -10,7 +10,6 @@ import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
@@ -26,31 +25,12 @@ import java.util.Set;
 
 @SQLDelete(sql = "UPDATE auth.role SET deletedat = now() WHERE id = ?")
 @Where(clause = "deletedat IS NULL")
-public class Role {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_generator")
-    private Long id;
+public class Role extends AbstractModel {
 
     @NotEmpty
     @Length(max = 50)
     @Column(name = "name", nullable = false)
     private String name;
-
-    @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    @Column(name = "createdat")
-    protected LocalDateTime createdAt = LocalDateTime.now();
-
-    @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    @Column(name = "modifiedat")
-    protected LocalDateTime modifiedAt = LocalDateTime.now();
-
-    @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    @Column(name = "deletedat")
-    protected LocalDateTime deletedAt;
 
     //--------------------------------
 
