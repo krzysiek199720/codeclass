@@ -7,8 +7,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Repository
 public class PermissionDAO extends GenericDAO<Permission>{
@@ -26,6 +28,13 @@ public class PermissionDAO extends GenericDAO<Permission>{
         }
 
         return role;
+    }
+
+    public Set<Permission> getAllIn(Set<Long> ids){
+        Query<Permission> query = getCurrentSession().createQuery("from Permission where id in :ids", Permission.class)
+                .setParameterList("ids", ids);
+
+        return new HashSet<>(query.getResultList());
     }
 
     //--------

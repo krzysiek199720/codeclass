@@ -13,7 +13,7 @@ public class MainExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleException(Exception exc){
 
-        ErrorResponse response = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, exc.getMessage());
+        ErrorResponse response = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "internal_server_error");
 
         return new ResponseEntity<>(response, response.getStatus());
     }
