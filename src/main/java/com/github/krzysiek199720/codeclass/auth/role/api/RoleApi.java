@@ -1,15 +1,15 @@
-package com.github.krzysiek199720.codeclass.auth.role;
+package com.github.krzysiek199720.codeclass.auth.role.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import java.util.Set;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoleNameDTO {
-    private Long id;
+public class RoleApi {
     private String name;
+    private Set<Long> permissions;
 }

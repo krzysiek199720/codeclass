@@ -34,6 +34,6 @@ public class PermissionServiceImpl implements PermissionService{
 
     @Transactional
     public List<Permission> getAll(){
-        return permissionDAO.getAll();
+        return (List<Permission>) permissionDAO.getAll();
     }
 }
