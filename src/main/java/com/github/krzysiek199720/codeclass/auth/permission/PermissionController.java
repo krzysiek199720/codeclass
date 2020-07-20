@@ -34,7 +34,7 @@ public class PermissionController extends AbstractController {
             @ApiResponse(code = 401, message = "auth.unauthorized", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class),
     })
-    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false
+    @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @GetMapping("/")
     @Secure("auth.permission.get")

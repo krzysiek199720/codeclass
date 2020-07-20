@@ -5,7 +5,6 @@ import com.github.krzysiek199720.codeclass.auth.accesstoken.AccessTokenService;
 import com.github.krzysiek199720.codeclass.auth.permission.Permission;
 import com.github.krzysiek199720.codeclass.auth.permission.PermissionService;
 import com.github.krzysiek199720.codeclass.auth.role.Role;
-import com.github.krzysiek199720.codeclass.core.exceptions.exception.NotFoundException;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.SessionExpiredException;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +53,19 @@ public class SecurityService {
     @Transactional
     public boolean checkPermission(String token, String perm){
         AccessToken at = accessTokenService.getAccesstokenByToken(token);
+        //only authentication required
+        if(perm.isEmpty())
+            return true;
+
+        Permission permission = permissionService.getByValue(perm);
+
+        Role role = at.getUser().getRole();
+
+        return role.getPermissions().contains(permission);
+    }
+
+    @Transactional
+    public boolean checkPermission(AccessToken at, String perm){
         //only authentication required
         if(perm.isEmpty())
             return true;

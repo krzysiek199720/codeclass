@@ -36,7 +36,7 @@ public class AccessTokenController extends AbstractController {
             @ApiResponse(code = 204, message = "NO_CONTENT"),
             @ApiResponse(code = 404, message = "auth.token.notfound", response = ErrorResponse.class)
     })
-    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false
+    @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     @GetMapping("/logout")
     public ResponseEntity<Object> logOut(@RequestHeader(value = "Authorization") String token){
@@ -49,7 +49,7 @@ public class AccessTokenController extends AbstractController {
             @ApiResponse(code = 204, message = "NO_CONTENT"),
             @ApiResponse(code = 404, message = "auth.token.notfound", response = ErrorResponse.class)
     })
-    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false
+    @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     @GetMapping("/logout/all")
     public ResponseEntity<Object> logOutAll(@RequestHeader(value = "Authorization") String token){

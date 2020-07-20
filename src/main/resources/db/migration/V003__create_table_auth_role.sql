@@ -20,3 +20,6 @@ ALTER TABLE "auth"."role" ADD CONSTRAINT "role_id_pk" PRIMARY KEY (id);
 CREATE UNIQUE INDEX auth_role_iq_unique
   ON "auth"."role" (id);
 
+CREATE OR REPLACE FUNCTION defaultRole() RETURNS BIGINT LANGUAGE SQL AS
+$$ SELECT id FROM auth.role WHERE name like 'user'; $$;
+

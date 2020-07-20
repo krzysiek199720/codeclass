@@ -2,6 +2,7 @@ package com.github.krzysiek199720.codeclass.auth.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.krzysiek199720.codeclass.auth.role.Role;
+import com.github.krzysiek199720.codeclass.auth.user.response.UserResponse;
 import com.github.krzysiek199720.codeclass.core.core.AbstractModel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -55,4 +56,16 @@ public class User extends AbstractModel {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "roleid", nullable = false)
     private Role role;
+
+
+    public UserResponse toUserResponse(){
+        return new UserResponse(
+                this.id,
+                this.email,
+                this.firstname,
+                this.lastname,
+                this.role.getId(),
+                this.role.getName()
+        );
+    }
 }
