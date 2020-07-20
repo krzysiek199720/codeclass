@@ -1,5 +1,6 @@
 package com.github.krzysiek199720.codeclass.auth.permission;
 
+import com.github.krzysiek199720.codeclass.auth.security.annotation.Secure;
 import com.github.krzysiek199720.codeclass.core.controller.AbstractController;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
 import io.swagger.annotations.ApiImplicitParam;
@@ -28,13 +29,15 @@ public class PermissionController extends AbstractController {
     @ApiOperation(value = "GetAllPermissions", notes = "Get all permissions")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = Permission.class, responseContainer = "List"),
+
+            @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "auth.unauthorized", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class),
-            @ApiResponse(code = 401, message = "auth.unauthorized", response = ErrorResponse.class)
     })
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @GetMapping("/")
-//    @Secure("auth.permission.get")
+    @Secure("auth.permission.get")
     public ResponseEntity<List<Permission>> getAllPermissions(){
         return okResponse(permissionService.getAll());
     }
