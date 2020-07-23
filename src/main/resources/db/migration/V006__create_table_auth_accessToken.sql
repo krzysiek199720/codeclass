@@ -10,7 +10,6 @@ CREATE TABLE "auth"."accesstoken"
     ,"lastaccess"     TIMESTAMP WITH TIME ZONE    NOT NULL    DEFAULT now()
     ,"expires"        TIMESTAMP WITH TIME ZONE    NOT NULL    DEFAULT (now() + INTERVAL '3 days')
 
-    ,UNIQUE(userid)
     ,UNIQUE(token)
 );
 

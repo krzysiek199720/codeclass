@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.krzysiek199720.codeclass.auth.user.User;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.Future;
@@ -23,7 +24,9 @@ public class AccessToken {
     @Setter(AccessLevel.NONE)
 
     @Id
-    @Column(name="token", columnDefinition = "UUID")
+    @Column(name="token")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Type(type="com.github.krzysiek199720.codeclass.core.config.PostgresTokenUUIDType")
     private UUID token;
 
     @Column(name = "createdat")

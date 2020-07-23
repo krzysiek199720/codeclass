@@ -3,10 +3,7 @@ package com.github.krzysiek199720.codeclass.auth.permission;
 import com.github.krzysiek199720.codeclass.auth.security.annotation.Secure;
 import com.github.krzysiek199720.codeclass.core.controller.AbstractController;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+@Api(tags={"Permission"})
 
 @RestController
 @RequestMapping("/auth/permissions")

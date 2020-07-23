@@ -12,16 +12,15 @@ import com.github.krzysiek199720.codeclass.core.controller.AbstractController;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.SessionExpiredException;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.UnauthorizedException;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+@Api(tags={"User"})
 
 @RestController
 @RequestMapping("/user")

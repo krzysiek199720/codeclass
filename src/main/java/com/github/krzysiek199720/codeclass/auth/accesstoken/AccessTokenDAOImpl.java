@@ -17,7 +17,7 @@ public class AccessTokenDAOImpl extends GenericDAO<AccessToken> implements Acces
 
 
     public AccessToken findByToken(String token){
-        Query<AccessToken> query = getCurrentSession().createQuery("from AccessToken where token LIKE :token", AccessToken.class);
+        Query<AccessToken> query = getCurrentSession().createQuery("from AccessToken where token = :token", AccessToken.class);
         query.setParameter("token", UUID.fromString(token));
 
         AccessToken accessToken;

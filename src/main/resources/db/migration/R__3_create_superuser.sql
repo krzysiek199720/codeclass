@@ -3,7 +3,7 @@ VALUES (
         'superuser@superuser.superuser'
         ,'superuser'
         ,'superuser'
-        , '$2a$10$F4S3nhkxKnyL.DICBrEWj.67dEw3ZuXFldhZ.ONvA65CllfwsMh7C' --> 'superuser'
+        , '$2a$10$8i0btZTdgL7/1FNx7fm2FemZfWfso.h.wjfm9UohlyoNSs1XvOFfS' --> 'superuser'
         , (SELECT "id" FROM "auth"."role" WHERE "name" LIKE 'superuser')
         ) ON CONFLICT DO NOTHING;
 

@@ -4,13 +4,12 @@ import com.github.krzysiek199720.codeclass.auth.accesstoken.api.LogInApi;
 import com.github.krzysiek199720.codeclass.auth.accesstoken.response.LogInResponse;
 import com.github.krzysiek199720.codeclass.core.controller.AbstractController;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+@Api(tags={"Authentication"})
 
 @RestController
 @RequestMapping("/auth")
@@ -37,7 +36,7 @@ public class AccessTokenController extends AbstractController {
             @ApiResponse(code = 404, message = "auth.token.notfound", response = ErrorResponse.class)
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
-            , paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
+            , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @GetMapping("/logout")
     public ResponseEntity<Object> logOut(@RequestHeader(value = "Authorization") String token){
         accessTokenService.logOut(token);
@@ -50,7 +49,7 @@ public class AccessTokenController extends AbstractController {
             @ApiResponse(code = 404, message = "auth.token.notfound", response = ErrorResponse.class)
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
-            , paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
+            , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @GetMapping("/logout/all")
     public ResponseEntity<Object> logOutAll(@RequestHeader(value = "Authorization") String token){
         accessTokenService.logOutAll(token);
