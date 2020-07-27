@@ -1,1 +1,0 @@
-INSERT INTO auth.role ("name") VALUES ('user') ON CONFLICT DO NOTHING;

@@ -2,12 +2,14 @@ package com.github.krzysiek199720.codeclass.core.exceptions.handler;
 
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.NotFoundException;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
+@Order
 public class MainExceptionHandler {
 
     @ExceptionHandler

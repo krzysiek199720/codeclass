@@ -19,3 +19,9 @@ INSERT INTO "auth"."permission" ("group", "name", "value")
          ,('user', 'delete_user', 'user.delete')
          ,('user', 'update_role_user', 'user.role.update')
         ;
+
+-- create superrole
+INSERT INTO auth.permission2role (roleid, permissionid)
+SELECT ro.id, pe.id FROM
+    auth.permission pe INNER JOIN auth.role ro ON 1=1
+WHERE ro.name LIKE 'superuser';

@@ -29,6 +29,10 @@ public class RoleDAOImpl extends GenericDAO<Role> implements RoleDAO{
         return role;
     }
 
+    public Role getDefaultRole() {
+        return (Role) getCurrentSession().createQuery("from Role where id = defaultRole()").getSingleResult();
+    }
+
     public List<RoleNameDTO> findAllNames(){
         Query<RoleNameDTO> query = getCurrentSession()
                 .createQuery("select new com.github.krzysiek199720.codeclass.auth.role.RoleNameDTO(id, name) from Role order by id", RoleNameDTO.class);

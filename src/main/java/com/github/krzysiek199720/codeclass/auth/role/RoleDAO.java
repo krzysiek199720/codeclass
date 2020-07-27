@@ -9,5 +9,7 @@ public interface RoleDAO extends DAO<Role>{
 
     public Role findByName(String name);
 
+    public Role getDefaultRole();
+
     public List<RoleNameDTO> findAllNames();
 }

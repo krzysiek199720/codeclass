@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService{
             throw new EmailTakenException();
 
         user.setId(null);
-        user.setRole(null);
+        user.setRole(roleDAO.getDefaultRole());
         user.setEmail(api.getEmail());
         user.setFirstname(api.getFirstName());
         user.setLastname(api.getLastName());

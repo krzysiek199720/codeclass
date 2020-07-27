@@ -36,7 +36,7 @@ public class PermissionController extends AbstractController {
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @GetMapping("/")
-    @Secure("auth.permission.get")
+    @Secure("permission.get")
     public ResponseEntity<List<Permission>> getAllPermissions(){
         return okResponse(permissionService.getAll());
     }
