@@ -43,7 +43,7 @@ public class Role extends AbstractModel {
             ,inverseJoinColumns = @JoinColumn(name = "permissionid"))
     @WhereJoinTable(clause = "deletedat IS NULL")
     @SQLDelete(sql = "UPDATE auth.permission2role SET deletedat = now() WHERE id = ?")
-    @SQLDeleteAll(sql = "UPDATE auth.permission2role SET deletedat = now() WHERE roleid IN ?")
+    @SQLDeleteAll(sql = "UPDATE auth.permission2role SET deletedat = now() WHERE roleid = ?")
 
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Permission> permissions;

@@ -22,8 +22,8 @@ CREATE UNIQUE INDEX auth_role_iq_unique
 
 --
 
-INSERT INTO auth.role ("id", "name") VALUES (1, 'superuser') ON CONFLICT DO NOTHING;
-INSERT INTO auth.role ("id", "name") VALUES (2, 'user') ON CONFLICT DO NOTHING;
+INSERT INTO auth.role ("id", "name") VALUES (nextval('auth.role_seq_id'), 'superuser') ON CONFLICT DO NOTHING;
+INSERT INTO auth.role ("id", "name") VALUES (nextval('auth.role_seq_id'), 'user') ON CONFLICT DO NOTHING;
 
 CREATE OR REPLACE FUNCTION defaultRole() RETURNS BIGINT LANGUAGE SQL AS
 $$ SELECT id FROM auth.role WHERE name like 'user' AND id = 2; $$;

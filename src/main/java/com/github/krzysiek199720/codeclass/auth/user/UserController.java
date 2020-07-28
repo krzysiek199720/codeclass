@@ -192,7 +192,7 @@ public class UserController extends AbstractController {
             throw new SessionExpiredException();
 
         if(!at.getUser().getId().equals(userId))
-            if(!securityService.checkPermission(at, "auth.user.delete"))
+            if(!securityService.checkPermission(at, "user.delete"))
                 throw new UnauthorizedException("auth.unauthorized");
 
         userService.delete(userId);
