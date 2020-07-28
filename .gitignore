@@ -35,3 +35,6 @@ build/
 
 # db access
 src/main/resources/application-dbcred.properties
+
+# LOGS
+/logs/
