@@ -1,6 +1,7 @@
 package com.github.krzysiek199720.codeclass.course.coursedata;
 
 import com.github.krzysiek199720.codeclass.course.course.coursedata.parser.CourseDataParser;
+import com.github.krzysiek199720.codeclass.course.course.coursedata.parser.ParserState;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,7 +31,8 @@ public class CourseDataParserTests {
                 "</code>\n" +
                 "Just want to say thank you.\n";
 
-
+        parser.parse(testCase);
+        Assert.state(parser.getState() != ParserState.ERROR, "Parser should end with success");
     }
 
 
@@ -38,6 +40,7 @@ public class CourseDataParserTests {
     void parserWorksAllElementsMinified(@Autowired CourseDataParser parser) {
         String testCase = "Here is where the text could be inserted.<code><line>Here is where magic happens.<element desc=\"Description of magic\">Magic is awesome!</element></line><line><element desc=\"Description one\">One.text<element desc=\"Description one.one\">One.one.text</element></element></line></code>Just want to say thank you.";
 
-
+        parser.parse(testCase);
+        Assert.state(parser.getState() != ParserState.ERROR, "Parser should end with success");
     }
 }
