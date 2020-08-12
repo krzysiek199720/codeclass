@@ -110,12 +110,29 @@ public class CourseDataParser {
                     state = ParserState.ERROR;
                     break;
                 }
-                if(!sb.toString().equals("line")){
-                    state = ParserState.ERROR;
-                    break;
-                }
 
-                indexBuffer.addElement(startingPosition, data.getPosition()-startingPosition+1, isEnding ? ElementType.LINE_END : ElementType.LINE);
+                // indent on line - thought to use \t but i think its prone to user errors, so i think its better to manually indent lines
+                if(isEnding){
+                    if(!sb.toString().equals("line")){
+                        state = ParserState.ERROR;
+                        break;
+                    }
+                    indexBuffer.addElement(startingPosition, data.getPosition()-startingPosition+1, ElementType.LINE_END);
+                }else{
+                    if(!sb.toString().startsWith("line")){
+                        state = ParserState.ERROR;
+                        break;
+                    }
+                    // check if there is a description
+                    int indIndex = sb.toString().indexOf("indent=");
+
+                    if(indIndex < 0)
+                        indexBuffer.addElement(startingPosition, data.getPosition()-startingPosition+1, ElementType.LINE);
+                    else{
+                        indexBuffer.addElement(startingPosition, startingPosition+indIndex-1, ElementType.LINE);
+                        indexBuffer.addElement(startingPosition+indIndex+8, data.getPosition()-startingPosition-2, ElementType.LINE_INDENT);
+                    }
+                }
 
                 break;
             }
@@ -153,7 +170,7 @@ public class CourseDataParser {
                         indexBuffer.addElement(startingPosition, data.getPosition()-startingPosition+1, ElementType.ELEMENT);
                     else{
                         indexBuffer.addElement(startingPosition, startingPosition+descIndex-1, ElementType.ELEMENT);
-                        indexBuffer.addElement(startingPosition+descIndex+5, data.getPosition()-startingPosition-1, ElementType.ELEMENT_DESCRIPTION);
+                        indexBuffer.addElement(startingPosition+descIndex+6, data.getPosition()-startingPosition-2, ElementType.ELEMENT_DESCRIPTION);
                     }
 
                 }
@@ -162,17 +179,28 @@ public class CourseDataParser {
             default: state = ParserState.ERROR;
         }
 
+        if(state != ParserState.ERROR)
+            data.next();
+
     }
 
     private void parseString(){
         int startingPosition = data.getPosition();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(data.get());
 
         char c;
         while(data.hasNext()){
             c = data.next();
             if(c == '<')
                 break;
+            sb.append(c);
         }
+
+        if(sb.toString().trim().equals(""))
+            return;
+
         indexBuffer.addElement(startingPosition, data.getPosition()-startingPosition, ElementType.TEXT);
     }
 

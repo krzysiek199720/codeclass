@@ -6,6 +6,7 @@ public enum ElementType {
     CODE,
     CODE_END,
     LINE,
+    LINE_INDENT,
     LINE_END,
     ELEMENT,
     ELEMENT_DESCRIPTION,

@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class CourseDataLine {
     private Integer order;
+    private Integer indent;
     private CourseData courseData;
 
     private List<CourseDataElement> courseDataElementList;
