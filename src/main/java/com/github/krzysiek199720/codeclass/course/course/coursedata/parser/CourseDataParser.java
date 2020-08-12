@@ -34,15 +34,6 @@ public class CourseDataParser {
 
     private boolean hasChanged = true;
 
-    public void tmpTest(){
-        for(Index index : indexBuffer.indexes){
-            System.out.println(index.type
-                    + ": " +
-                    new String(data.getData()).substring(index.position, index.position + index.length)
-                    + "\n");
-        }
-    }
-
     public void parse(String data){
         this.data = new CourseDataCharBuffer(data);
         hasChanged = true;
@@ -251,7 +242,7 @@ public class CourseDataParser {
             while(true){
                 next = getNextCourseData();
                 //if error in getting result
-                if( !(resultState == ParserResultState.SUCCESS || resultState == ParserResultState.UNKNOWN))
+                if( !(resultState == ParserResultState.UNKNOWN))
                     return null;
 
                 if(next == null)
@@ -260,6 +251,7 @@ public class CourseDataParser {
                 results.add(next);
             }
             finalResult = results;
+            resultState = ParserResultState.SUCCESS;
         }
 
         return finalResult;
@@ -267,6 +259,9 @@ public class CourseDataParser {
 
     private CourseData getNextCourseData(){
         CourseData result = null;
+
+        if(resultIndex >= indexBuffer.indexes.size())
+            return null;
 
         // check if code or text
         if(indexBuffer.indexes.get(resultIndex).type == ElementType.CODE){
@@ -290,11 +285,6 @@ public class CourseDataParser {
                     if(index.type == ElementType.LINE || index.type == ElementType.CODE_END){
                         resultState = ParserResultState.ERROR_UNEXPECTED_TAG;
                         return null;
-                    }
-                    if(index.type == ElementType.LINE_END){
-                        //end line
-                        isLineStarted = false;
-                        continue;
                     }
 
 //                     line elements loop
@@ -338,7 +328,7 @@ public class CourseDataParser {
                             if(nextIndex.type == ElementType.ELEMENT_DESCRIPTION){
 //                                desc
                                 element.setDescription(
-                                        new String(data.getData(), nextIndex.position, nextIndex.position + nextIndex.length)
+                                        new String(data.getData(), nextIndex.position, nextIndex.length)
                                 );
                             } else{
                                 element.setDescription(null);
@@ -356,7 +346,7 @@ public class CourseDataParser {
                             if(nextIndex.type == ElementType.TEXT){
 //                                element data
                                 element.setData(
-                                        new String(data.getData(), nextIndex.position, nextIndex.position + nextIndex.length)
+                                        new String(data.getData(), nextIndex.position, nextIndex.length)
                                 );
                             } else{
 //                              missing element data
@@ -364,21 +354,25 @@ public class CourseDataParser {
                                 return null;
                             }
 
-                        }else if(index.type == ElementType.ELEMENT_END){
+                        }else if(indexElement.type == ElementType.ELEMENT_END){
 //                                end element
                             --depth;
                             ++resultIndex;
                             continue;
-                        } else if(index.type == ElementType.TEXT){
+                        } else if(indexElement.type == ElementType.TEXT){
                             element = new CourseDataElement();
                             element.setCourseDataLine(line);
                             element.setDepth(depth);
                             element.setDescription(null);
                             element.setOrder(elements.size());
                             element.setData(
-                                    new String(data.getData(), indexElement.position, indexElement.position + indexElement.length)
+                                    new String(data.getData(), indexElement.position, indexElement.length)
                             );
-                        } else{
+                        } else if(indexElement.type == ElementType.LINE_END){
+                            //end line
+                            isLineStarted = false;
+                            break;
+                        }else{
                             resultState = ParserResultState.ERROR_UNEXPECTED_TAG;
                             return null;
                         }
@@ -386,6 +380,7 @@ public class CourseDataParser {
                         ++resultIndex;
                         elements.add(element);
                     }
+                    line.getCourseDataElementList().addAll(elements);
 
 
                 }else{ // isLineStarted == false
@@ -393,6 +388,12 @@ public class CourseDataParser {
                         resultState = ParserResultState.ERROR_UNEXPECTED_TAG;
                         return null;
                     }
+                    if(index.type == ElementType.CODE_END){
+                        result.getCourseDataLineList().addAll(lines);
+                        ++resultIndex;
+                        return result;
+                    }
+
                     if(index.type == ElementType.LINE){
                         //make new line
                         CourseDataLine line = new CourseDataLine();
@@ -405,9 +406,9 @@ public class CourseDataParser {
                             if(indexBuffer.indexes.get(resultIndex+1).type == ElementType.LINE_INDENT){
                                 ++resultIndex;
                                 Index indexIndent = indexBuffer.indexes.get(resultIndex);
-                                String tmp = new String(data.getData(), indexIndent.position, indexIndent.position+index.length);
+                                String tmp = new String(data.getData(), indexIndent.position, indexIndent.length);
                                 Integer indent = Integer.parseInt(
-                                        new String(data.getData(), indexIndent.position, indexIndent.position+indexIndent.length)
+                                        new String(data.getData(), indexIndent.position, indexIndent.length)
                                 );
                                 line.setIndent(indent);
                             }
@@ -427,9 +428,6 @@ public class CourseDataParser {
 
 
             }
-            // add lines to result
-            result.getCourseDataLineList().addAll(lines);
-
         } else if(indexBuffer.indexes.get(resultIndex).type == ElementType.TEXT){
             //make a text CourseData
             result = new CourseData();
@@ -440,7 +438,7 @@ public class CourseDataParser {
             CourseDataElement element = new CourseDataElement(
                     0,
                     0,
-                    new String(data.getData(), index.position,index.position + index.length),
+                    new String(data.getData(), index.position, index.length),
                     null,
                     line
             );
@@ -453,6 +451,7 @@ public class CourseDataParser {
             ++resultIndex;
         }else{
             resultState = ParserResultState.ERROR_UNEXPECTED_TAG;
+            return null;
         }
 
         return result;

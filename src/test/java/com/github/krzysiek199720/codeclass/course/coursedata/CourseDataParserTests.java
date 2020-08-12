@@ -36,12 +36,11 @@ public class CourseDataParserTests {
                           "Just want to say thank you. ";
 
         parser.parse(testCase);
-        parser.tmpTest();
-//        Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
-//
-//        List<CourseData> cd = parser.getResults();
-//        Assert.state(parser.getResultState() == ParserResultState.SUCCESS, "Parser result should end with success");
-//        Assert.notNull(cd,"Parser results should not be null");
-//        Assert.notEmpty(cd, "Parser results should not be empty");
+        Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
+
+        List<CourseData> cd = parser.getResults();
+        Assert.state(parser.getResultState() == ParserResultState.SUCCESS, "Parser result should end with success");
+        Assert.notNull(cd,"Parser results should not be null");
+        Assert.notEmpty(cd, "Parser results should not be empty");
     }
 }
