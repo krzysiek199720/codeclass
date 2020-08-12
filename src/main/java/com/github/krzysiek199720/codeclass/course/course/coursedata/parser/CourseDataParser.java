@@ -161,12 +161,10 @@ public class CourseDataParser {
                     // check if there is a description
                     int indIndex = sb.toString().indexOf("indent=");
 
-                    if(indIndex < 0)
-                        indexBuffer.addElement(startingPosition, data.getPosition()-startingPosition+1, ElementType.LINE);
-                    else{
-                        indexBuffer.addElement(startingPosition, startingPosition+indIndex-1, ElementType.LINE);
-                        indexBuffer.addElement(startingPosition+indIndex+8, data.getPosition()-startingPosition-2, ElementType.LINE_INDENT);
-                    }
+                    indexBuffer.addElement(startingPosition, data.getPosition()-startingPosition+1, ElementType.LINE);
+                    if(indIndex >= 0)
+                        indexBuffer.addElement(startingPosition+indIndex+9, data.getPosition()-(startingPosition+indIndex+9)-1, ElementType.LINE_INDENT);
+
                 }
 
                 break;
@@ -201,12 +199,9 @@ public class CourseDataParser {
                     int descIndex = sb.toString().indexOf("desc=");
 
                     //no description
-                    if(descIndex < 0)
-                        indexBuffer.addElement(startingPosition, data.getPosition()-startingPosition+1, ElementType.ELEMENT);
-                    else{
-                        indexBuffer.addElement(startingPosition, startingPosition+descIndex-1, ElementType.ELEMENT);
-                        indexBuffer.addElement(startingPosition+descIndex+6, data.getPosition()-startingPosition-2, ElementType.ELEMENT_DESCRIPTION);
-                    }
+                    indexBuffer.addElement(startingPosition, data.getPosition()-startingPosition+1, ElementType.ELEMENT);
+                    if(descIndex >= 0)
+                        indexBuffer.addElement(startingPosition+descIndex+7, data.getPosition()-(startingPosition+descIndex+8), ElementType.ELEMENT_DESCRIPTION);
 
                 }
                 break;
