@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Getter
@@ -13,5 +15,5 @@ public class CourseData {
     private CourseDataType type;
     private Integer order;
 
-    private List<CourseDataLine> courseDataLineList;
+    private List<CourseDataLine> courseDataLineList = new LinkedList<>();
 }

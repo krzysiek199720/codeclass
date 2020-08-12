@@ -1,5 +1,6 @@
 package com.github.krzysiek199720.codeclass.course.course.coursedata;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class CourseDataElement {
     private Integer order;
     private Integer depth;

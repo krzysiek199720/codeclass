@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -15,5 +16,5 @@ public class CourseDataLine {
     private Integer indent;
     private CourseData courseData;
 
-    private List<CourseDataElement> courseDataElementList;
+    private List<CourseDataElement> courseDataElementList = new ArrayList<>();
 }
