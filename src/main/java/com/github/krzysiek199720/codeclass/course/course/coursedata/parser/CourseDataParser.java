@@ -8,10 +8,7 @@ import lombok.Getter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Component
 @Scope("prototype")
@@ -257,6 +254,7 @@ public class CourseDataParser {
         return finalResult;
     }
 
+//    Too messy, should rewrite
     private CourseData getNextCourseData(){
         CourseData result = null;
 
@@ -273,6 +271,11 @@ public class CourseDataParser {
             boolean isLineStarted = false;
             ++resultIndex;
 
+            if(!(resultIndex < indexBuffer.indexes.size())){
+                resultState = ParserResultState.ERROR_MISSING_CODE_END;
+                return null;
+            }
+
             for(;resultIndex < indexBuffer.indexes.size(); ++resultIndex){
                 Index index = indexBuffer.indexes.get(resultIndex);
 
@@ -282,8 +285,12 @@ public class CourseDataParser {
                 }
 
                 if(isLineStarted){
-                    if(index.type == ElementType.LINE || index.type == ElementType.CODE_END){
+                    if(index.type == ElementType.LINE){
                         resultState = ParserResultState.ERROR_UNEXPECTED_TAG;
+                        return null;
+                    }
+                    if(index.type == ElementType.CODE_END){
+                        resultState = ParserResultState.ERROR_MISSING_LINE_END;
                         return null;
                     }
 
@@ -291,6 +298,8 @@ public class CourseDataParser {
                     LinkedList<CourseDataElement> elements = new LinkedList<>();
                     CourseDataLine line = lines.getLast();
                     int depth = 0;
+                    Map<Integer, Boolean> isElementOpened = new HashMap<>();
+                    isElementOpened.put(0, false);
                     while(true){
                         Index indexElement;
                         try{
@@ -308,11 +317,15 @@ public class CourseDataParser {
                         if(indexElement.type == ElementType.ELEMENT){
 //                                start new element
 //                                check for description
+
                             element = new CourseDataElement();
                             element.setCourseDataLine(line);
                             ++depth;
                             element.setDepth(depth);
                             element.setOrder(elements.size());
+
+                            isElementOpened.put(depth, true);
+
 
 //                                check for description
                             Index nextIndex = null;
@@ -330,17 +343,16 @@ public class CourseDataParser {
                                 element.setDescription(
                                         new String(data.getData(), nextIndex.position, nextIndex.length)
                                 );
+                                try{
+                                    nextIndex = indexBuffer.indexes.get(resultIndex+1);
+                                    ++resultIndex;
+                                }catch (IndexOutOfBoundsException exception){
+                                    resultState = ParserResultState.ERROR_MISSING_ELEMENT_DATA;
+
+                                    return null;
+                                }
                             } else{
                                 element.setDescription(null);
-                            }
-
-                            try{
-                                nextIndex = indexBuffer.indexes.get(resultIndex+1);
-                                ++resultIndex;
-                            }catch (IndexOutOfBoundsException exception){
-                                resultState = ParserResultState.ERROR_MISSING_ELEMENT_DATA;
-
-                                return null;
                             }
 
                             if(nextIndex.type == ElementType.TEXT){
@@ -348,14 +360,17 @@ public class CourseDataParser {
                                 element.setData(
                                         new String(data.getData(), nextIndex.position, nextIndex.length)
                                 );
-                            } else{
-//                              missing element data
+                            }else if(nextIndex.type == ElementType.LINE_END) {
+                                resultState = ParserResultState.ERROR_MISSING_ELEMENT_END;
+                                return null;
+                            } else {
                                 resultState = ParserResultState.ERROR_MISSING_ELEMENT_DATA;
                                 return null;
                             }
 
                         }else if(indexElement.type == ElementType.ELEMENT_END){
 //                                end element
+                            isElementOpened.put(depth,false);
                             --depth;
                             ++resultIndex;
                             continue;
@@ -370,12 +385,18 @@ public class CourseDataParser {
                             );
                         } else if(indexElement.type == ElementType.LINE_END){
                             //end line
+                            if(isElementOpened.get(depth)){
+                                resultState = ParserResultState.ERROR_MISSING_ELEMENT_END;
+                                return null;
+                            }
                             isLineStarted = false;
                             break;
                         }else{
                             resultState = ParserResultState.ERROR_UNEXPECTED_TAG;
                             return null;
                         }
+
+
 
                         ++resultIndex;
                         elements.add(element);
@@ -388,6 +409,14 @@ public class CourseDataParser {
                         resultState = ParserResultState.ERROR_UNEXPECTED_TAG;
                         return null;
                     }
+                    if(index.type == ElementType.ELEMENT
+                            || index.type == ElementType.ELEMENT_DESCRIPTION
+                            || index.type == ElementType.ELEMENT_END)
+                    {
+                        resultState = ParserResultState.ERROR_UNEXPECTED_TAG;
+                        return null;
+                    }
+
                     if(index.type == ElementType.CODE_END){
                         result.getCourseDataLineList().addAll(lines);
                         ++resultIndex;
@@ -406,7 +435,6 @@ public class CourseDataParser {
                             if(indexBuffer.indexes.get(resultIndex+1).type == ElementType.LINE_INDENT){
                                 ++resultIndex;
                                 Index indexIndent = indexBuffer.indexes.get(resultIndex);
-                                String tmp = new String(data.getData(), indexIndent.position, indexIndent.length);
                                 Integer indent = Integer.parseInt(
                                         new String(data.getData(), indexIndent.position, indexIndent.length)
                                 );
