@@ -164,4 +164,68 @@ public class CourseDataParserTests {
         Assert.state(parser.getResultState() == ParserResultState.ERROR_MISSING_ELEMENT_DATA, "Element should have data at front");
         Assert.isNull(cd,"Parser results should be null on error");
     }
+
+    @Test
+    void parserEmptyData(@Autowired CourseDataParser parser) {
+        String testCase = "";
+        parser.parse(testCase);
+        Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
+
+        List<CourseData> cd = parser.getResults();
+        Assert.state(parser.getResultState() == ParserResultState.ERROR_NO_DATA, "Data should not be empty");
+        Assert.isNull(cd,"Parser results should be null on error");
+    }
+
+    @Test
+    void parserBlankData(@Autowired CourseDataParser parser) {
+        String testCase = "                           ";
+        parser.parse(testCase);
+        Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
+
+        List<CourseData> cd = parser.getResults();
+        Assert.state(parser.getResultState() == ParserResultState.ERROR_NO_DATA, "Data should not be blank");
+        Assert.isNull(cd,"Parser results should be null on error");
+    }
+
+    @Test
+    void parserTokenizerUnknownTagCod(@Autowired CourseDataParser parser) {
+        String testCase = "<cod> </code>";
+        parser.parse(testCase);
+        Assert.state(parser.getState() == ParserState.ERROR, "Tag error");
+    }
+
+    @Test
+    void parserTokenizerUnknownTagLin(@Autowired CourseDataParser parser) {
+        String testCase = "<lin> </line>";
+        parser.parse(testCase);
+        Assert.state(parser.getState() == ParserState.ERROR, "Tag error");
+    }
+
+    @Test
+    void parserTokenizerUnknownTagEl(@Autowired CourseDataParser parser) {
+        String testCase = "<el> </element>";
+        parser.parse(testCase);
+        Assert.state(parser.getState() == ParserState.ERROR, "Tag error");
+    }
+
+    @Test
+    void parserTokenizerUnknownTag(@Autowired CourseDataParser parser) {
+        String testCase = "<mm> </mm>";
+        parser.parse(testCase);
+        Assert.state(parser.getState() == ParserState.ERROR, "Tag error");
+    }
+
+    @Test
+    void parserTokenizerEmpty(@Autowired CourseDataParser parser) {
+        String testCase = "";
+        parser.parse(testCase);
+        Assert.state(parser.getState() == ParserState.SUCCESS, "Empty data should be possible");
+    }
+
+    @Test
+    void parserTokenizerBlank(@Autowired CourseDataParser parser) {
+        String testCase = "      ";
+        parser.parse(testCase);
+        Assert.state(parser.getState() == ParserState.SUCCESS, "Blank data should be possible");
+    }
 }

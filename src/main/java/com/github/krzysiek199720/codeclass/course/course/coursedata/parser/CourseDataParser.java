@@ -71,12 +71,15 @@ public class CourseDataParser {
         }
         //parsing done
 
-        // TODO check state
-//            if error save current position
-        state = ParserState.SUCCESS;
-        hasChanged = false;
         finalResult = null;
 
+        if(state == ParserState.ERROR){
+            hasChanged = true;
+            return;
+        }
+
+        state = ParserState.SUCCESS;
+        hasChanged = false;
     }
 
     private void parseTag(){
@@ -234,6 +237,11 @@ public class CourseDataParser {
             List<CourseData> results = new ArrayList<>();
             resultIndex = 0;
             resultState = ParserResultState.UNKNOWN;
+
+            if(indexBuffer.indexes.size() < 1){
+                resultState = ParserResultState.ERROR_NO_DATA;
+                return null;
+            }
 
             CourseData next;
             while(true){
