@@ -11,6 +11,7 @@ CREATE TABLE "course"."course"
     ,"complexity"       SMALLINT                    NOT NULL
     ,"grouporder"       SMALLINT                    NOT NULL    DEFAULT 0
     ,"ispublished"      TIMESTAMP WITH TIME ZONE                DEFAULT NULL
+    ,"sourcepath"       VARCHAR(120)                NOT NULL
 
     ,"createdat"        TIMESTAMP WITH TIME ZONE    NOT NULL    DEFAULT now()
     ,"modifiedat"       TIMESTAMP WITH TIME ZONE    NOT NULL    DEFAULT now()

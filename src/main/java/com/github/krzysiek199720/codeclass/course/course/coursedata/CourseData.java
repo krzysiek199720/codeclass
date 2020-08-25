@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,6 +17,10 @@ import java.util.List;
 @NoArgsConstructor
 
 @Entity
+@Table(schema = "course", name = "coursedata")
+@SequenceGenerator(schema = "course", name = "id_generator", sequenceName = "coursedata_seq_id", allocationSize = 1)
+
+@SQLDelete(sql = "UPDATE course.coursedata SET deletedat = now() WHERE id = ?")
 public class CourseData {
 
     @Id
@@ -27,11 +32,6 @@ public class CourseData {
     @Column(name = "createdat")
     protected LocalDateTime createdAt = LocalDateTime.now();
 
-    @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    @Column(name = "deletedat")
-    protected LocalDateTime deletedAt;
-
     @Enumerated
     @Column(name = "type", nullable = false, columnDefinition = "smallint")
     private CourseDataType type;
@@ -39,9 +39,7 @@ public class CourseData {
     @Column(name = "order") // default on db
     private Integer order;
 
-    @Column(name = "sourcepath", nullable = false)
-    private String sourcePath;
-
+    @OneToMany(mappedBy = "courseData")
     private List<CourseDataLine> courseDataLineList = new LinkedList<>();
 
 }
