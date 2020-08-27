@@ -16,10 +16,14 @@ public class CourseDataParser {
 
     private CourseDataCharBuffer data = null;
 
+    public int getDataPosition(){return data.getPosition();}
+
     private IndexBuffer indexBuffer;
 
     @Getter
     private int resultIndex = 0;
+
+    public int getResultIndexPosition(){return indexBuffer.indexes.get(resultIndex).position;}
 
     @Getter
     private ParserState state;
@@ -31,13 +35,13 @@ public class CourseDataParser {
 
     private boolean hasChanged = true;
 
-    public void parse(String data){
+    public void tokenize(String data){
         this.data = new CourseDataCharBuffer(data);
         hasChanged = true;
-        this.parse();
+        this.tokenize();
     }
 
-    public void parse(){
+    public void tokenize(){
         if(data == null)
             return;
         // we do have data
@@ -62,10 +66,10 @@ public class CourseDataParser {
             }
 
             if (next == '<') {
-                parseTag();
+                tokenizeTag();
             }
             else{
-                parseString();
+                tokenizeString();
             }
 
         }
@@ -82,7 +86,7 @@ public class CourseDataParser {
         hasChanged = false;
     }
 
-    private void parseTag(){
+    private void tokenizeTag(){
         if(!data.hasNext()){
             state = ParserState.ERROR;
             return;
@@ -205,7 +209,7 @@ public class CourseDataParser {
 
     }
 
-    private void parseString(){
+    private void tokenizeString(){
         int startingPosition = data.getPosition();
 
         StringBuilder sb = new StringBuilder();
@@ -225,7 +229,7 @@ public class CourseDataParser {
         indexBuffer.addElement(startingPosition, data.getPosition()-startingPosition, ElementType.TEXT);
     }
 
-    public List<CourseData> getResults(){
+    public List<CourseData> parse(){
         if(data == null)
             return null;
         if(indexBuffer == null)

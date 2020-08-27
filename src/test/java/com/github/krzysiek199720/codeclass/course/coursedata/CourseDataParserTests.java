@@ -35,10 +35,10 @@ public class CourseDataParserTests {
                           "</code> " +
                           "Just want to say thank you. ";
 
-        parser.parse(testCase);
+        parser.tokenize(testCase);
         Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
 
-        List<CourseData> cd = parser.getResults();
+        List<CourseData> cd = parser.parse();
         Assert.state(parser.getResultState() == ParserResultState.SUCCESS, "Parser result should end with success");
         Assert.notNull(cd,"Parser results should not be null");
         Assert.notEmpty(cd, "Parser results should not be empty");
@@ -47,10 +47,10 @@ public class CourseDataParserTests {
     @Test
     void parserCodeInsideCode(@Autowired CourseDataParser parser) {
         String testCase = "<code> <code> </code> </code>";
-        parser.parse(testCase);
+        parser.tokenize(testCase);
         Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
 
-        List<CourseData> cd = parser.getResults();
+        List<CourseData> cd = parser.parse();
         Assert.state(parser.getResultState() == ParserResultState.ERROR_UNEXPECTED_TAG, "Code inside code should not be allowed");
         Assert.isNull(cd,"Parser results should be null on error");
     }
@@ -58,10 +58,10 @@ public class CourseDataParserTests {
     @Test
     void parserLineInsideLine(@Autowired CourseDataParser parser) {
         String testCase = "<code> <line> <line> </line> </line> </code>";
-        parser.parse(testCase);
+        parser.tokenize(testCase);
         Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
 
-        List<CourseData> cd = parser.getResults();
+        List<CourseData> cd = parser.parse();
         Assert.state(parser.getResultState() == ParserResultState.ERROR_UNEXPECTED_TAG, "Line inside line should not be allowed");
         Assert.isNull(cd,"Parser results should be null on error");
     }
@@ -69,10 +69,10 @@ public class CourseDataParserTests {
     @Test
     void parserLineWithoutCode(@Autowired CourseDataParser parser) {
         String testCase = "<line> </line>";
-        parser.parse(testCase);
+        parser.tokenize(testCase);
         Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
 
-        List<CourseData> cd = parser.getResults();
+        List<CourseData> cd = parser.parse();
         Assert.state(parser.getResultState() == ParserResultState.ERROR_UNEXPECTED_TAG, "Line outside code should not be allowed");
         Assert.isNull(cd,"Parser results should be null on error");
     }
@@ -80,10 +80,10 @@ public class CourseDataParserTests {
     @Test
     void parserElementWithoutLine(@Autowired CourseDataParser parser) {
         String testCase = "<code> <element> </element> </code>";
-        parser.parse(testCase);
+        parser.tokenize(testCase);
         Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
 
-        List<CourseData> cd = parser.getResults();
+        List<CourseData> cd = parser.parse();
         Assert.state(parser.getResultState() == ParserResultState.ERROR_UNEXPECTED_TAG, "Element outside line should not be allowed");
         Assert.isNull(cd,"Parser results should be null on error");
     }
@@ -91,10 +91,10 @@ public class CourseDataParserTests {
     @Test
     void parserElementOutsideCode(@Autowired CourseDataParser parser) {
         String testCase = "<element> </element>";
-        parser.parse(testCase);
+        parser.tokenize(testCase);
         Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
 
-        List<CourseData> cd = parser.getResults();
+        List<CourseData> cd = parser.parse();
         Assert.state(parser.getResultState() == ParserResultState.ERROR_UNEXPECTED_TAG, "Element outside code should not be allowed");
         Assert.isNull(cd,"Parser results should be null on error");
     }
@@ -102,10 +102,10 @@ public class CourseDataParserTests {
     @Test
     void parserNoCodeEnd(@Autowired CourseDataParser parser) {
         String testCase = "<code>";
-        parser.parse(testCase);
+        parser.tokenize(testCase);
         Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
 
-        List<CourseData> cd = parser.getResults();
+        List<CourseData> cd = parser.parse();
         Assert.state(parser.getResultState() == ParserResultState.ERROR_MISSING_CODE_END, "Code should have an end");
         Assert.isNull(cd,"Parser results should be null on error");
     }
@@ -113,10 +113,10 @@ public class CourseDataParserTests {
     @Test
     void parserNoLineEnd(@Autowired CourseDataParser parser) {
         String testCase = "<code> <line> </code>";
-        parser.parse(testCase);
+        parser.tokenize(testCase);
         Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
 
-        List<CourseData> cd = parser.getResults();
+        List<CourseData> cd = parser.parse();
         Assert.state(parser.getResultState() == ParserResultState.ERROR_MISSING_LINE_END, "Line should have an end");
         Assert.isNull(cd,"Parser results should be null on error");
     }
@@ -124,10 +124,10 @@ public class CourseDataParserTests {
     @Test
     void parserNoElementEnd(@Autowired CourseDataParser parser) {
         String testCase = "<code> <line> <element> </line> </code>";
-        parser.parse(testCase);
+        parser.tokenize(testCase);
         Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
 
-        List<CourseData> cd = parser.getResults();
+        List<CourseData> cd = parser.parse();
         Assert.state(parser.getResultState() == ParserResultState.ERROR_MISSING_ELEMENT_END, "Element should have an end");
         Assert.isNull(cd,"Parser results should be null on error");
     }
@@ -135,10 +135,10 @@ public class CourseDataParserTests {
     @Test
     void parserNoElementEndWithData(@Autowired CourseDataParser parser) {
         String testCase = "<code> <line> <element>ssa </line> </code>";
-        parser.parse(testCase);
+        parser.tokenize(testCase);
         Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
 
-        List<CourseData> cd = parser.getResults();
+        List<CourseData> cd = parser.parse();
         Assert.state(parser.getResultState() == ParserResultState.ERROR_MISSING_ELEMENT_END, "Element should have an end");
         Assert.isNull(cd,"Parser results should be null on error");
     }
@@ -146,10 +146,10 @@ public class CourseDataParserTests {
     @Test
     void parserNoElementData(@Autowired CourseDataParser parser) {
         String testCase = "<code> <line> <element> </element> </line> </code>";
-        parser.parse(testCase);
+        parser.tokenize(testCase);
         Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
 
-        List<CourseData> cd = parser.getResults();
+        List<CourseData> cd = parser.parse();
         Assert.state(parser.getResultState() == ParserResultState.ERROR_MISSING_ELEMENT_DATA, "Element should have data");
         Assert.isNull(cd,"Parser results should be null on error");
     }
@@ -157,10 +157,10 @@ public class CourseDataParserTests {
     @Test
     void parserElementDataAtEnd(@Autowired CourseDataParser parser) {
         String testCase = "<code> <line> <element> <element> sa </element> ss</element> </line> </code>";
-        parser.parse(testCase);
+        parser.tokenize(testCase);
         Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
 
-        List<CourseData> cd = parser.getResults();
+        List<CourseData> cd = parser.parse();
         Assert.state(parser.getResultState() == ParserResultState.ERROR_MISSING_ELEMENT_DATA, "Element should have data at front");
         Assert.isNull(cd,"Parser results should be null on error");
     }
@@ -168,10 +168,10 @@ public class CourseDataParserTests {
     @Test
     void parserEmptyData(@Autowired CourseDataParser parser) {
         String testCase = "";
-        parser.parse(testCase);
+        parser.tokenize(testCase);
         Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
 
-        List<CourseData> cd = parser.getResults();
+        List<CourseData> cd = parser.parse();
         Assert.state(parser.getResultState() == ParserResultState.ERROR_NO_DATA, "Data should not be empty");
         Assert.isNull(cd,"Parser results should be null on error");
     }
@@ -179,10 +179,10 @@ public class CourseDataParserTests {
     @Test
     void parserBlankData(@Autowired CourseDataParser parser) {
         String testCase = "                           ";
-        parser.parse(testCase);
+        parser.tokenize(testCase);
         Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
 
-        List<CourseData> cd = parser.getResults();
+        List<CourseData> cd = parser.parse();
         Assert.state(parser.getResultState() == ParserResultState.ERROR_NO_DATA, "Data should not be blank");
         Assert.isNull(cd,"Parser results should be null on error");
     }
@@ -190,42 +190,42 @@ public class CourseDataParserTests {
     @Test
     void parserTokenizerUnknownTagCod(@Autowired CourseDataParser parser) {
         String testCase = "<cod> </code>";
-        parser.parse(testCase);
+        parser.tokenize(testCase);
         Assert.state(parser.getState() == ParserState.ERROR, "Tag error");
     }
 
     @Test
     void parserTokenizerUnknownTagLin(@Autowired CourseDataParser parser) {
         String testCase = "<lin> </line>";
-        parser.parse(testCase);
+        parser.tokenize(testCase);
         Assert.state(parser.getState() == ParserState.ERROR, "Tag error");
     }
 
     @Test
     void parserTokenizerUnknownTagEl(@Autowired CourseDataParser parser) {
         String testCase = "<el> </element>";
-        parser.parse(testCase);
+        parser.tokenize(testCase);
         Assert.state(parser.getState() == ParserState.ERROR, "Tag error");
     }
 
     @Test
     void parserTokenizerUnknownTag(@Autowired CourseDataParser parser) {
         String testCase = "<mm> </mm>";
-        parser.parse(testCase);
+        parser.tokenize(testCase);
         Assert.state(parser.getState() == ParserState.ERROR, "Tag error");
     }
 
     @Test
     void parserTokenizerEmpty(@Autowired CourseDataParser parser) {
         String testCase = "";
-        parser.parse(testCase);
+        parser.tokenize(testCase);
         Assert.state(parser.getState() == ParserState.SUCCESS, "Empty data should be possible");
     }
 
     @Test
     void parserTokenizerBlank(@Autowired CourseDataParser parser) {
         String testCase = "      ";
-        parser.parse(testCase);
+        parser.tokenize(testCase);
         Assert.state(parser.getState() == ParserState.SUCCESS, "Blank data should be possible");
     }
 }
