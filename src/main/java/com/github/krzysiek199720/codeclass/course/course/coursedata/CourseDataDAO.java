@@ -11,4 +11,6 @@ public interface CourseDataDAO extends DAO<CourseData> {
 
     public void deleteOld(Course course);
 
+    public List<CourseData> getByCourseId(Long courseId);
+
 }

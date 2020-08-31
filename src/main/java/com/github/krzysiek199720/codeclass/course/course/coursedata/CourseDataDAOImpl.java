@@ -19,6 +19,17 @@ public class CourseDataDAOImpl extends GenericDAO<CourseData> implements CourseD
                 .executeUpdate();
     }
 
+    public List<CourseData> getByCourseId(Long courseId){
+//        fixme need a db func for that, or just use hibernate - not sure how fast it is
+
+        List<CourseData> result;
+
+        result = getCurrentSession().createQuery("FROM CourseData WHERE course = ?", CourseData.class)
+                .setParameter(0, courseId).getResultList();
+
+        return result;
+    }
+
 
 //----
     @Autowired

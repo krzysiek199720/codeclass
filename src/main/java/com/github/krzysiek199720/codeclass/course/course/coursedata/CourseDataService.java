@@ -92,9 +92,8 @@ public class CourseDataService {
 
     @Transactional
     public List<CourseData> getCourseData(Long courseId){
-        //TODO
 
-        return null;
+        return courseDataDAO.getByCourseId(courseId);
     }
 
 
