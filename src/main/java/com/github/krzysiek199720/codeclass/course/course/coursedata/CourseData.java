@@ -1,6 +1,7 @@
 package com.github.krzysiek199720.codeclass.course.course.coursedata;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.github.krzysiek199720.codeclass.course.course.Course;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,8 +20,6 @@ import java.util.List;
 @Entity
 @Table(schema = "course", name = "coursedata")
 @SequenceGenerator(schema = "course", name = "id_generator", sequenceName = "coursedata_seq_id", allocationSize = 1)
-
-@SQLDelete(sql = "UPDATE course.coursedata SET deletedat = now() WHERE id = ?")
 public class CourseData {
 
     @Id
@@ -38,6 +37,10 @@ public class CourseData {
 
     @Column(name = "order") // default on db
     private Integer order;
+
+    @ManyToOne()
+    @JoinColumn(name = "courseid", nullable = false)
+    private Course course;
 
     @OneToMany(mappedBy = "courseData", cascade = CascadeType.PERSIST)
     private List<CourseDataLine> courseDataLineList = new LinkedList<>();

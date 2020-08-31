@@ -1,6 +1,7 @@
 package com.github.krzysiek199720.codeclass.course.course.coursedata;
 
 import com.github.krzysiek199720.codeclass.core.db.GenericDAO;
+import com.github.krzysiek199720.codeclass.course.course.Course;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
@@ -9,6 +10,14 @@ import java.util.List;
 import java.util.Objects;
 
 public class CourseDataDAOImpl extends GenericDAO<CourseData> implements CourseDataDAO{
+
+    @Override
+    public void deleteOld(Course course) {
+        getCurrentSession().createNativeQuery(
+                "DELETE FROM course.coursedata WHERE courseid = ?")
+                .setParameter(0, course.getId())
+                .executeUpdate();
+    }
 
 
 //----
@@ -45,4 +54,5 @@ public class CourseDataDAOImpl extends GenericDAO<CourseData> implements CourseD
     public void delete(CourseData object) {
         getCurrentSession().delete(Objects.requireNonNull(object));
     }
+
 }
