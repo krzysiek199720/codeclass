@@ -47,7 +47,6 @@ public class AccessTokenDAOImpl extends GenericDAO<AccessToken> implements Acces
         return getCurrentSession().get(AccessToken.class, id);
     }
 
-    @Override
     public List<AccessToken> getAll() {
         Query<AccessToken> query = getCurrentSession().createQuery("from AccessToken order by id", AccessToken.class);
         return query.getResultList();

@@ -8,5 +8,4 @@ public interface DAO<T> {
     void delete(T object);
 
     T getById(Long id);
-    Collection<T> getAll();
 }

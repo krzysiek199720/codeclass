@@ -15,9 +15,12 @@ public class CourseDataService {
 
     private final ObjectFactory<CourseDataParser> factory;
 
+    private final CourseDataDAO courseDataDAO;
+
     @Autowired
-    public CourseDataService(ObjectFactory<CourseDataParser> factory){
+    public CourseDataService(ObjectFactory<CourseDataParser> factory, CourseDataDAO courseDataDAO){
         this.factory = factory;
+        this.courseDataDAO = courseDataDAO;
     }
 
     public List<CourseData> parseCourseData(String input){
@@ -44,8 +47,10 @@ public class CourseDataService {
     public List<CourseData> saveCourseData(Long courseId, String input){
         List<CourseData> result = parseCourseData(input);
 
-        //TODO delete old one, delete old source file path from db, then save
+        //TODO delete old one, delete old source file path from db
 
+
+        result = courseDataDAO.saveAll(result);
 
         return result;
     }

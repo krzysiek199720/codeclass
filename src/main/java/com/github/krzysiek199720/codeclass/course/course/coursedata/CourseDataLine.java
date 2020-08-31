@@ -30,6 +30,6 @@ public class CourseDataLine {
     @ManyToOne(fetch = FetchType.LAZY)
     private CourseData courseData;
 
-    @OneToMany(mappedBy = "courseDataLine")
+    @OneToMany(mappedBy = "courseDataLine", cascade = CascadeType.PERSIST)
     private List<CourseDataElement> courseDataElementList = new ArrayList<>();
 }

@@ -48,7 +48,6 @@ public class PermissionDAOImpl extends GenericDAO<Permission> implements Permiss
         return getCurrentSession().get(Permission.class, id);
     }
 
-    @Override
     public List<Permission> getAll() {
         Query<Permission> query = getCurrentSession().createQuery("from Permission order by id", Permission.class);
         return query.getResultList();

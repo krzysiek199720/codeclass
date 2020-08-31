@@ -50,7 +50,6 @@ public class RoleDAOImpl extends GenericDAO<Role> implements RoleDAO{
         return getCurrentSession().get(Role.class, id);
     }
 
-    @Override
     public List<Role> getAll() {
         Query<Role> query = getCurrentSession().createQuery("from Role", Role.class);
         return query.getResultList();

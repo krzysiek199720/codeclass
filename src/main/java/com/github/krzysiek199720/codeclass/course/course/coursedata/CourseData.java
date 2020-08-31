@@ -39,7 +39,7 @@ public class CourseData {
     @Column(name = "order") // default on db
     private Integer order;
 
-    @OneToMany(mappedBy = "courseData")
+    @OneToMany(mappedBy = "courseData", cascade = CascadeType.PERSIST)
     private List<CourseDataLine> courseDataLineList = new LinkedList<>();
 
 }

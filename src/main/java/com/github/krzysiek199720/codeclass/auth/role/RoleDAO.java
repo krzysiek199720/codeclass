@@ -12,4 +12,6 @@ public interface RoleDAO extends DAO<Role>{
     public Role getDefaultRole();
 
     public List<RoleNameDTO> findAllNames();
+
+    public List<Role> getAll();
 }

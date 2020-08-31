@@ -46,7 +46,6 @@ public class UserDAOImpl extends GenericDAO<User> implements UserDAO{
         return getCurrentSession().get(User.class, id);
     }
 
-    @Override
     public List<User> getAll() {
         Query<User> query = getCurrentSession().createQuery("from User", User.class);
         return query.getResultList();
