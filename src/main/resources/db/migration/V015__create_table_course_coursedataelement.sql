@@ -9,7 +9,7 @@ CREATE TABLE "course"."coursedataelement"
     "id"                    BIGINT      NOT NULL    DEFAULT nextval('course.coursedataelement_seq_id')
     ,"order"                INTEGER     NOT NULL    DEFAULT 0
     ,"depth"                INTEGER     NOT NULL    DEFAULT 0
-    ,"data"                 TEXT        NOT NULL
+    ,"data"                 TEXT                    DEFAULT NULL
     ,"description"          TEXT                    DEFAULT NULL
     ,"coursedatalineid"     BIGINT      NOT NULL    REFERENCES course.coursedataline (id) DEFAULT 1
 );

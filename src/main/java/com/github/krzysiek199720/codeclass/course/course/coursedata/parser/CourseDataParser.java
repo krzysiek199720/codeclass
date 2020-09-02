@@ -314,7 +314,9 @@ public class CourseDataParser {
                     CourseDataLine line = lines.getLast();
                     int depth = 0;
                     Map<Integer, Boolean> isElementOpened = new HashMap<>();
+                    Map<Integer, Boolean> hasData = new HashMap<>();
                     isElementOpened.put(0, false);
+                    hasData.put(0, false);
                     while(true){
                         Index indexElement;
                         try{
@@ -340,13 +342,13 @@ public class CourseDataParser {
                             element.setOrder(elements.size());
 
                             isElementOpened.put(depth, true);
+                            hasData.put(depth, false);
 
 
 //                                check for description
                             Index nextIndex = null;
                             try{
                                 nextIndex = indexBuffer.indexes.get(resultIndex+1);
-                                ++resultIndex;
                             }catch (IndexOutOfBoundsException exception){
                                 resultState = ParserResultState.ERROR_MISSING_ELEMENT_END;
 
@@ -354,13 +356,13 @@ public class CourseDataParser {
                             }
 
                             if(nextIndex.type == ElementType.ELEMENT_DESCRIPTION){
+                                ++resultIndex;
 //                                desc
                                 element.setDescription(
                                         new String(data.getData(), nextIndex.position, nextIndex.length)
                                 );
                                 try{
                                     nextIndex = indexBuffer.indexes.get(resultIndex+1);
-                                    ++resultIndex;
                                 }catch (IndexOutOfBoundsException exception){
                                     resultState = ParserResultState.ERROR_MISSING_ELEMENT_DATA;
 
@@ -371,6 +373,8 @@ public class CourseDataParser {
                             }
 
                             if(nextIndex.type == ElementType.TEXT){
+                                hasData.put(depth,true);
+                                ++resultIndex;
 //                                element data
                                 element.setData(
                                         new String(data.getData(), nextIndex.position, nextIndex.length)
@@ -378,18 +382,23 @@ public class CourseDataParser {
                             }else if(nextIndex.type == ElementType.LINE_END) {
                                 resultState = ParserResultState.ERROR_MISSING_ELEMENT_END;
                                 return null;
-                            } else {
+                            }else{
+                                element.setData(null);
+                            }
+
+                        }else if(indexElement.type == ElementType.ELEMENT_END){
+                            if(!hasData.get(depth)){
                                 resultState = ParserResultState.ERROR_MISSING_ELEMENT_DATA;
                                 return null;
                             }
 
-                        }else if(indexElement.type == ElementType.ELEMENT_END){
 //                                end element
                             isElementOpened.put(depth,false);
                             --depth;
                             ++resultIndex;
                             continue;
                         } else if(indexElement.type == ElementType.TEXT){
+                            hasData.put(depth,true);
                             element = new CourseDataElement();
                             element.setCourseDataLine(line);
                             element.setDepth(depth);

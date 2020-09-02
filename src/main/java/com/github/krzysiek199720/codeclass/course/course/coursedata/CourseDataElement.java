@@ -24,7 +24,7 @@ public class CourseDataElement {
     @Column(name = "depth")
     private Integer depth;
 
-    @Column(name = "data", nullable = false)
+    @Column(name = "data")
     private String data;
 
     @Column(name = "description")

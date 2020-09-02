@@ -82,8 +82,8 @@ public class CourseDataParserTests {
                 ": " +
                 "<element desc=\"elem data\">\"data\"</element>" +
                 "," +
-                "</element" +
-                "</line" +
+                "</element>" +
+                "</line>" +
                 "</code>";
 
         parser.tokenize(testCase);
@@ -93,6 +93,22 @@ public class CourseDataParserTests {
         Assert.state(parser.getResultState() == ParserResultState.SUCCESS, "Parser result should end with success");
         Assert.notNull(cd,"Parser results should not be null");
         Assert.notEmpty(cd, "Parser results should not be empty");
+    }
+
+    @Test
+    void parserJsonCourseNoData(@Autowired CourseDataParser parser) {
+        String testCase = "<code><line><element desc=\"json line\">" +
+                "<element desc=\"elem name\">\"name\"</element>" +
+                "<element desc=\"elem data\">\"data\"</element>" +
+                "</element>" +
+                "</line>" +
+                "</code>";
+
+        parser.tokenize(testCase);
+        Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
+
+        List<CourseData> cd = parser.parse();
+        Assert.state(parser.getResultState() == ParserResultState.ERROR_MISSING_ELEMENT_DATA, "Parser result should end with no data error");
     }
 
     @Test
@@ -201,18 +217,9 @@ public class CourseDataParserTests {
         Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
 
         List<CourseData> cd = parser.parse();
+        System.out.println(parser.getResultState());
+        System.out.println(parser.getResultIndexPosition());
         Assert.state(parser.getResultState() == ParserResultState.ERROR_MISSING_ELEMENT_DATA, "Element should have data");
-        Assert.isNull(cd,"Parser results should be null on error");
-    }
-
-    @Test
-    void parserElementDataAtEnd(@Autowired CourseDataParser parser) {
-        String testCase = "<code> <line> <element> <element> sa </element> ss</element> </line> </code>";
-        parser.tokenize(testCase);
-        Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
-
-        List<CourseData> cd = parser.parse();
-        Assert.state(parser.getResultState() == ParserResultState.ERROR_MISSING_ELEMENT_DATA, "Element should have data at front");
         Assert.isNull(cd,"Parser results should be null on error");
     }
 
