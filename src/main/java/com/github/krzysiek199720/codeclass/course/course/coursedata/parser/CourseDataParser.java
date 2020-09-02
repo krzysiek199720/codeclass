@@ -218,8 +218,11 @@ public class CourseDataParser {
         char c;
         while(data.hasNext()){
             c = data.next();
-            if(c == '<')
-                break;
+            if(c == '<'){
+                // if \ before < then it is not a tag
+                if(data.getData()[(data.getPosition()-1)] != '\\')
+                    break;
+            }
             sb.append(c);
         }
 

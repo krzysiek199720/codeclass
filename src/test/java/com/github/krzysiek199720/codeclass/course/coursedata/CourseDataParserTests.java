@@ -52,7 +52,7 @@ public class CourseDataParserTests {
                 "<line indent=\"1\"> " +
                 "Here is where magic happens. " +
                 "<element desc=\"Description of magic\"> " +
-                "Magic is awesome<>! " +
+                "Magic is awesome\\<>! " +
                 "</element> " +
                 "</line> " +
                 "<line> " +
@@ -65,6 +65,26 @@ public class CourseDataParserTests {
                 "</line> " +
                 "</code> " +
                 "Just want to say thank you. ";
+
+        parser.tokenize(testCase);
+        Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
+
+        List<CourseData> cd = parser.parse();
+        Assert.state(parser.getResultState() == ParserResultState.SUCCESS, "Parser result should end with success");
+        Assert.notNull(cd,"Parser results should not be null");
+        Assert.notEmpty(cd, "Parser results should not be empty");
+    }
+
+    @Test
+    void parserJsonCourse(@Autowired CourseDataParser parser) {
+        String testCase = "<code><line><element desc=\"json line\">" +
+                "<element desc=\"elem name\">\"name\"</element>" +
+                ": " +
+                "<element desc=\"elem data\">\"data\"</element>" +
+                "," +
+                "</element" +
+                "</line" +
+                "</code>";
 
         parser.tokenize(testCase);
         Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
