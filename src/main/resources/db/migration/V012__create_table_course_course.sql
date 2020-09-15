@@ -8,8 +8,8 @@ CREATE TABLE "course"."course"
 (
     "id"                BIGINT                      NOT NULL    DEFAULT nextval('course.course_seq_id')
     ,"title"            VARCHAR(50)                 NOT NULL
-    ,"complexity"       SMALLINT                    NOT NULL
-    ,"grouporder"       SMALLINT                    NOT NULL    DEFAULT 0
+    ,"complexity"       VARCHAR(20)                 NOT NULL
+    ,"grouporder"       INTEGER                     NOT NULL    DEFAULT 0
     ,"ispublished"      TIMESTAMP WITH TIME ZONE                DEFAULT NULL
     ,"sourcepath"       VARCHAR(120)                NOT NULL
 

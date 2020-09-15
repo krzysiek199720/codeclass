@@ -1,6 +1,7 @@
 package com.github.krzysiek199720.codeclass.course.course.coursedata;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,7 +28,9 @@ public class CourseDataLine {
     @Column(name = "indent")
     private Integer indent;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "coursedataid")
     private CourseData courseData;
 
     @OneToMany(mappedBy = "courseDataLine", cascade = CascadeType.PERSIST)

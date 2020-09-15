@@ -2,10 +2,12 @@ package com.github.krzysiek199720.codeclass.course.course;
 
 import com.github.krzysiek199720.codeclass.core.db.GenericDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.Objects;
 
+@Repository
 public class CourseDAOImpl extends GenericDAO<Course> implements CourseDAO {
 
 

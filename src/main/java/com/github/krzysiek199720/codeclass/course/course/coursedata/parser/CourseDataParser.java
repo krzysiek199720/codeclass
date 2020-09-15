@@ -51,7 +51,7 @@ public class CourseDataParser {
             return;
         indexBuffer = new IndexBuffer();
 
-        //TODO reset results
+        finalResult = null;
 
         state = null;
 
@@ -74,8 +74,6 @@ public class CourseDataParser {
 
         }
         //parsing done
-
-        finalResult = null;
 
         if(state == ParserState.ERROR){
             hasChanged = true;

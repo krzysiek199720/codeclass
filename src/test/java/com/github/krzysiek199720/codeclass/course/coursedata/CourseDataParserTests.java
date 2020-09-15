@@ -45,6 +45,19 @@ public class CourseDataParserTests {
     }
 
     @Test
+    void parserWorksAllElementsOneline(@Autowired CourseDataParser parser) {
+        String testCase = "Here is where the text could be inserted.<code><line indent=\"1\">Here is where magic happens.<element desc=\"Description of magic\">Magic is awesome!</element></line><line><element desc=\"Description one\">One.text<element desc=\"Description one.one\">One.one.text</element></element></line></code>Just want to say thank you.";
+
+        parser.tokenize(testCase);
+        Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
+
+        List<CourseData> cd = parser.parse();
+        Assert.state(parser.getResultState() == ParserResultState.SUCCESS, "Parser result should end with success");
+        Assert.notNull(cd,"Parser results should not be null");
+        Assert.notEmpty(cd, "Parser results should not be empty");
+    }
+
+    @Test
     void parserWorksAllElementsWithLessSign(@Autowired CourseDataParser parser) {
 //        FIXME As for now the < signs are not allowed and this needs to be fixed
         String testCase = "Here is where the text could be inserted. " +

@@ -28,8 +28,8 @@ public class Course extends AbstractModel {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Enumerated
-    @Column(name = "complexity", nullable = false, columnDefinition = "smallint")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "complexity", nullable = false)
     private CourseComplexity complexity;
 
     @Column(name = "grouporder", nullable = false)

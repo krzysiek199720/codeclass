@@ -31,13 +31,14 @@ public class CourseData {
     @Column(name = "createdat")
     protected LocalDateTime createdAt = LocalDateTime.now();
 
-    @Enumerated
-    @Column(name = "type", nullable = false, columnDefinition = "smallint")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
     private CourseDataType type;
 
     @Column(name = "order") // default on db
     private Integer order;
 
+    @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "courseid", nullable = false)
     private Course course;

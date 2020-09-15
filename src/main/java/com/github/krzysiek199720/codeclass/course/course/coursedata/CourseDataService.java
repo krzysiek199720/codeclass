@@ -10,14 +10,15 @@ import com.github.krzysiek199720.codeclass.course.course.coursedata.parser.excep
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URI;
 import java.util.List;
 
+@Service
 public class CourseDataService {
 
     private final ObjectFactory<CourseDataParser> factory;
@@ -66,6 +67,8 @@ public class CourseDataService {
         List<CourseData> result = parseCourseData(input);
 
         Course course = courseDAO.getById(courseId);
+
+        result.forEach(e -> e.setCourse(course));
 
         if(course.getSourcePath().isBlank()){
             course.setSourcePath(String.format("%019d", courseId) + ".course");
