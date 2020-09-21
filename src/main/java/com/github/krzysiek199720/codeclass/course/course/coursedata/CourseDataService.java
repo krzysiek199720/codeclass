@@ -1,5 +1,6 @@
 package com.github.krzysiek199720.codeclass.course.course.coursedata;
 
+import com.github.krzysiek199720.codeclass.core.exceptions.exception.NotFoundException;
 import com.github.krzysiek199720.codeclass.course.course.Course;
 import com.github.krzysiek199720.codeclass.course.course.CourseDAO;
 import com.github.krzysiek199720.codeclass.course.course.coursedata.parser.CourseDataParser;
@@ -68,17 +69,23 @@ public class CourseDataService {
 
         Course course = courseDAO.getById(courseId);
 
+        if(course == null)
+            throw new NotFoundException("course.notfound");
+
         result.forEach(e -> e.setCourse(course));
 
+        String fileName = String.format("%019d", courseId) + ".course";
+
         if(course.getSourcePath().isBlank()){
-            course.setSourcePath(String.format("%019d", courseId) + ".course");
+            course.setSourcePath(fileName);
         }
 
         File sourceFile = new File(sourceDirectory, course.getSourcePath());
         FileWriter fw = null;
         try{
             sourceFile.createNewFile(); // does not create if file exists
-            fw = new FileWriter(sourceFile);
+            // FIXME would be nice to write to tmp file instead of overwriting original right away
+            fw = new FileWriter(sourceFile, false);
             fw.write(input);
             fw.close();
         }catch (IOException e){
