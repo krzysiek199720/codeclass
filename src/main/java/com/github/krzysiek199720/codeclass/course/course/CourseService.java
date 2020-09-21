@@ -1,14 +1,11 @@
 package com.github.krzysiek199720.codeclass.course.course;
 
-import com.github.krzysiek199720.codeclass.auth.user.User;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.NotFoundException;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.UnauthorizedException;
 import com.github.krzysiek199720.codeclass.course.course.api.CourseCreateApi;
 import com.github.krzysiek199720.codeclass.course.course.api.CourseUpdateApi;
-import com.github.krzysiek199720.codeclass.course.course.category.Category;
 import com.github.krzysiek199720.codeclass.course.course.coursegroup.CourseGroup;
 import com.github.krzysiek199720.codeclass.course.course.coursegroup.CourseGroupDAO;
-import com.github.krzysiek199720.codeclass.course.course.language.Language;
 import com.github.krzysiek199720.codeclass.course.course.response.CourseResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

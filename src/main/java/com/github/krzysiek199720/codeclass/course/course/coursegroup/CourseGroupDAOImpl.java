@@ -1,10 +1,7 @@
 package com.github.krzysiek199720.codeclass.course.course.coursegroup;
 
-import com.github.krzysiek199720.codeclass.auth.role.Role;
 import com.github.krzysiek199720.codeclass.auth.user.User;
 import com.github.krzysiek199720.codeclass.core.db.GenericDAO;
-import com.github.krzysiek199720.codeclass.course.course.Course;
-import com.github.krzysiek199720.codeclass.course.course.CourseDAO;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

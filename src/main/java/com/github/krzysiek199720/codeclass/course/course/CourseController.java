@@ -4,17 +4,12 @@ import com.github.krzysiek199720.codeclass.auth.accesstoken.AccessToken;
 import com.github.krzysiek199720.codeclass.auth.accesstoken.AccessTokenService;
 import com.github.krzysiek199720.codeclass.auth.security.annotation.Secure;
 import com.github.krzysiek199720.codeclass.auth.user.User;
-import com.github.krzysiek199720.codeclass.auth.user.response.UserResponse;
 import com.github.krzysiek199720.codeclass.core.controller.AbstractController;
-import com.github.krzysiek199720.codeclass.core.exceptions.exception.SessionExpiredException;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.UnauthorizedException;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
 import com.github.krzysiek199720.codeclass.course.course.api.CourseCreateApi;
 import com.github.krzysiek199720.codeclass.course.course.api.CourseUpdateApi;
-import com.github.krzysiek199720.codeclass.course.course.coursedata.CourseData;
 import com.github.krzysiek199720.codeclass.course.course.coursedata.CourseDataService;
-import com.github.krzysiek199720.codeclass.course.course.coursedata.parser.exception.response.CourseDataParserParseErrorResponse;
-import com.github.krzysiek199720.codeclass.course.course.coursedata.parser.exception.response.CourseDataParserTokenizerErrorResponse;
 import com.github.krzysiek199720.codeclass.course.course.coursegroup.CourseGroupService;
 import com.github.krzysiek199720.codeclass.course.course.response.CourseResponse;
 import io.swagger.annotations.ApiImplicitParam;
@@ -24,8 +19,6 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/course")
