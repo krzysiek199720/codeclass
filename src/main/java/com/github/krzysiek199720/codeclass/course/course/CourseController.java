@@ -9,8 +9,8 @@ import com.github.krzysiek199720.codeclass.core.exceptions.exception.Unauthorize
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
 import com.github.krzysiek199720.codeclass.course.course.api.CourseCreateApi;
 import com.github.krzysiek199720.codeclass.course.course.api.CourseUpdateApi;
-import com.github.krzysiek199720.codeclass.course.course.coursedata.CourseDataService;
-import com.github.krzysiek199720.codeclass.course.course.coursegroup.CourseGroupService;
+import com.github.krzysiek199720.codeclass.course.coursedata.CourseDataService;
+import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroupService;
 import com.github.krzysiek199720.codeclass.course.course.response.CourseResponse;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;

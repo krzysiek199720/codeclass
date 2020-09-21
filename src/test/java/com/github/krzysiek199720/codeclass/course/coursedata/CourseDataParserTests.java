@@ -1,9 +1,8 @@
 package com.github.krzysiek199720.codeclass.course.coursedata;
 
-import com.github.krzysiek199720.codeclass.course.course.coursedata.CourseData;
-import com.github.krzysiek199720.codeclass.course.course.coursedata.parser.CourseDataParser;
-import com.github.krzysiek199720.codeclass.course.course.coursedata.parser.ParserResultState;
-import com.github.krzysiek199720.codeclass.course.course.coursedata.parser.ParserState;
+import com.github.krzysiek199720.codeclass.course.coursedata.parser.CourseDataParser;
+import com.github.krzysiek199720.codeclass.course.coursedata.parser.ParserResultState;
+import com.github.krzysiek199720.codeclass.course.coursedata.parser.ParserState;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

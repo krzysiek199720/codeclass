@@ -4,8 +4,8 @@ import com.github.krzysiek199720.codeclass.core.exceptions.exception.NotFoundExc
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.UnauthorizedException;
 import com.github.krzysiek199720.codeclass.course.course.api.CourseCreateApi;
 import com.github.krzysiek199720.codeclass.course.course.api.CourseUpdateApi;
-import com.github.krzysiek199720.codeclass.course.course.coursegroup.CourseGroup;
-import com.github.krzysiek199720.codeclass.course.course.coursegroup.CourseGroupDAO;
+import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroup;
+import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroupDAO;
 import com.github.krzysiek199720.codeclass.course.course.response.CourseResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

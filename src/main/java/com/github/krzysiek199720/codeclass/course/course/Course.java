@@ -2,9 +2,9 @@ package com.github.krzysiek199720.codeclass.course.course;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.krzysiek199720.codeclass.core.core.AbstractModel;
-import com.github.krzysiek199720.codeclass.course.course.category.Category;
-import com.github.krzysiek199720.codeclass.course.course.coursegroup.CourseGroup;
-import com.github.krzysiek199720.codeclass.course.course.language.Language;
+import com.github.krzysiek199720.codeclass.course.category.Category;
+import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroup;
+import com.github.krzysiek199720.codeclass.course.language.Language;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
