@@ -66,7 +66,7 @@ public class CourseController extends AbstractController {
     }
 
 //    save
-    @ApiOperation(value = "getCourse", notes = "Get course")
+    @ApiOperation(value = "createCourse", notes = "Create course")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = CourseResponse.class),
 
@@ -98,7 +98,7 @@ public class CourseController extends AbstractController {
     }
 
 //    update
-    @ApiOperation(value = "getCourse", notes = "Get course")
+    @ApiOperation(value = "updateCourse", notes = "Update course")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = CourseResponse.class),
 
