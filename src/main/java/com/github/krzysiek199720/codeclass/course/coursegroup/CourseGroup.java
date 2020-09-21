@@ -1,8 +1,15 @@
 package com.github.krzysiek199720.codeclass.course.coursegroup;
 
 import com.github.krzysiek199720.codeclass.auth.user.User;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
 
 @Entity
 @Table(schema = "course", name = "coursegroup")
