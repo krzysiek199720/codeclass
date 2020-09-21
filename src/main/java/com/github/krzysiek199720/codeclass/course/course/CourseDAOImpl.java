@@ -1,16 +1,29 @@
 package com.github.krzysiek199720.codeclass.course.course;
 
 import com.github.krzysiek199720.codeclass.core.db.GenericDAO;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.Objects;
 
 @Repository
 public class CourseDAOImpl extends GenericDAO<Course> implements CourseDAO {
 
-
+    public Course fetchById(Long id) {
+        Query<Course> query = getCurrentSession().createQuery("select c from Course c " +
+                "join fetch all properties where c.id = :courseId", Course.class)
+                .setParameter("courseId", id);
+        Course res;
+        try{
+            res = query.getSingleResult();
+        } catch(NoResultException exc){
+            return null;
+        }
+        return res;
+    }
 //----
     @Autowired
     public CourseDAOImpl(EntityManager entityManager){

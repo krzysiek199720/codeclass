@@ -4,7 +4,9 @@ import com.github.krzysiek199720.codeclass.auth.accesstoken.AccessToken;
 import com.github.krzysiek199720.codeclass.auth.accesstoken.AccessTokenService;
 import com.github.krzysiek199720.codeclass.auth.security.annotation.Secure;
 import com.github.krzysiek199720.codeclass.auth.user.User;
+import com.github.krzysiek199720.codeclass.auth.user.response.UserResponse;
 import com.github.krzysiek199720.codeclass.core.controller.AbstractController;
+import com.github.krzysiek199720.codeclass.core.exceptions.exception.SessionExpiredException;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.UnauthorizedException;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
 import com.github.krzysiek199720.codeclass.course.course.coursedata.CourseData;
@@ -12,6 +14,7 @@ import com.github.krzysiek199720.codeclass.course.course.coursedata.CourseDataSe
 import com.github.krzysiek199720.codeclass.course.course.coursedata.parser.exception.response.CourseDataParserParseErrorResponse;
 import com.github.krzysiek199720.codeclass.course.course.coursedata.parser.exception.response.CourseDataParserTokenizerErrorResponse;
 import com.github.krzysiek199720.codeclass.course.course.coursegroup.CourseGroupService;
+import com.github.krzysiek199720.codeclass.course.course.response.CourseResponse;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -42,6 +45,30 @@ public class CourseController extends AbstractController {
 
 
 //    Get
+    @ApiOperation(value = "getCourse", notes = "Get course")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = CourseResponse.class),
+
+            @ApiResponse(code = 404, message = "course.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "course.unauthorized", response = ErrorResponse.class),
+    })
+    @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = false, allowEmptyValue = false
+            , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
+    @GetMapping("/{id}")
+    public ResponseEntity<CourseResponse> get(@PathVariable Long id,
+                                              @RequestHeader(value = "Authorization",required = false, defaultValue = "") String token){
+        boolean isAuthor = false;
+
+        if(!token.isBlank()){
+            AccessToken at = accessTokenService.getAccesstokenByToken(token);
+            User user = courseGroupService.getUserByCourseId(id);
+
+            if(user.equals(at.getUser()))
+                isAuthor = true;
+        }
+
+        return okResponse(courseService.getById(id, isAuthor));
+    }
 
 //    save
 
@@ -52,25 +79,30 @@ public class CourseController extends AbstractController {
 //    publish - on/off
     @ApiOperation(value = "coursedataSave", notes = "Save course data")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = Course.class),
+            @ApiResponse(code = 204, message = "NO_CONTENT"),
 
             @ApiResponse(code = 401, message = "course.unauthorized", response = ErrorResponse.class),
-            @ApiResponse(code = 404, message = "course.notfound", response = ErrorResponse.class)
+            @ApiResponse(code = 404, message = "course.notfound", response = ErrorResponse.class),
+
+            @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class)
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @Secure("")
     @PutMapping("/publish")
-    public ResponseEntity<Course> publish(Long courseId, Boolean isPublished, @RequestHeader(value = "Authorization") String token){
+    public ResponseEntity<Object> publish(Long courseId, Boolean isPublished, @RequestHeader(value = "Authorization") String token){
 
-    AccessToken at = accessTokenService.getAccesstokenByToken(token);
-    User user = courseGroupService.getUserByCourseId(courseId);
+        AccessToken at = accessTokenService.getAccesstokenByToken(token);
+        User user = courseGroupService.getUserByCourseId(courseId);
 
-    if(!user.equals(at.getUser()))
-        throw new UnauthorizedException("course.unauthorized");
+        if(!user.equals(at.getUser()))
+            throw new UnauthorizedException("course.unauthorized");
 
-    return okResponse(courseService.publish(courseId, isPublished));
-}
+        courseService.publish(courseId, isPublished);
+
+        return noContent();
+    }
 
 
 
@@ -79,7 +111,10 @@ public class CourseController extends AbstractController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = CourseData.class, responseContainer = "List"),
             @ApiResponse(code = 401, message = "course.data.tokenize.error", response = CourseDataParserTokenizerErrorResponse.class),
-            @ApiResponse(code = 401, message = "course.data.parse.error", response = CourseDataParserParseErrorResponse.class)
+            @ApiResponse(code = 401, message = "course.data.parse.error", response = CourseDataParserParseErrorResponse.class),
+
+            @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class)
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
@@ -96,7 +131,10 @@ public class CourseController extends AbstractController {
             @ApiResponse(code = 401, message = "course.unauthorized", response = ErrorResponse.class),
             @ApiResponse(code = 404, message = "course.notfound", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "course.data.tokenize.error", response = CourseDataParserTokenizerErrorResponse.class),
-            @ApiResponse(code = 401, message = "course.data.parse.error", response = CourseDataParserParseErrorResponse.class)
+            @ApiResponse(code = 401, message = "course.data.parse.error", response = CourseDataParserParseErrorResponse.class),
+
+            @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class)
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")

@@ -1,5 +1,6 @@
 package com.github.krzysiek199720.codeclass.course.course;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.krzysiek199720.codeclass.core.core.AbstractModel;
 import com.github.krzysiek199720.codeclass.course.course.category.Category;
 import com.github.krzysiek199720.codeclass.course.course.coursegroup.CourseGroup;
@@ -38,6 +39,7 @@ public class Course extends AbstractModel {
     @Column(name = "ispublished")
     private LocalDateTime isPublished;
 
+    @JsonIgnore
     @Column(name = "sourcepath", nullable = false)
     private String sourcePath;
 
