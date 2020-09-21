@@ -170,16 +170,16 @@ public class CourseController extends AbstractController {
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @Secure("")
-    @PutMapping("/publish")
-    public ResponseEntity<Object> publish(Long courseId, Boolean isPublished, @RequestHeader(value = "Authorization") String token){
+    @PutMapping("/{id}/publish")
+    public ResponseEntity<Object> publish(@PathVariable Long id, Boolean isPublished, @RequestHeader(value = "Authorization") String token){
 
         AccessToken at = accessTokenService.getAccesstokenByToken(token);
-        User user = courseGroupService.getUserByCourseId(courseId);
+        User user = courseGroupService.getUserByCourseId(id);
 
         if(!user.equals(at.getUser()))
             throw new UnauthorizedException("course.unauthorized");
 
-        courseService.publish(courseId, isPublished);
+        courseService.publish(id, isPublished);
 
         return noContent();
     }
