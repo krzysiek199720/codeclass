@@ -259,6 +259,17 @@ public class CourseDataParserTests {
     }
 
     @Test
+    void parserBlankData255(@Autowired CourseDataParser parser) {
+        String testCase = " ";
+        parser.tokenize(testCase);
+        Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
+
+        List<CourseData> cd = parser.parse();
+        Assert.state(parser.getResultState() == ParserResultState.ERROR_NO_DATA, "Data should not be blank");
+        Assert.isNull(cd,"Parser results should be null on error");
+    }
+
+    @Test
     void parserTokenizerUnknownTagCod(@Autowired CourseDataParser parser) {
         String testCase = "<cod> </code>";
         parser.tokenize(testCase);

@@ -5,14 +5,12 @@ import com.github.krzysiek199720.codeclass.auth.accesstoken.AccessTokenService;
 import com.github.krzysiek199720.codeclass.auth.security.annotation.Secure;
 import com.github.krzysiek199720.codeclass.auth.user.User;
 import com.github.krzysiek199720.codeclass.core.controller.AbstractController;
-import com.github.krzysiek199720.codeclass.core.exceptions.exception.SessionExpiredException;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.UnauthorizedException;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
 import com.github.krzysiek199720.codeclass.course.course.coursedata.CourseData;
 import com.github.krzysiek199720.codeclass.course.course.coursedata.CourseDataService;
 import com.github.krzysiek199720.codeclass.course.course.coursedata.parser.exception.response.CourseDataParserParseErrorResponse;
 import com.github.krzysiek199720.codeclass.course.course.coursedata.parser.exception.response.CourseDataParserTokenizerErrorResponse;
-import com.github.krzysiek199720.codeclass.course.course.coursegroup.CourseGroupDAO;
 import com.github.krzysiek199720.codeclass.course.course.coursegroup.CourseGroupService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -20,10 +18,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,17 +26,52 @@ import java.util.List;
 @RequestMapping("/course")
 public class CourseController extends AbstractController {
 
+    private final CourseService courseService;
     private final CourseDataService courseDataService;
     private final AccessTokenService accessTokenService;
 
     private final CourseGroupService courseGroupService;
 
     @Autowired
-    public CourseController(CourseDataService courseDataService, AccessTokenService accessTokenService, CourseGroupService courseGroupService) {
+    public CourseController(CourseService courseService, CourseDataService courseDataService, AccessTokenService accessTokenService, CourseGroupService courseGroupService) {
+        this.courseService = courseService;
         this.courseDataService = courseDataService;
         this.accessTokenService = accessTokenService;
         this.courseGroupService = courseGroupService;
     }
+
+
+//    Get
+
+//    save
+
+//    update
+
+//    delete
+
+//    publish - on/off
+    @ApiOperation(value = "coursedataSave", notes = "Save course data")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = Course.class),
+
+            @ApiResponse(code = 401, message = "course.unauthorized", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "course.notfound", response = ErrorResponse.class)
+    })
+    @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
+            , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
+    @Secure("")
+    @PutMapping("/publish")
+    public ResponseEntity<Course> publish(Long courseId, Boolean isPublished, @RequestHeader(value = "Authorization") String token){
+
+    AccessToken at = accessTokenService.getAccesstokenByToken(token);
+    User user = courseGroupService.getUserByCourseId(courseId);
+
+    if(!user.equals(at.getUser()))
+        throw new UnauthorizedException("course.unauthorized");
+
+    return okResponse(courseService.publish(courseId, isPublished));
+}
+
 
 
 // -----COURSE DATA -----
