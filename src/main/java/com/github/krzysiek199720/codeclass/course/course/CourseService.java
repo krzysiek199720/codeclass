@@ -128,4 +128,13 @@ public class CourseService {
 
         courseDAO.save(course);
     }
+
+    @Transactional
+    public boolean isPublished(Long id){
+        Course course = courseDAO.getById(id);
+        if(course == null)
+            throw new NotFoundException("course.notfound");
+
+        return course.getIsPublished() != null;
+    }
 }

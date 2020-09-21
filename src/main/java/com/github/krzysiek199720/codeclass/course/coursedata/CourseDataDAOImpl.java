@@ -26,8 +26,12 @@ public class CourseDataDAOImpl extends GenericDAO<CourseData> implements CourseD
 
         List<CourseData> result;
 
-        result = getCurrentSession().createQuery("FROM CourseData WHERE course = ?", CourseData.class)
-                .setParameter(0, courseId).getResultList();
+        result = getCurrentSession()
+                .createQuery("select cd from CourseDataElement cde " +
+                        "inner join fetch cde.courseDataLine cdl " +
+                        "inner join fetch cdl.courseData cd " +
+                        "WHERE cd.course = :courseid", CourseData.class)
+                .setParameter("courseid", courseId).getResultList();
 
         return result;
     }
@@ -41,7 +45,6 @@ public class CourseDataDAOImpl extends GenericDAO<CourseData> implements CourseD
 
     @Override
     public CourseData getById(Long id) {
-//        fixme need a db func for that, or just use hibernate - not sure how fast it is
 
         return getCurrentSession().get(CourseData.class, id);
     }
