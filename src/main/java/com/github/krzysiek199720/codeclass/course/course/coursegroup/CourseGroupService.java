@@ -14,6 +14,11 @@ public class CourseGroupService {
     }
 
     @Transactional
+    public User getUserByCourseGroupId(Long courseGroupId){
+        return courseGroupDAO.getUserByCourseGroupId(courseGroupId);
+    }
+
+    @Transactional
     public User getUserByCourseId(Long courseId){
         return courseGroupDAO.getUserByCourseId(courseId);
     }

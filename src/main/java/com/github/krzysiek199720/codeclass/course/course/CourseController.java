@@ -9,6 +9,8 @@ import com.github.krzysiek199720.codeclass.core.controller.AbstractController;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.SessionExpiredException;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.UnauthorizedException;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
+import com.github.krzysiek199720.codeclass.course.course.api.CourseCreateApi;
+import com.github.krzysiek199720.codeclass.course.course.api.CourseUpdateApi;
 import com.github.krzysiek199720.codeclass.course.course.coursedata.CourseData;
 import com.github.krzysiek199720.codeclass.course.course.coursedata.CourseDataService;
 import com.github.krzysiek199720.codeclass.course.course.coursedata.parser.exception.response.CourseDataParserParseErrorResponse;
@@ -71,10 +73,95 @@ public class CourseController extends AbstractController {
     }
 
 //    save
+    @ApiOperation(value = "getCourse", notes = "Get course")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = CourseResponse.class),
+
+            @ApiResponse(code = 404, message = "course.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "course.coursegroup.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "course.language.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "course.category.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "course.unauthorized", response = ErrorResponse.class),
+
+            @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "auth.unauthorized", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class),
+    })
+    @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = false, allowEmptyValue = false
+            , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
+    @Secure("course.save")
+    @PostMapping("/")
+    public ResponseEntity<CourseResponse> create(@RequestBody CourseCreateApi api,
+                                              @RequestHeader(value = "Authorization") String token){
+
+        AccessToken at = accessTokenService.getAccesstokenByToken(token);
+        User userAuthor = courseGroupService.getUserByCourseGroupId(api.getCourseGroupId());
+
+        if(!userAuthor.equals(at.getUser()))
+            throw new UnauthorizedException("course.save");
+
+
+        return okResponse(courseService.createCourse(api));
+    }
 
 //    update
+    @ApiOperation(value = "getCourse", notes = "Get course")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = CourseResponse.class),
+
+            @ApiResponse(code = 404, message = "course.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "course.coursegroup.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "course.language.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "course.category.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "course.unauthorized", response = ErrorResponse.class),
+
+            @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "auth.unauthorized", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class),
+    })
+    @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = false, allowEmptyValue = false
+            , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
+    @Secure("course.save")
+    @PutMapping("/{id}")
+    public ResponseEntity<CourseResponse> update(@PathVariable Long id,
+                                                 @RequestBody CourseUpdateApi api,
+                                                 @RequestHeader(value = "Authorization") String token){
+
+        AccessToken at = accessTokenService.getAccesstokenByToken(token);
+        User userAuthor = courseGroupService.getUserByCourseId(id);
+
+        if(!userAuthor.equals(at.getUser()))
+            throw new UnauthorizedException("course.save");
+
+        return okResponse(courseService.updateCourse(id, api));
+    }
 
 //    delete
+    @ApiOperation(value = "deleteUser", notes = "Delete user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "NO_CONTENT"),
+            @ApiResponse(code = 400, message = "auth.user.notfound", response = ErrorResponse.class),
+
+            @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "auth.unauthorized", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class),
+    })
+    @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
+            , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
+    @Secure("course.delete")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> delete(@RequestHeader(value = "Authorization") String token, @PathVariable Long id){
+
+        AccessToken at = accessTokenService.getAccesstokenByToken(token);
+        User userAuthor = courseGroupService.getUserByCourseId(id);
+
+        if(!userAuthor.equals(at.getUser()))
+            throw new UnauthorizedException("course.delete");
+
+        courseService.delete(id);
+
+        return noContent();
+    }
 
 //    publish - on/off
     @ApiOperation(value = "coursedataSave", notes = "Save course data")

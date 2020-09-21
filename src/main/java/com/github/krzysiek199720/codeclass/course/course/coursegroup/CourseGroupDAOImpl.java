@@ -31,6 +31,21 @@ public class CourseGroupDAOImpl extends GenericDAO<CourseGroup> implements Cours
         return res;
     }
 
+    public User getUserByCourseGroupId(Long courseGroupId){
+        Query<User> query= getCurrentSession()
+                .createQuery("select cg.user from CourseGroup cg where cg.id = :coursegroupid", User.class)
+                .setParameter("coursegroupid", courseGroupId);
+
+        User res;
+        try{
+            res = query.getSingleResult();
+        } catch(NoResultException exc){
+            return null;
+        }
+
+        return res;
+    }
+
 
 //----
     @Autowired

@@ -18,6 +18,9 @@ INSERT INTO "auth"."permission" ("group", "name", "value")
          ,('user', 'get_user', 'user.email')
          ,('user', 'delete_user', 'user.delete')
          ,('user', 'update_role_user', 'user.role.update')
+
+         ,('course', 'save_course', 'course.save')
+         ,('course', 'delete_course', 'course.delete')
         ;
 
 -- create superrole
