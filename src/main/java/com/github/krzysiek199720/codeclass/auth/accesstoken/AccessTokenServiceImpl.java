@@ -37,6 +37,9 @@ public class AccessTokenServiceImpl implements AccessTokenService{
     public boolean isSessionActive(String token){
         AccessToken accessToken = accessTokenDAO.findByToken(token);
 
+        if(accessToken == null)
+            throw new NotFoundException("auth.token.notfound");
+
         return isSessionActive(accessToken);
     }
 
