@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 public class Security {
 
     private final SecurityService securityService;
+    private final String defaultMessage = "auth.unauthorized";
 
     @Autowired
     public Security(SecurityService securityService) {
@@ -23,11 +24,8 @@ public class Security {
     @Before("@annotation(secure)")
     public void checkSecurity(Secure secure){
 
-        //tmp TODO remove
-        System.out.println("\n\nSecure\n\n");
-
-
         String permissionVal = secure.value();
+        String exceptionMessage = secure.exceptionMessage();
         String authToken = securityService.getToken();
 
         // Authenticate
@@ -37,6 +35,6 @@ public class Security {
         //check permission
         if(securityService.checkPermission(authToken, permissionVal))
             return;
-        throw new UnauthorizedException("auth.unauthorized");
+        throw new UnauthorizedException(exceptionMessage.isBlank() ? defaultMessage : exceptionMessage);
     }
 }
