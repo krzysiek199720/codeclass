@@ -6,6 +6,7 @@ import com.github.krzysiek199720.codeclass.course.course.Course;
 import com.github.krzysiek199720.codeclass.course.coursegroup.api.CourseGroupSaveApi;
 import com.github.krzysiek199720.codeclass.course.coursegroup.response.CourseGroupResponse;
 import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ public class CourseGroupService {
 
     private final CourseGroupDAO courseGroupDAO;
 
+    @Autowired
     public CourseGroupService(CourseGroupDAO courseGroupDAO) {
         this.courseGroupDAO = courseGroupDAO;
     }
@@ -72,7 +74,7 @@ public class CourseGroupService {
     public void delete(Long id) {
         CourseGroup courseGroup = courseGroupDAO.getById(id);
         if(courseGroup == null)
-            throw new NotFoundException("user.notfound");
+            throw new NotFoundException("course.coursegroup.notfound");
         courseGroupDAO.delete(courseGroup);
     }
 }

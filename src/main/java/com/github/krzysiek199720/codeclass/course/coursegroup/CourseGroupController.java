@@ -116,7 +116,7 @@ public class CourseGroupController extends AbstractController {
     @ApiOperation(value = "deleteUser", notes = "Delete user")
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "NO_CONTENT"),
-            @ApiResponse(code = 400, message = "auth.user.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 400, message = "course.coursegroup.notfound", response = ErrorResponse.class),
 
             @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "auth.unauthorized", response = ErrorResponse.class),
