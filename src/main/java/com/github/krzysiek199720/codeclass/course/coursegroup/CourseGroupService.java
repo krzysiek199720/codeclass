@@ -37,7 +37,6 @@ public class CourseGroupService {
             throw new NotFoundException("course.group.notfound");
 
         User author = courseGroup.getUser();
-        //FIXME Never used it - wonder if it works :>
         Hibernate.initialize(author);
 
         return new CourseGroupResponse(courseGroup, isAuthor);
@@ -58,19 +57,21 @@ public class CourseGroupService {
 
     @Transactional
     public CourseGroupResponse updateCourseGroup(Long id, CourseGroupSaveApi api){
-        CourseGroup courseGroup = new CourseGroup();
+        CourseGroup courseGroup = courseGroupDAO.getById(id);
+        if(courseGroup==null)
+            throw new NotFoundException("course.coursegroup.notfound");
 
         courseGroup.setName(api.getName());
 
         courseGroupDAO.save(courseGroup);
 
         User user = courseGroup.getUser();
-        //FIXME Never used it - wonder if it works :>
         Hibernate.initialize(user);
 
         return new CourseGroupResponse(courseGroup, true);
     }
 
+    @Transactional
     public void delete(Long id) {
         CourseGroup courseGroup = courseGroupDAO.getById(id);
         if(courseGroup == null)

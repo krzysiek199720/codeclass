@@ -63,6 +63,8 @@ public class CourseGroupDAOImpl extends GenericDAO<CourseGroup> implements Cours
 
     @Override
     public void delete(CourseGroup object) {
+        System.out.println("DELETE--------------------------------------");
         getCurrentSession().delete(Objects.requireNonNull(object));
+        System.out.println("DELETE--------------------------------------");
     }
 }
