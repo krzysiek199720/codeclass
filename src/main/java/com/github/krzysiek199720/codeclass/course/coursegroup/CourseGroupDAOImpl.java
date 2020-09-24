@@ -15,7 +15,7 @@ public class CourseGroupDAOImpl extends GenericDAO<CourseGroup> implements Cours
 
     public User getUserByCourseId(Long courseId){
         Query<User> query= getCurrentSession()
-                .createQuery("select cg.user from Course c join c.courseGroup cg where c.id = :courseid", User.class)
+                .createQuery("select cg.user from CourseGroup cg inner join Course c ON c.courseGroup=cg.id where c.id = :courseid", User.class)
                 .setParameter("courseid", courseId);
 
         User res;
@@ -63,8 +63,6 @@ public class CourseGroupDAOImpl extends GenericDAO<CourseGroup> implements Cours
 
     @Override
     public void delete(CourseGroup object) {
-        System.out.println("DELETE--------------------------------------");
         getCurrentSession().delete(Objects.requireNonNull(object));
-        System.out.println("DELETE--------------------------------------");
     }
 }

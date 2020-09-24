@@ -1,5 +1,6 @@
 package com.github.krzysiek199720.codeclass.course.course;
 
+import com.github.krzysiek199720.codeclass.auth.user.User;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.NotFoundException;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.UnauthorizedException;
 import com.github.krzysiek199720.codeclass.course.course.api.CourseCreateApi;
@@ -28,10 +29,12 @@ public class CourseService {
     }
 
     @Transactional
-    public CourseResponse getById(Long id, boolean isAuthor){
+    public CourseResponse getById(Long id, User user){
         Course course = courseDAO.getById(id);
         if(course == null)
             throw new NotFoundException("course.notfound");
+
+        boolean isAuthor = user != null && courseGroupDAO.getUserByCourseId(course.getId()).equals(user);
 
         if(course.getIsPublished() == null)
             if(!isAuthor)

@@ -51,17 +51,12 @@ public class CourseController extends AbstractController {
     @GetMapping("/{id}")
     public ResponseEntity<CourseResponse> get(@PathVariable Long id,
                                               @RequestHeader(value = "Authorization",required = false, defaultValue = "") String token){
-        boolean isAuthor = false;
 
-        if(!token.isBlank()){
-            AccessToken at = accessTokenService.getAccesstokenByToken(token);
-            User user = courseGroupService.getUserByCourseId(id);
+        User user = null;
+        if(!token.isBlank())
+            user = accessTokenService.getAccesstokenByToken(token).getUser();
 
-            if(user.equals(at.getUser()))
-                isAuthor = true;
-        }
-
-        return okResponse(courseService.getById(id, isAuthor));
+        return okResponse(courseService.getById(id, user));
     }
 
 //    save

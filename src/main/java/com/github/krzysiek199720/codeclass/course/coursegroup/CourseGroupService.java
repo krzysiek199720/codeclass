@@ -31,7 +31,7 @@ public class CourseGroupService {
     }
 
     @Transactional
-    public CourseGroupResponse getById(Long id, boolean isAuthor) {
+    public CourseGroupResponse getById(Long id, User user) {
         CourseGroup courseGroup = courseGroupDAO.getById(id);
         if(courseGroup == null)
             throw new NotFoundException("course.group.notfound");
@@ -39,7 +39,7 @@ public class CourseGroupService {
         User author = courseGroup.getUser();
         Hibernate.initialize(author);
 
-        return new CourseGroupResponse(courseGroup, isAuthor);
+        return new CourseGroupResponse(courseGroup, author.equals(user));
     }
 
     @Transactional
