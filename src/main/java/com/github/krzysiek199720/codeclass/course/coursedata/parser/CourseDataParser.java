@@ -23,7 +23,13 @@ public class CourseDataParser {
     @Getter
     private int resultIndex = 0;
 
-    public int getResultIndexPosition(){return indexBuffer.indexes.get(resultIndex).position;}
+    public int getResultIndexPosition(){
+        if(indexBuffer==null)
+            return -1;
+        if(indexBuffer.indexes.size() < resultIndex)
+            return indexBuffer.indexes.get(resultIndex).position;
+        return -1;
+    }
 
     @Getter
     private ParserState state;

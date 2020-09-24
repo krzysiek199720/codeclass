@@ -39,6 +39,8 @@ public class CourseDataService {
 
     public List<CourseData> parseCourseData(String input){
         CourseDataParser parser = factory.getObject();
+        if(input == null)
+            input = "";
 
         parser.tokenize(input);
 
