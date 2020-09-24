@@ -168,12 +168,8 @@ public class CourseController extends AbstractController {
     public ResponseEntity<Object> publish(@PathVariable Long id, Boolean isPublished, @RequestHeader(value = "Authorization") String token){
 
         AccessToken at = accessTokenService.getAccesstokenByToken(token);
-        User user = courseGroupService.getUserByCourseId(id);
 
-        if(!user.equals(at.getUser()))
-            throw new UnauthorizedException("course.unauthorized");
-
-        courseService.publish(id, isPublished);
+        courseService.publish(id, at.getUser(), isPublished);
 
         return noContent();
     }

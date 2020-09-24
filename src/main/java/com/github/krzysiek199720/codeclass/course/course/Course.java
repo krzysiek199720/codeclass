@@ -40,7 +40,7 @@ public class Course extends AbstractModel {
     private LocalDateTime isPublished;
 
     @JsonIgnore
-    @Column(name = "sourcepath", nullable = false)
+    @Column(name = "sourcepath")
     private String sourcePath;
 
     @ManyToOne(fetch = FetchType.LAZY)

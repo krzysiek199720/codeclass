@@ -13,8 +13,13 @@ import java.util.Objects;
 public class CourseDAOImpl extends GenericDAO<Course> implements CourseDAO {
 
     public Course fetchById(Long id) {
+//        Wht tho. Why fetch all properties doesnt work
         Query<Course> query = getCurrentSession().createQuery("select c from Course c " +
-                "join fetch all properties where c.id = :courseId", Course.class)
+                        "join fetch c.courseGroup " +
+                        "join fetch c.language " +
+                        "join fetch c.category " +
+                        " where c.id = :courseId"
+                , Course.class)
                 .setParameter("courseId", id);
         Course res;
         try{
