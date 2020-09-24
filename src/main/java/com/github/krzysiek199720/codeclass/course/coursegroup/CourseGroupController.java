@@ -7,16 +7,14 @@ import com.github.krzysiek199720.codeclass.auth.user.User;
 import com.github.krzysiek199720.codeclass.core.controller.AbstractController;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.UnauthorizedException;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
-import com.github.krzysiek199720.codeclass.course.course.api.CourseUpdateApi;
 import com.github.krzysiek199720.codeclass.course.course.response.CourseResponse;
 import com.github.krzysiek199720.codeclass.course.coursegroup.api.CourseGroupSaveApi;
 import com.github.krzysiek199720.codeclass.course.coursegroup.response.CourseGroupResponse;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+@Api(tags={"Course Group"})
 
 @RestController
 @RequestMapping("/course/group")

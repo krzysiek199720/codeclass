@@ -11,14 +11,13 @@ import com.github.krzysiek199720.codeclass.course.course.CourseService;
 import com.github.krzysiek199720.codeclass.course.coursedata.parser.exception.response.CourseDataParserParseErrorResponse;
 import com.github.krzysiek199720.codeclass.course.coursedata.parser.exception.response.CourseDataParserTokenizerErrorResponse;
 import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroupService;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+@Api(tags={"Course Data"})
 
 @RestController
 @RequestMapping("/course")

@@ -12,13 +12,12 @@ import com.github.krzysiek199720.codeclass.course.course.api.CourseUpdateApi;
 import com.github.krzysiek199720.codeclass.course.coursedata.CourseDataService;
 import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroupService;
 import com.github.krzysiek199720.codeclass.course.course.response.CourseResponse;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+@Api(tags={"Course"})
 
 @RestController
 @RequestMapping("/course")
