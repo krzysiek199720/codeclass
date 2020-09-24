@@ -31,6 +31,10 @@ INSERT INTO "auth"."permission" ("group", "name", "value")
          ,('language', 'save_language', 'course.language.create')
          ,('language', 'save_language', 'course.language.update')
          ,('language', 'delete_language', 'course.language.delete')
+
+         ,('category', 'save_category', 'course.category.create')
+         ,('category', 'save_category', 'course.category.update')
+         ,('category', 'delete_category', 'course.category.delete')
 ;
 
 -- create superrole
