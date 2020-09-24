@@ -67,7 +67,7 @@ public class CourseDataController extends AbstractController {
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
-    @Secure("")
+    @Secure(value = "course.data.save", exceptionMessage = "course.unauthorized")
     @PostMapping("/{id}/data")
     public ResponseEntity<List<CourseData>> saveCourseData(@PathVariable Long id, String input, @RequestHeader(value = "Authorization") String token){
 

@@ -65,12 +65,12 @@ public class CourseGroupController extends AbstractController {
             @ApiResponse(code = 401, message = "course.unauthorized", response = ErrorResponse.class),
 
             @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
-            @ApiResponse(code = 401, message = "auth.unauthorized", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "course.group.unauthorized", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class),
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
-    @Secure("course.group.save")
+    @Secure(value = "course.group.save", exceptionMessage = "course.group.unauthorized")
     @PostMapping("/")
     public ResponseEntity<CourseGroupResponse> create(@RequestBody CourseGroupSaveApi api,
                                                  @RequestHeader(value = "Authorization") String token){
@@ -92,12 +92,12 @@ public class CourseGroupController extends AbstractController {
             @ApiResponse(code = 401, message = "course.unauthorized", response = ErrorResponse.class),
 
             @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
-            @ApiResponse(code = 401, message = "auth.unauthorized", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "course.group.unauthorized", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class),
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
-    @Secure("course.group.save")
+    @Secure(value = "course.group.save", exceptionMessage = "course.group.unauthorized")
     @PutMapping("/{id}")
     public ResponseEntity<CourseGroupResponse> update(@PathVariable Long id,
                                                  @RequestBody CourseGroupSaveApi api,
@@ -119,12 +119,12 @@ public class CourseGroupController extends AbstractController {
             @ApiResponse(code = 400, message = "course.coursegroup.notfound", response = ErrorResponse.class),
 
             @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
-            @ApiResponse(code = 401, message = "auth.unauthorized", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "course.group.unauthorized", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class),
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
-    @Secure("course.group.delete")
+    @Secure(value = "course.group.delete", exceptionMessage = "course.group.unauthorized")
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@RequestHeader(value = "Authorization") String token, @PathVariable Long id){
 
@@ -132,7 +132,7 @@ public class CourseGroupController extends AbstractController {
         User userAuthor = courseGroupService.getUserByCourseGroupId(id);
 
         if(!userAuthor.equals(at.getUser()))
-            throw new UnauthorizedException("course.delete");
+            throw new UnauthorizedException("course.group.delete");
 
         courseGroupService.delete(id);
 

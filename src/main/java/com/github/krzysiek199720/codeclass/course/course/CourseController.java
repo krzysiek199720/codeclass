@@ -77,12 +77,12 @@ public class CourseController extends AbstractController {
             @ApiResponse(code = 401, message = "course.unauthorized", response = ErrorResponse.class),
 
             @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
-            @ApiResponse(code = 401, message = "auth.unauthorized", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "course.unauthorized", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class),
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
-    @Secure("course.save")
+    @Secure(value = "course.save", exceptionMessage = "course.unauthorized")
     @PostMapping("/")
     public ResponseEntity<CourseResponse> create(@RequestBody CourseCreateApi api,
                                               @RequestHeader(value = "Authorization") String token){
@@ -109,12 +109,12 @@ public class CourseController extends AbstractController {
             @ApiResponse(code = 401, message = "course.unauthorized", response = ErrorResponse.class),
 
             @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
-            @ApiResponse(code = 401, message = "auth.unauthorized", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "course.unauthorized", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class),
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
-    @Secure("course.save")
+    @Secure(value = "course.save", exceptionMessage = "course.unauthorized")
     @PutMapping("/{id}")
     public ResponseEntity<CourseResponse> update(@PathVariable Long id,
                                                  @RequestBody CourseUpdateApi api,
@@ -136,12 +136,12 @@ public class CourseController extends AbstractController {
             @ApiResponse(code = 400, message = "auth.user.notfound", response = ErrorResponse.class),
 
             @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
-            @ApiResponse(code = 401, message = "auth.unauthorized", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "course.unauthorized", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class),
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
-    @Secure("course.delete")
+    @Secure(value = "course.delete", exceptionMessage = "course.unauthorized")
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@RequestHeader(value = "Authorization") String token, @PathVariable Long id){
 
@@ -169,7 +169,7 @@ public class CourseController extends AbstractController {
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
-    @Secure("")
+    @Secure(value = "course.publish", exceptionMessage = "course.unauthorized")
     @PutMapping("/{id}/publish")
     public ResponseEntity<Object> publish(@PathVariable Long id, Boolean isPublished, @RequestHeader(value = "Authorization") String token){
 

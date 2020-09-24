@@ -58,12 +58,12 @@ public class LanguageController extends AbstractController {
             @ApiResponse(code = 401, message = "course.language.unauthorized", response = ErrorResponse.class),
 
             @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
-            @ApiResponse(code = 401, message = "auth.unauthorized", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "course.language.unauthorized", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class),
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
-    @Secure("course.language.create")
+    @Secure(value = "course.language.create", exceptionMessage = "course.language.unauthorized")
     @PostMapping("/")
     public ResponseEntity<Language> create(@RequestBody LanguageSaveApi api){
 
@@ -77,12 +77,12 @@ public class LanguageController extends AbstractController {
             @ApiResponse(code = 404, message = "course.language.notfound", response = ErrorResponse.class),
 
             @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
-            @ApiResponse(code = 401, message = "auth.unauthorized", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "course.language.unauthorized", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class),
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
-    @Secure("course.language.update")
+    @Secure(value = "course.language.update", exceptionMessage = "course.language.unauthorized")
     @PutMapping("/{id}")
     public ResponseEntity<Language> update(@PathVariable Long id,
                                                       @RequestBody LanguageSaveApi api){
@@ -97,12 +97,12 @@ public class LanguageController extends AbstractController {
             @ApiResponse(code = 400, message = "course.language.notfound", response = ErrorResponse.class),
 
             @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
-            @ApiResponse(code = 401, message = "auth.unauthorized", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "course.language.unauthorized", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class),
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
-    @Secure("course.language.delete")
+    @Secure(value = "course.language.delete", exceptionMessage = "course.language.unauthorized")
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable Long id){
 
