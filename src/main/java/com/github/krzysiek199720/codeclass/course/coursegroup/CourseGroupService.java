@@ -3,12 +3,16 @@ package com.github.krzysiek199720.codeclass.course.coursegroup;
 import com.github.krzysiek199720.codeclass.auth.user.User;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.NotFoundException;
 import com.github.krzysiek199720.codeclass.course.course.Course;
+import com.github.krzysiek199720.codeclass.course.course.response.CourseResponseNoGroup;
 import com.github.krzysiek199720.codeclass.course.coursegroup.api.CourseGroupSaveApi;
 import com.github.krzysiek199720.codeclass.course.coursegroup.response.CourseGroupResponse;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseGroupService {
@@ -77,5 +81,22 @@ public class CourseGroupService {
         if(courseGroup == null)
             throw new NotFoundException("course.coursegroup.notfound");
         courseGroupDAO.delete(courseGroup);
+    }
+
+    @Transactional
+    public List<CourseResponseNoGroup> getCourses(Long courseGroupId, User user){
+        CourseGroup courseGroup = courseGroupDAO.getById(courseGroupId);
+        if(courseGroup == null)
+            throw new NotFoundException("course.coursegroup.notfound");
+
+        User author = courseGroupDAO.getUserByCourseGroupId(courseGroup.getId());
+        boolean showUnpublished = false;
+        if(author.equals(user))
+            showUnpublished = true;
+
+        List<Course> result = courseGroupDAO.getCourses(courseGroupId, showUnpublished);
+
+        final boolean isAuthor = showUnpublished;
+        return result.stream().map(c -> new CourseResponseNoGroup(c, isAuthor)).collect(Collectors.toList());
     }
 }

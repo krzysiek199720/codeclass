@@ -8,11 +8,14 @@ import com.github.krzysiek199720.codeclass.core.controller.AbstractController;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.UnauthorizedException;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
 import com.github.krzysiek199720.codeclass.course.course.response.CourseResponse;
+import com.github.krzysiek199720.codeclass.course.course.response.CourseResponseNoGroup;
 import com.github.krzysiek199720.codeclass.course.coursegroup.api.CourseGroupSaveApi;
 import com.github.krzysiek199720.codeclass.course.coursegroup.response.CourseGroupResponse;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Api(tags={"Course Group"})
 
@@ -129,5 +132,25 @@ public class CourseGroupController extends AbstractController {
         courseGroupService.delete(id);
 
         return noContent();
+    }
+
+    //    Get courses
+    @ApiOperation(value = "getCoursesInGroup", notes = "Get courses in group")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = CourseResponseNoGroup.class, responseContainer = "List"),
+
+            @ApiResponse(code = 404, message = "course.coursegroup.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "course.unauthorized", response = ErrorResponse.class),
+    })
+    @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = false, allowEmptyValue = false
+            , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
+    @GetMapping("{id}/courses")
+    public ResponseEntity<List<CourseResponseNoGroup>> getCourses(@PathVariable Long id,
+                                                           @RequestHeader(value = "Authorization",required = false, defaultValue = "") String token){
+        User user = null;
+        if(!token.isBlank())
+            user = accessTokenService.getAccesstokenByToken(token).getUser();
+
+        return okResponse(courseGroupService.getCourses(id, user));
     }
 }
