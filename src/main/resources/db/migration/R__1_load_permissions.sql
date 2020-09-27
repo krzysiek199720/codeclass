@@ -39,6 +39,9 @@ INSERT INTO "auth"."permission" ("group", "name", "value")
          ,('link', 'save_link', 'course.link.create')
          ,('link', 'save_link', 'course.link.update')
          ,('link', 'delete_link', 'course.link.delete')
+
+         ,('file', 'save_file', 'course.file.create')
+         ,('file', 'delete_file', 'course.file.delete')
 ;
 
 -- create superrole

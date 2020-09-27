@@ -89,8 +89,6 @@ public class CourseService {
         if(course == null)
             throw new NotFoundException("course.notfound");
 
-//TODO uncomment
-
         if(!course.getLanguage().getId().equals(api.getLanguageId())){
           Language language = languageDAO.getById(api.getLanguageId());
           if(language == null)
