@@ -10,6 +10,9 @@ import com.github.krzysiek199720.codeclass.core.exceptions.exception.Unauthorize
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
 import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroupService;
 import io.swagger.annotations.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,7 +47,7 @@ public class FileController extends AbstractController {
     }
 
     //    save
-    @ApiOperation(value = "createLink", notes = "create link")
+    @ApiOperation(value = "createFile", notes = "create file")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = File.class),
 
@@ -70,6 +73,36 @@ public class FileController extends AbstractController {
             throw new UnauthorizedException("course.file.unauthorized");
 
         return okResponse(fileService.saveFile(courseId, displayName, file));
+    }
+
+    // download
+    @ApiOperation(value = "donwloadFile", notes = "download file")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = byte[].class),
+
+            @ApiResponse(code = 401, message = "course.notfound", response = ErrorResponse.class),
+
+            @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "course.file.unauthorized", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class),
+    })
+    @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
+            , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
+    @Secure(value = "course.file.create", exceptionMessage = "course.file.unauthorized")
+    @PostMapping("/file/{id}")
+    public ResponseEntity<byte[]> create(@PathVariable("id") Long id,
+                                       @RequestHeader(value = "Authorization") String token) throws IOException {
+
+        AccessToken at = accessTokenService.getAccesstokenByToken(token);
+
+        FileDataHolder result = fileService.downloadFile(id, at.getUser());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData(result.getName(), result.getName());
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+
+        return new ResponseEntity<>(result.getData(), headers, HttpStatus.OK);
     }
 
     //    delete

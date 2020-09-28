@@ -2,9 +2,11 @@ package com.github.krzysiek199720.codeclass.course.file;
 
 import com.github.krzysiek199720.codeclass.auth.user.User;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.NotFoundException;
+import com.github.krzysiek199720.codeclass.core.exceptions.exception.UnauthorizedException;
 import com.github.krzysiek199720.codeclass.course.course.Course;
 import com.github.krzysiek199720.codeclass.course.course.CourseDAO;
 import com.github.krzysiek199720.codeclass.course.file.exception.exception.CourseFileEmptyException;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 @Service
@@ -40,7 +43,7 @@ public class FileService {
             throw new CourseFileEmptyException();
 
         String fileName = multipartFile.getOriginalFilename() == null ? String.valueOf(multipartFile.hashCode()) : multipartFile.getOriginalFilename();
-        String folder = filePath + "/" + String.format("%019d", courseId);
+        String folder = getFileFolder(courseId);
 
         byte[] bytes = multipartFile.getBytes();
 
@@ -77,5 +80,34 @@ public class FileService {
             throw new NotFoundException("course.file.notfound");
 
         fileDAO.delete(file);
+    }
+
+    @Transactional
+    public FileDataHolder downloadFile(Long id, User user) throws IOException {
+        File file = fileDAO.getById(id);
+        if(file == null)
+            throw new NotFoundException("course.file.notfound");
+
+        User author = fileDAO.getUserByFile(file.getId());
+        Course course = file.getCourse();
+        Hibernate.initialize(course);
+        if(course.getIsPublished() == null)
+            if(!author.equals(user))
+                throw new UnauthorizedException("course.file.unauthorized");
+
+        String folderName = getFileFolder(course.getId());
+
+        java.io.File theFile = new java.io.File(folderName, file.getPath());
+
+        byte[] data = Files.readAllBytes(theFile.toPath());
+
+        FileDataHolder result = new FileDataHolder();
+        result.setName(file.getPath());
+        result.setData(data);
+        return result;
+    }
+
+    private String getFileFolder(Long courseId){
+        return filePath + "/" + String.format("%019d", courseId);
     }
 }
