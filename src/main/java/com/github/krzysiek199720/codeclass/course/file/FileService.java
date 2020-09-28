@@ -1,5 +1,6 @@
 package com.github.krzysiek199720.codeclass.course.file;
 
+import com.github.krzysiek199720.codeclass.auth.user.User;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.NotFoundException;
 import com.github.krzysiek199720.codeclass.course.course.Course;
 import com.github.krzysiek199720.codeclass.course.course.CourseDAO;
@@ -11,11 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.List;
 
 @Service
 public class FileService {
@@ -46,11 +44,8 @@ public class FileService {
 
         byte[] bytes = multipartFile.getBytes();
 
-//        Path path = Paths.get(filePath + fileName);
-//        Files.write(path, bytes);
-
-        java.io.File folerFile = new java.io.File(folder);
-        folerFile.mkdirs();
+        java.io.File folderFile = new java.io.File(folder);
+        folderFile.mkdirs();
         java.io.File sourceFile = new java.io.File(folder, fileName);
         sourceFile.createNewFile(); // does not create if file exists
         FileOutputStream fos = new FileOutputStream(sourceFile);
@@ -66,4 +61,21 @@ public class FileService {
         return file;
     }
 
+    @Transactional
+    public List<File> getAllByCourse(Long courseId) {
+        return fileDAO.getAddByCourse(courseId);
+    }
+
+    public User getUserByFile(Long id) {
+        return fileDAO.getUserByFile(id);
+    }
+
+    @Transactional
+    public void deleteFile(Long id) {
+        File file = fileDAO.getById(id);
+        if(file == null)
+            throw new NotFoundException("course.file.notfound");
+
+        fileDAO.delete(file);
+    }
 }

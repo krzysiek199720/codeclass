@@ -66,6 +66,7 @@ public class LinkService {
         linkDAO.delete(link);
     }
 
+
     public User getUserByLink(Long id) {
         return linkDAO.getUserByLinkId(id);
     }
