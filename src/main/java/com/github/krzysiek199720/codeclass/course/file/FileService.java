@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class FileService {
@@ -50,7 +51,29 @@ public class FileService {
         java.io.File folderFile = new java.io.File(folder);
         folderFile.mkdirs();
         java.io.File sourceFile = new java.io.File(folder, fileName);
-        sourceFile.createNewFile(); // does not create if file exists
+        boolean isFileNew = sourceFile.createNewFile(); // does not create if file exists
+        if(!isFileNew){
+            String[] fileNameParts = fileName.split("\\.");
+
+            StringBuilder newFileName = new StringBuilder();
+            if(fileNameParts.length > 1) {
+                for (int i = 0; i < fileNameParts.length - 1; ++i) {
+                    newFileName.append(fileNameParts[i]);
+                }
+                newFileName.append(new Random().nextLong());
+                newFileName.append(".");
+                newFileName.append(fileNameParts[fileNameParts.length - 1]);
+            }
+            else{
+                newFileName.append(fileName);
+                newFileName.append(new Random().nextLong());
+            }
+
+            fileName = newFileName.toString();
+            sourceFile = new java.io.File(folder, fileName);
+            sourceFile.createNewFile();
+        }
+
         FileOutputStream fos = new FileOutputStream(sourceFile);
         fos.write(bytes);
         fos.close();
