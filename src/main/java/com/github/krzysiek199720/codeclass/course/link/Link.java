@@ -27,7 +27,7 @@ public class Link {
     private String link;
 
     @JsonIgnore
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "courseid", nullable = false)
     private Course course;
 }

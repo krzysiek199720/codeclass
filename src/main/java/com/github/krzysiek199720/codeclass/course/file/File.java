@@ -28,7 +28,7 @@ public class File {
     private String path;
 
     @JsonIgnore
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "courseid", nullable = false)
     private Course course;
 }
