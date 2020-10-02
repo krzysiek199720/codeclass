@@ -88,6 +88,56 @@ public class CourseDataParserTests {
     }
 
     @Test
+    void parserWorksAllElementsWithLessSignTwoTimesInARow(@Autowired CourseDataParser parser) {
+//        FIXME As for now the < signs are not allowed and this needs to be fixed
+        String testCase = "Here is where the text could be inserted. " +
+                "<code> " +
+                "<line indent=\"1\"> " +
+                "Here is where magic happens. " +
+                "<element desc=\"Description of magic\"> " +
+                "Magic is awesome\\<\\<>! " +
+                "</element> " +
+                "</line> " +
+                "<line> " +
+                "<element desc=\"Description one\"> " +
+                "One.text " +
+                "<element desc=\"Description one.one\"> " +
+                "One.one.text " +
+                "</element> " +
+                "</element> " +
+                "</line> " +
+                "</code> " +
+                "Just want to say thank you. ";
+
+        parser.tokenize(testCase);
+        Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
+
+        List<CourseData> cd = parser.parse();
+        Assert.state(parser.getResultState() == ParserResultState.SUCCESS, "Parser result should end with success");
+        Assert.notNull(cd,"Parser results should not be null");
+        Assert.notEmpty(cd, "Parser results should not be empty");
+    }
+
+    @Test
+    void parserIndentNotNumber(@Autowired CourseDataParser parser) {
+        String testCase = "<code> " +
+                "<line indent=\"q\"> " +
+                "Here is where magic happens. " +
+                "<element desc=\"Description of magic\"> " +
+                "Magic is awesome\\<\\<>! " +
+                "</element> " +
+                "</line> " +
+                "</code>";
+
+        parser.tokenize(testCase);
+        Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
+
+        List<CourseData> cd = parser.parse();
+        Assert.state(parser.getResultState() == ParserResultState.ERROR_INDENT, "Parser result should end with success");
+        Assert.isNull(cd,"Parser results should not be null");
+    }
+
+    @Test
     void parserJsonCourse(@Autowired CourseDataParser parser) {
         String testCase = "<code><line><element desc=\"json line\">" +
                 "<element desc=\"elem name\">\"name\"</element>" +

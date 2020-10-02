@@ -362,9 +362,8 @@ public class CourseDataParser {
                             if(nextIndex.type == ElementType.ELEMENT_DESCRIPTION){
                                 ++resultIndex;
 //                                desc
-                                element.setDescription(
-                                        new String(data.getData(), nextIndex.position, nextIndex.length)
-                                );
+                                String descData = new String(data.getData(), nextIndex.position, nextIndex.length).replace("\\<", "<");
+                                element.setDescription(descData);
                                 try{
                                     nextIndex = indexBuffer.indexes.get(resultIndex+1);
                                 }catch (IndexOutOfBoundsException exception){
@@ -380,9 +379,8 @@ public class CourseDataParser {
                                 hasData.put(depth,true);
                                 ++resultIndex;
 //                                element data
-                                element.setData(
-                                        new String(data.getData(), nextIndex.position, nextIndex.length)
-                                );
+                                String elemData = new String(data.getData(), nextIndex.position, nextIndex.length).replace("\\<", "<");
+                                element.setData(elemData);
                             }else if(nextIndex.type == ElementType.LINE_END) {
                                 resultState = ParserResultState.ERROR_MISSING_ELEMENT_END;
                                 return null;
@@ -403,14 +401,16 @@ public class CourseDataParser {
                             continue;
                         } else if(indexElement.type == ElementType.TEXT){
                             hasData.put(depth,true);
+
+                            String elemData = new String(data.getData(), indexElement.position, indexElement.length).replace("\\<", "<");
+
                             element = new CourseDataElement();
                             element.setCourseDataLine(line);
                             element.setDepth(depth);
                             element.setDescription(null);
                             element.setOrder(elements.size());
-                            element.setData(
-                                    new String(data.getData(), indexElement.position, indexElement.length)
-                            );
+                            element.setData(elemData);
+
                         } else if(indexElement.type == ElementType.LINE_END){
                             //end line
                             if(isElementOpened.get(depth)){
@@ -491,10 +491,12 @@ public class CourseDataParser {
             Index index = indexBuffer.indexes.get(resultIndex);
             CourseDataLine line = new CourseDataLine();
 
+            String elemData = new String(data.getData(), index.position, index.length).replace("\\<", "<");
+
             CourseDataElement element = new CourseDataElement(
                     0,
                     0,
-                    new String(data.getData(), index.position, index.length),
+                    elemData,
                     null,
                     line
             );
