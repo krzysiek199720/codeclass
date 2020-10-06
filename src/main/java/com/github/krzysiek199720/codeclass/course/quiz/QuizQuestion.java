@@ -17,6 +17,7 @@ import javax.persistence.*;
 @Table(schema = "course", name = "quizquestion")
 @SequenceGenerator(schema = "course", name = "id_generator", sequenceName = "quizquestion_seq_id", allocationSize = 1)
 public class QuizQuestion {
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_generator")
     private Long id;
@@ -24,6 +25,10 @@ public class QuizQuestion {
     @Length(max = 100)
     @Column(name = "question", nullable = false)
     private String question;
+
+    @Length(max = 100)
+    @Column(name = "answer0", nullable = false)
+    private String answer0;
 
     @Length(max = 100)
     @Column(name = "answer1", nullable = false)
@@ -36,10 +41,6 @@ public class QuizQuestion {
     @Length(max = 100)
     @Column(name = "answer3", nullable = false)
     private String answer3;
-
-    @Length(max = 100)
-    @Column(name = "answer4", nullable = false)
-    private String answer4;
 
     @Column(name = "answer", nullable = false)
     private Integer answer;
