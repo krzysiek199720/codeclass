@@ -20,18 +20,20 @@ public class CourseResponse {
     private Language language;
     private Category category;
     private Boolean isAuthor;
+    private Boolean isFollowing;
 
-    public CourseResponse(Course course, boolean isAuthor){
+    public CourseResponse(Course course, Boolean isAuthor, Boolean isFollowing){
 
         this.id = course.getId();
         this.title = course.getTitle();
         this.complexity = course.getComplexity();
         this.groupOrder = course.getGroupOrder();
         this.isPublished = course.getIsPublished();
-        this.courseGroupResponse = new CourseGroupResponse(course.getCourseGroup(), isAuthor);
+        this.courseGroupResponse = new CourseGroupResponse(course.getCourseGroup(), isAuthor, isFollowing);
         this.language = course.getLanguage();
         this.category = course.getCategory();
 
         this.isAuthor = isAuthor;
+        this.isFollowing = isFollowing;
     }
 }

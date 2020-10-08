@@ -10,6 +10,8 @@ import com.github.krzysiek199720.codeclass.course.course.api.CourseUpdateApi;
 import com.github.krzysiek199720.codeclass.course.course.response.CourseResponse;
 import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroup;
 import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroupDAO;
+import com.github.krzysiek199720.codeclass.course.follow.Follow;
+import com.github.krzysiek199720.codeclass.course.follow.FollowDAO;
 import com.github.krzysiek199720.codeclass.course.language.Language;
 import com.github.krzysiek199720.codeclass.course.language.LanguageDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +27,15 @@ public class CourseService {
     private final CourseGroupDAO courseGroupDAO;
     private final LanguageDAO languageDAO;
     private final CategoryDAO categoryDAO;
+    private final FollowDAO followDAO;
 
     @Autowired
-    public CourseService(CourseDAO courseDAO, CourseGroupDAO courseGroupDAO, LanguageDAO languageDAO, CategoryDAO categoryDAO) {
+    public CourseService(CourseDAO courseDAO, CourseGroupDAO courseGroupDAO, LanguageDAO languageDAO, CategoryDAO categoryDAO, FollowDAO followDAO) {
         this.courseDAO = courseDAO;
         this.courseGroupDAO = courseGroupDAO;
         this.languageDAO = languageDAO;
         this.categoryDAO = categoryDAO;
+        this.followDAO = followDAO;
     }
 
     @Transactional
@@ -46,7 +50,11 @@ public class CourseService {
             if(!isAuthor)
                 throw new UnauthorizedException("course.unauthorized");
 
-        return new CourseResponse(course, isAuthor);
+        Follow follow = null;
+        if(user != null)
+            follow = followDAO.getByCourseId(course.getId(), user.getId());
+
+        return new CourseResponse(course, isAuthor, follow != null);
     }
 
     @Transactional
@@ -78,7 +86,7 @@ public class CourseService {
 
         courseDAO.save(course);
 
-        return new CourseResponse(course, true);
+        return new CourseResponse(course, true, null);
     }
 
     @Transactional
@@ -108,7 +116,7 @@ public class CourseService {
 
         courseDAO.save(course);
 
-        return new CourseResponse(course, true);
+        return new CourseResponse(course, true, null);
     }
 
     @Transactional
