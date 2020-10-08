@@ -6,6 +6,8 @@ import com.github.krzysiek199720.codeclass.course.course.Course;
 import com.github.krzysiek199720.codeclass.course.course.response.CourseResponseNoGroup;
 import com.github.krzysiek199720.codeclass.course.coursegroup.api.CourseGroupSaveApi;
 import com.github.krzysiek199720.codeclass.course.coursegroup.response.CourseGroupResponse;
+import com.github.krzysiek199720.codeclass.course.follow.Follow;
+import com.github.krzysiek199720.codeclass.course.follow.FollowDAO;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +20,12 @@ import java.util.stream.Collectors;
 public class CourseGroupService {
 
     private final CourseGroupDAO courseGroupDAO;
+    private final FollowDAO followDAO;
 
     @Autowired
-    public CourseGroupService(CourseGroupDAO courseGroupDAO) {
+    public CourseGroupService(CourseGroupDAO courseGroupDAO, FollowDAO followDAO) {
         this.courseGroupDAO = courseGroupDAO;
+        this.followDAO = followDAO;
     }
 
     @Transactional
@@ -43,7 +47,9 @@ public class CourseGroupService {
         User author = courseGroup.getUser();
         Hibernate.initialize(author);
 
-        return new CourseGroupResponse(courseGroup, author.equals(user));
+        Follow follow = followDAO.getByCourseGroupId(courseGroup.getId(), user.getId());
+
+        return new CourseGroupResponse(courseGroup, author.equals(user), follow != null);
     }
 
     @Transactional
@@ -56,7 +62,7 @@ public class CourseGroupService {
 
         courseGroupDAO.save(courseGroup);
 
-        return new CourseGroupResponse(courseGroup, true);
+        return new CourseGroupResponse(courseGroup, true, null);
     }
 
     @Transactional
@@ -72,7 +78,7 @@ public class CourseGroupService {
         User user = courseGroup.getUser();
         Hibernate.initialize(user);
 
-        return new CourseGroupResponse(courseGroup, true);
+        return new CourseGroupResponse(courseGroup, true, null);
     }
 
     @Transactional
@@ -96,7 +102,9 @@ public class CourseGroupService {
 
         List<Course> result = courseGroupDAO.getCourses(courseGroupId, showUnpublished);
 
+        Follow follow = followDAO.getByCourseGroupId(courseGroup.getId(), user.getId());
+
         final boolean isAuthor = showUnpublished;
-        return result.stream().map(c -> new CourseResponseNoGroup(c, isAuthor)).collect(Collectors.toList());
+        return result.stream().map(c -> new CourseResponseNoGroup(c, isAuthor, follow != null)).collect(Collectors.toList());
     }
 }

@@ -18,8 +18,9 @@ public class CourseResponseNoGroup {
     private Language language;
     private Category category;
     private Boolean isAuthor;
+    private Boolean isFollowing;
 
-    public CourseResponseNoGroup(Course course, boolean isAuthor){
+    public CourseResponseNoGroup(Course course, boolean isAuthor, boolean isFollowing){
 
         this.id = course.getId();
         this.title = course.getTitle();
@@ -30,5 +31,6 @@ public class CourseResponseNoGroup {
         this.category = course.getCategory();
 
         this.isAuthor = isAuthor;
+        this.isFollowing = isFollowing;
     }
 }

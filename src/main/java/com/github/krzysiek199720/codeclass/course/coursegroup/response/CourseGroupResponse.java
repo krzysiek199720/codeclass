@@ -15,8 +15,9 @@ public class CourseGroupResponse {
     private String authorEmail;
 
     private Boolean isAuthor;
+    private Boolean isFollowing;
 
-    public CourseGroupResponse(CourseGroup cg, Boolean isAuthor){
+    public CourseGroupResponse(CourseGroup cg, Boolean isAuthor, Boolean isFollowing){
         this.id = cg.getId();
         this.name = cg.getName();
         this.authorFirstname = cg.getUser().getFirstname();
@@ -24,5 +25,6 @@ public class CourseGroupResponse {
         this.authorEmail = cg.getUser().getEmail();
 
         this.isAuthor = isAuthor;
+        this.isFollowing = isFollowing;
     }
 }

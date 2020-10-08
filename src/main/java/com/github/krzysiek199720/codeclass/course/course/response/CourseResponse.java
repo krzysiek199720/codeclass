@@ -1,9 +1,8 @@
 package com.github.krzysiek199720.codeclass.course.course.response;
 
+import com.github.krzysiek199720.codeclass.course.category.Category;
 import com.github.krzysiek199720.codeclass.course.course.Course;
 import com.github.krzysiek199720.codeclass.course.course.CourseComplexity;
-import com.github.krzysiek199720.codeclass.course.category.Category;
-import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroup;
 import com.github.krzysiek199720.codeclass.course.coursegroup.response.CourseGroupResponse;
 import com.github.krzysiek199720.codeclass.course.language.Language;
 import lombok.Getter;

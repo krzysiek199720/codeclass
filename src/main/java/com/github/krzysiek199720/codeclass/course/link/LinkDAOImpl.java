@@ -2,7 +2,6 @@ package com.github.krzysiek199720.codeclass.course.link;
 
 import com.github.krzysiek199720.codeclass.auth.user.User;
 import com.github.krzysiek199720.codeclass.core.db.GenericDAO;
-import com.github.krzysiek199720.codeclass.course.language.Language;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

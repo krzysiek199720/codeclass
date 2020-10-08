@@ -1,7 +1,6 @@
 package com.github.krzysiek199720.codeclass.course.quiz.dao;
 
 import com.github.krzysiek199720.codeclass.core.db.GenericDAO;
-import com.github.krzysiek199720.codeclass.course.quiz.Quiz;
 import com.github.krzysiek199720.codeclass.course.quiz.QuizScore;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;

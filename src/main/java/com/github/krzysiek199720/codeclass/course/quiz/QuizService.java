@@ -12,7 +12,6 @@ import com.github.krzysiek199720.codeclass.course.quiz.dao.QuizDAO;
 import com.github.krzysiek199720.codeclass.course.quiz.dao.QuizQuestionDAO;
 import com.github.krzysiek199720.codeclass.course.quiz.dao.QuizScoreDAO;
 import com.github.krzysiek199720.codeclass.course.quiz.response.QuizResponse;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

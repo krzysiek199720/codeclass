@@ -1,6 +1,5 @@
 package com.github.krzysiek199720.codeclass.course.quiz.api;
 
-import com.github.krzysiek199720.codeclass.course.quiz.QuizQuestion;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

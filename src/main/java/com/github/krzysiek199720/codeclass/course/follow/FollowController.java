@@ -5,7 +5,6 @@ import com.github.krzysiek199720.codeclass.auth.accesstoken.AccessTokenService;
 import com.github.krzysiek199720.codeclass.auth.security.annotation.Secure;
 import com.github.krzysiek199720.codeclass.core.controller.AbstractController;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
-import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroupService;
 import com.github.krzysiek199720.codeclass.course.follow.response.FollowResponse;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;

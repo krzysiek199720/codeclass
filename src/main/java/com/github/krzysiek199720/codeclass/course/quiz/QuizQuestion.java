@@ -1,7 +1,6 @@
 package com.github.krzysiek199720.codeclass.course.quiz;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.github.krzysiek199720.codeclass.course.course.Course;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

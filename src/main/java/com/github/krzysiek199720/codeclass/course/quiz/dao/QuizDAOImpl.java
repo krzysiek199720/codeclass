@@ -1,6 +1,5 @@
 package com.github.krzysiek199720.codeclass.course.quiz.dao;
 
-import com.github.krzysiek199720.codeclass.auth.user.User;
 import com.github.krzysiek199720.codeclass.core.db.GenericDAO;
 import com.github.krzysiek199720.codeclass.course.quiz.Quiz;
 import org.hibernate.query.Query;
