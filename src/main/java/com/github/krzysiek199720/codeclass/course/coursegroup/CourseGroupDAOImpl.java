@@ -15,6 +15,22 @@ import java.util.Objects;
 @Repository
 public class CourseGroupDAOImpl extends GenericDAO<CourseGroup> implements CourseGroupDAO {
 
+    @Override
+    public CourseGroup getByCourse(Long courseId) {
+        Query<CourseGroup> query= getCurrentSession()
+                .createQuery("select cg from CourseGroup cg inner join Course c ON c.courseGroup=cg.id where c.id = :courseid", CourseGroup.class)
+                .setParameter("courseid", courseId);
+
+        CourseGroup res;
+        try{
+            res = query.getSingleResult();
+        } catch(NoResultException exc){
+            return null;
+        }
+
+        return res;
+    }
+
     public User getUserByCourseId(Long courseId){
         Query<User> query= getCurrentSession()
                 .createQuery("select cg.user from CourseGroup cg inner join Course c ON c.courseGroup=cg.id where c.id = :courseid", User.class)

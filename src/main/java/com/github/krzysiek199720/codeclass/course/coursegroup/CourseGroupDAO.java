@@ -10,4 +10,5 @@ public interface CourseGroupDAO extends DAO<CourseGroup> {
     public User getUserByCourseId(Long courseId);
     public User getUserByCourseGroupId(Long courseGroupId);
     public List<Course> getCourses(Long courseGroupId, boolean showUnpublished);
+    CourseGroup getByCourse(Long courseId);
 }
