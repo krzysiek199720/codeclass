@@ -58,7 +58,6 @@ public class CourseDataParserTests {
 
     @Test
     void parserWorksAllElementsWithLessSign(@Autowired CourseDataParser parser) {
-//        FIXME As for now the < signs are not allowed and this needs to be fixed
         String testCase = "Here is where the text could be inserted. " +
                 "<code> " +
                 "<line indent=\"1\"> " +
@@ -89,7 +88,6 @@ public class CourseDataParserTests {
 
     @Test
     void parserWorksAllElementsWithLessSignTwoTimesInARow(@Autowired CourseDataParser parser) {
-//        FIXME As for now the < signs are not allowed and this needs to be fixed
         String testCase = "Here is where the text could be inserted. " +
                 "<code> " +
                 "<line indent=\"1\"> " +
