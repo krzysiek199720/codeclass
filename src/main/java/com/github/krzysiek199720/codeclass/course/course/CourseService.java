@@ -14,6 +14,7 @@ import com.github.krzysiek199720.codeclass.course.follow.Follow;
 import com.github.krzysiek199720.codeclass.course.follow.FollowDAO;
 import com.github.krzysiek199720.codeclass.course.language.Language;
 import com.github.krzysiek199720.codeclass.course.language.LanguageDAO;
+import com.github.krzysiek199720.codeclass.notification.NotificationDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,14 +29,16 @@ public class CourseService {
     private final LanguageDAO languageDAO;
     private final CategoryDAO categoryDAO;
     private final FollowDAO followDAO;
+    private final NotificationDAO notificationDAO;
 
     @Autowired
-    public CourseService(CourseDAO courseDAO, CourseGroupDAO courseGroupDAO, LanguageDAO languageDAO, CategoryDAO categoryDAO, FollowDAO followDAO) {
+    public CourseService(CourseDAO courseDAO, CourseGroupDAO courseGroupDAO, LanguageDAO languageDAO, CategoryDAO categoryDAO, FollowDAO followDAO, NotificationDAO notificationDAO) {
         this.courseDAO = courseDAO;
         this.courseGroupDAO = courseGroupDAO;
         this.languageDAO = languageDAO;
         this.categoryDAO = categoryDAO;
         this.followDAO = followDAO;
+        this.notificationDAO = notificationDAO;
     }
 
     @Transactional
@@ -147,6 +150,18 @@ public class CourseService {
         }
 
         courseDAO.save(course);
+
+        String textSb = "New course: " +
+                course.getTitle() +
+                " by " +
+                user.getFirstname() +
+                " " +
+                user.getLastname();
+        notificationDAO.createNotification(
+                course.getId(),
+                textSb,
+                "/course/" + course.getId().toString() // i dont know how to do this dynamically
+                );
     }
 
     @Transactional

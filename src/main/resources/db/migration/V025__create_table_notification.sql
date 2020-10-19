@@ -8,7 +8,7 @@ CREATE TABLE "notification"."notification"
 (
     "id"          BIGINT        NOT NULL   DEFAULT nextval('notification.notification_seq_id')
     ,"isread"     BOOLEAN       NOT NULL   DEFAULT FALSE
-    ,"text"       VARCHAR(30)   NOT NULL
+    ,"text"       TEXT          NOT NULL
     ,"slug"       VARCHAR(255)  NOT NULL
     ,"userid"     BIGINT        NOT NULL   REFERENCES auth.user (id) DEFAULT 1
 );

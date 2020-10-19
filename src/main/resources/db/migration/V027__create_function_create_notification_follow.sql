@@ -13,6 +13,4 @@ BEGIN
         LOOP
             INSERT INTO notification.notification (text, slug, userid) VALUES (text_val, slug_val, user_id);
         END LOOP;
-
-    COMMIT;
 END;$$

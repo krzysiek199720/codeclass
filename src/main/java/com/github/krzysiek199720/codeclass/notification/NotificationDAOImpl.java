@@ -1,12 +1,14 @@
 package com.github.krzysiek199720.codeclass.notification;
 
 import com.github.krzysiek199720.codeclass.core.db.GenericDAO;
+import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.StoredProcedureQuery;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,6 +38,16 @@ public class NotificationDAOImpl extends GenericDAO<Notification> implements Not
         }
 
         return notification;
+    }
+
+    @Override
+    public void createNotification(Long courseId, String text, String slug) {
+        NativeQuery query = getCurrentSession()
+                .createNativeQuery("select count(*) from create_follow_notification(:course_group_id, :text_val, :slug_val)")
+                .setParameter("course_group_id",courseId)
+                .setParameter("text_val", text)
+                .setParameter("slug_val", slug);
+        query.getResultList();
     }
 
     //----
