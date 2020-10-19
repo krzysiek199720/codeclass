@@ -19,7 +19,7 @@ public class CourseDataElement {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_generator")
     private Long id;
 
-    @Column(name = "order", nullable = false)
+    @Column(name = "theorder", nullable = false)
     private Integer order;
 
     @Column(name = "depth")

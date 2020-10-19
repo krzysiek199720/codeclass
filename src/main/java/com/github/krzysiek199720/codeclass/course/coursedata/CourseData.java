@@ -34,7 +34,7 @@ public class CourseData {
     @Column(name = "type", nullable = false)
     private CourseDataType type;
 
-    @Column(name = "order") // default on db
+    @Column(name = "theorder")
     private Integer order;
 
     @JsonIgnore

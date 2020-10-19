@@ -22,7 +22,7 @@ public class CourseDataLine {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_generator")
     private Long id;
 
-    @Column(name = "order")
+    @Column(name = "theorder")
     private Integer order;
 
     @Column(name = "indent")

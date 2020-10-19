@@ -78,15 +78,17 @@ public class CourseDataService {
 
         String fileName = String.format("%019d", courseId) + ".course";
 
-        if(course.getSourcePath().isBlank()){
+        if(course.getSourcePath() == null ||
+                course.getSourcePath().isBlank()){
             course.setSourcePath(fileName);
         }
 
+        File dir = new File(sourceDirectory);
         File sourceFile = new File(sourceDirectory, course.getSourcePath());
         FileWriter fw = null;
         try{
+            dir.mkdirs();
             sourceFile.createNewFile(); // does not create if file exists
-            // FIXME would be nice to write to tmp file instead of overwriting original right away
             fw = new FileWriter(sourceFile, false);
             fw.write(input);
             fw.close();

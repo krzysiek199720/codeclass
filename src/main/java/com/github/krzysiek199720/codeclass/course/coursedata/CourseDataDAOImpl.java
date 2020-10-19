@@ -16,8 +16,8 @@ public class CourseDataDAOImpl extends GenericDAO<CourseData> implements CourseD
     @Override
     public void deleteOld(Course course) {
         getCurrentSession().createNativeQuery(
-                "DELETE FROM course.coursedata WHERE courseid = ?")
-                .setParameter(0, course.getId())
+                "DELETE FROM course.coursedata WHERE courseid = :id")
+                .setParameter("id", course.getId())
                 .executeUpdate();
     }
 
@@ -56,14 +56,10 @@ public class CourseDataDAOImpl extends GenericDAO<CourseData> implements CourseD
     }
 
     public List<CourseData> saveAll(List<CourseData> objects){
-//        fixme look into batch saving
-        List<CourseData> result = new ArrayList<>(objects.size());
-
         for(CourseData cd : objects){
             getCurrentSession().save(cd);
-            result.add(cd);
         }
-        return result;
+        return objects;
     }
 
     @Override

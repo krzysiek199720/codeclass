@@ -7,7 +7,7 @@ CREATE SEQUENCE "course"."coursedataline_seq_id";
 CREATE TABLE "course"."coursedataline"
 (
     "id"                BIGINT      NOT NULL    DEFAULT nextval('course.coursedataline_seq_id')
-    ,"order"            INTEGER     NOT NULL    DEFAULT 0
+    ,"theorder"            INTEGER     NOT NULL    DEFAULT 0
     ,"indent"           INTEGER     NOT NULL    DEFAULT 0
     ,"coursedataid"     BIGINT      NOT NULL    REFERENCES course.coursedata (id) DEFAULT 1
 );

@@ -7,7 +7,7 @@ CREATE SEQUENCE "course"."coursedataelement_seq_id";
 CREATE TABLE "course"."coursedataelement"
 (
     "id"                    BIGINT      NOT NULL    DEFAULT nextval('course.coursedataelement_seq_id')
-    ,"order"                INTEGER     NOT NULL    DEFAULT 0
+    ,"theorder"                INTEGER     NOT NULL    DEFAULT 0
     ,"depth"                INTEGER     NOT NULL    DEFAULT 0
     ,"data"                 TEXT                    DEFAULT NULL
     ,"description"          TEXT                    DEFAULT NULL
