@@ -1,13 +1,10 @@
-package com.github.krzysiek199720.codeclass.course.link;
+package com.github.krzysiek199720.codeclass.course.assimilation;
 
 import com.github.krzysiek199720.codeclass.auth.accesstoken.AccessToken;
 import com.github.krzysiek199720.codeclass.auth.accesstoken.AccessTokenService;
 import com.github.krzysiek199720.codeclass.auth.security.annotation.Secure;
 import com.github.krzysiek199720.codeclass.core.controller.AbstractController;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
-import com.github.krzysiek199720.codeclass.course.assimilation.Assimilation;
-import com.github.krzysiek199720.codeclass.course.assimilation.AssimilationService;
-import com.github.krzysiek199720.codeclass.course.assimilation.AssimilationValue;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +25,7 @@ public class AssimilationController extends AbstractController {
 
 
     //    get
-    @ApiOperation(value = "getAssimilation", notes = "getsimilation")
+    @ApiOperation(value = "getAssimilation", notes = "Get assimilation")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = AssimilationValue.class),
 

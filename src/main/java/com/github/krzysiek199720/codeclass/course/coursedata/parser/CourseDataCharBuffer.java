@@ -5,9 +5,9 @@ import lombok.Getter;
 public class CourseDataCharBuffer {
 
     @Getter
-    private char[] data = null;
+    private char[] data;
     @Getter
-    private int length = 0;
+    private int length;
 
     @Getter
     private int position = 0;

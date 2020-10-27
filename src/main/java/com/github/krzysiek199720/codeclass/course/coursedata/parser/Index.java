@@ -8,5 +8,5 @@ import lombok.ToString;
 public class Index {
     int position;
     int length;
-    ElementType type = null;
+    ElementType type;
 }

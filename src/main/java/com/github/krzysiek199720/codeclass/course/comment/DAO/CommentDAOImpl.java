@@ -3,19 +3,15 @@ package com.github.krzysiek199720.codeclass.course.comment.DAO;
 import com.github.krzysiek199720.codeclass.core.db.GenericDAO;
 import com.github.krzysiek199720.codeclass.course.comment.Comment;
 import com.github.krzysiek199720.codeclass.course.comment.response.CommentResponse;
-import com.github.krzysiek199720.codeclass.course.search.dto.SearchDTO;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
-import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 

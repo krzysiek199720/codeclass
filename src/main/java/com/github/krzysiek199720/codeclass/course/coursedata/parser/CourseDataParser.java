@@ -275,7 +275,7 @@ public class CourseDataParser {
 
 //    Too messy, should rewrite
     private CourseData getNextCourseData(){
-        CourseData result = null;
+        CourseData result;
 
         if(resultIndex >= indexBuffer.indexes.size())
             return null;
@@ -333,7 +333,7 @@ public class CourseDataParser {
 
                             return null;
                         }
-                        CourseDataElement element = null;
+                        CourseDataElement element;
 
                         if(indexElement.type == ElementType.ELEMENT){
 //                                start new element
@@ -350,7 +350,7 @@ public class CourseDataParser {
 
 
 //                                check for description
-                            Index nextIndex = null;
+                            Index nextIndex;
                             try{
                                 nextIndex = indexBuffer.indexes.get(resultIndex+1);
                             }catch (IndexOutOfBoundsException exception){

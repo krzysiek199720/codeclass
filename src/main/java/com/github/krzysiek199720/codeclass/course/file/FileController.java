@@ -76,7 +76,7 @@ public class FileController extends AbstractController {
     }
 
     // download
-    @ApiOperation(value = "donwloadFile", notes = "download file")
+    @ApiOperation(value = "downloadFile", notes = "download file")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = byte[].class),
 

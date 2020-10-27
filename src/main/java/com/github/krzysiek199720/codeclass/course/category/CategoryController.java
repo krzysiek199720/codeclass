@@ -1,11 +1,10 @@
-package com.github.krzysiek199720.codeclass.course.language;
+package com.github.krzysiek199720.codeclass.course.category;
 
 import com.github.krzysiek199720.codeclass.auth.security.annotation.Secure;
 import com.github.krzysiek199720.codeclass.core.controller.AbstractController;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
-import com.github.krzysiek199720.codeclass.course.category.Category;
-import com.github.krzysiek199720.codeclass.course.category.CategoryService;
 import com.github.krzysiek199720.codeclass.course.category.api.CategorySaveApi;
+import com.github.krzysiek199720.codeclass.course.language.Language;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

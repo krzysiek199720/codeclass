@@ -10,12 +10,11 @@ import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorRespons
 import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroupService;
 import com.github.krzysiek199720.codeclass.course.quiz.api.QuizSaveApi;
 import com.github.krzysiek199720.codeclass.course.quiz.response.QuizResponse;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+@Api(tags={"Quiz"})
 
 @RestController
 @RequestMapping("/course/{id}/quiz")

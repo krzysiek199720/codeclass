@@ -30,7 +30,7 @@ public class RoleServiceImpl implements RoleService{
 
     @Transactional
     public List<Role> getAll(){
-        return (List<Role>) roleDAO.getAll();
+        return roleDAO.getAll();
     }
 
     @Transactional

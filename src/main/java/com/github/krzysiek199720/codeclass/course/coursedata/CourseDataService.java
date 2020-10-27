@@ -85,7 +85,7 @@ public class CourseDataService {
 
         File dir = new File(sourceDirectory);
         File sourceFile = new File(sourceDirectory, course.getSourcePath());
-        FileWriter fw = null;
+        FileWriter fw;
         try{
             dir.mkdirs();
             sourceFile.createNewFile(); // does not create if file exists

@@ -10,7 +10,7 @@ import javax.persistence.NoResultException;
 import java.util.Objects;
 
 @Repository
-public class AssimialtionDAOImpl extends GenericDAO<Assimilation> implements AssimilationDAO {
+public class AssimilationDAOImpl extends GenericDAO<Assimilation> implements AssimilationDAO {
 
     @Override
     public Assimilation getByCourseUser(Long courseId, Long userId) {
@@ -18,7 +18,7 @@ public class AssimialtionDAOImpl extends GenericDAO<Assimilation> implements Ass
                 .setParameter("courseid", courseId)
                 .setParameter("userid", userId);
 
-        Assimilation assimilation = null;
+        Assimilation assimilation;
         try {
             assimilation = query.getSingleResult();
         }catch(NoResultException exc){
@@ -30,7 +30,7 @@ public class AssimialtionDAOImpl extends GenericDAO<Assimilation> implements Ass
 
     //----
     @Autowired
-    public AssimialtionDAOImpl(EntityManager entityManager){
+    public AssimilationDAOImpl(EntityManager entityManager){
         super(entityManager);
     }
 
