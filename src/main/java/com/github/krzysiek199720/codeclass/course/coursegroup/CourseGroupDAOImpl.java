@@ -3,7 +3,15 @@ package com.github.krzysiek199720.codeclass.course.coursegroup;
 import com.github.krzysiek199720.codeclass.auth.user.User;
 import com.github.krzysiek199720.codeclass.core.db.GenericDAO;
 import com.github.krzysiek199720.codeclass.course.course.Course;
+import com.github.krzysiek199720.codeclass.course.course.CourseComplexity;
+import com.github.krzysiek199720.codeclass.course.search.dto.SearchDTO;
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import org.hibernate.query.Query;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.LocalDateTimeType;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +22,32 @@ import java.util.Objects;
 
 @Repository
 public class CourseGroupDAOImpl extends GenericDAO<CourseGroup> implements CourseGroupDAO {
+
+    @Override
+    public List<SearchDTO> search(String searchQuery, List<CourseComplexity> complexities, Long userId) {
+        Object[] complex = complexities.stream().map(x -> x.toString()).toArray();
+
+        return (List<SearchDTO>) getCurrentSession()
+                .createSQLQuery("SELECT * FROM fn_search(:searchQuery, :complexities, :userId)")
+                .setParameter("searchQuery", searchQuery, StringType.INSTANCE)
+                .setParameter("complexities", complex, StringArrayType.INSTANCE)
+                .setParameter("userId", userId)
+                .addScalar("courseGroupId", LongType.INSTANCE)
+                .addScalar("courseGroupName", StringType.INSTANCE)
+                .addScalar("courseCount", LongType.INSTANCE)
+                .addScalar("lastAddedDate", LocalDateTimeType.INSTANCE)
+                .addScalar("complexities", ListArrayType.INSTANCE)
+                .addScalar("languageId", LongType.INSTANCE)
+                .addScalar("languageName", StringType.INSTANCE)
+                .addScalar("categoryId", LongType.INSTANCE)
+                .addScalar("categoryName", StringType.INSTANCE)
+                .addScalar("commentCount", LongType.INSTANCE)
+                .addScalar("authorFirstName", StringType.INSTANCE)
+                .addScalar("authorLastName", StringType.INSTANCE)
+                .addScalar("authorId", LongType.INSTANCE)
+                .setResultTransformer(Transformers.aliasToBean(SearchDTO.class))
+                .getResultList();
+    }
 
     @Override
     public CourseGroup getByCourse(Long courseId) {
@@ -73,10 +107,8 @@ public class CourseGroupDAOImpl extends GenericDAO<CourseGroup> implements Cours
 
         queryString = queryString + "order by c.groupOrder asc";
 
-        List<Course> results = getCurrentSession().createQuery(queryString, Course.class)
+        return getCurrentSession().createQuery(queryString, Course.class)
                 .setParameter("courseGroupId", courseGroupId).getResultList();
-
-        return results;
     }
 
 

@@ -3,7 +3,9 @@ package com.github.krzysiek199720.codeclass.course.comment.DAO;
 import com.github.krzysiek199720.codeclass.core.db.GenericDAO;
 import com.github.krzysiek199720.codeclass.course.comment.Comment;
 import com.github.krzysiek199720.codeclass.course.comment.response.CommentResponse;
+import com.github.krzysiek199720.codeclass.course.search.dto.SearchDTO;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
+import org.hibernate.transform.Transformers;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StandardBasicTypes;
@@ -35,6 +37,7 @@ public class CommentDAOImpl extends GenericDAO<Comment> implements CommentDAO {
                 .addScalar("linesFrom", IntegerType.INSTANCE)
                 .addScalar("linesTo", IntegerType.INSTANCE)
                 .addScalar("lines", ListArrayType.INSTANCE)
+                .setResultTransformer(Transformers.aliasToBean(CommentResponse.class))
                 .getResultList();
     }
 
