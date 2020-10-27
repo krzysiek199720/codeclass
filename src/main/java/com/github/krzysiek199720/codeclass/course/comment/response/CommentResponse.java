@@ -1,5 +1,6 @@
 package com.github.krzysiek199720.codeclass.course.comment.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 import java.util.List;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Setter
 @Getter
 public class CommentResponse {
@@ -17,7 +19,7 @@ public class CommentResponse {
 
     private String userFirstName;
     private String userLastName;
-    private String userId;
+    private Long userId;
 
     private Integer linesFrom;
     private Integer linesTo;

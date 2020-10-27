@@ -15,8 +15,9 @@ public class CourseDataDAOImpl extends GenericDAO<CourseData> implements CourseD
 
     @Override
     public void deleteOld(Course course) {
+
         getCurrentSession().createNativeQuery(
-                "DELETE FROM course.coursedata WHERE courseid = :id")
+                "UPDATE course.coursedata SET courseid = null WHERE courseid = :id")
                 .setParameter("id", course.getId())
                 .executeUpdate();
     }
@@ -34,8 +35,21 @@ public class CourseDataDAOImpl extends GenericDAO<CourseData> implements CourseD
         return result;
     }
 
+    @Override
+    public List<String> getLines(Long courseDataId, Integer from, Integer to) {
+        return (List<String>)getCurrentSession().createNativeQuery("select string_agg(cde.data, '') " +
+                " from course.coursedata cd " +
+                " inner join course.coursedataline cdl on cdl.coursedataid = cd.id " +
+                " inner join course.coursedataelement cde on cde.coursedatalineid = cdl.id " +
+                " where cd.id = :cdId and cdl.theorder between :from and :to" +
+                " group by cdl.id")
+                .setParameter("cdId", courseDataId)
+                .setParameter("from", from)
+                .setParameter("to", to)
+                .getResultList();
+    }
 
-//----
+    //----
     @Autowired
     public CourseDataDAOImpl(EntityManager entityManager){
         super(entityManager);

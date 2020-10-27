@@ -13,4 +13,6 @@ public interface CourseDataDAO extends DAO<CourseData> {
 
     public List<CourseData> getByCourseId(Long courseId);
 
+    List<String> getLines(Long courseDataId, Integer from, Integer to);
+
 }

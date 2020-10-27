@@ -2,6 +2,7 @@ package com.github.krzysiek199720.codeclass.course.comment;
 
 import com.github.krzysiek199720.codeclass.auth.accesstoken.AccessToken;
 import com.github.krzysiek199720.codeclass.auth.accesstoken.AccessTokenService;
+import com.github.krzysiek199720.codeclass.auth.security.annotation.Secure;
 import com.github.krzysiek199720.codeclass.core.controller.AbstractController;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
 import com.github.krzysiek199720.codeclass.course.comment.response.CommentResponse;
@@ -12,6 +13,8 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/course/{id}/comment")
@@ -37,37 +40,35 @@ public class CommentController extends AbstractController {
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = false, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @GetMapping()
-    public ResponseEntity<CommentResponse> getByCourse(@PathVariable("id") Long courseId, @RequestHeader(value = "Authorization") String token){
+    public ResponseEntity<List<CommentResponse>> getByCourse(@PathVariable("id") Long courseId, @RequestHeader(value = "Authorization") String token){
         AccessToken at = accessTokenService.getAccesstokenByToken(token);
 
-        return okResponse(commentService.getAllComments(courseId, at.getUser()));
+        return okResponse(commentService.getAllComments(courseId, at.getUser() == null ? null : at.getUser()));
     }
 
     //    save
-//    @ApiOperation(value = "saveQuiz", notes = "save quiz")
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 200, message = "OK", response = QuizResponse.class),
-//
-//            @ApiResponse(code = 401, message = "course.notfound", response = ErrorResponse.class),
-//
-//            @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
-//            @ApiResponse(code = 401, message = "course.quiz.unauthorized", response = ErrorResponse.class),
-//            @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class),
-//    })
-//    @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
-//            , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
-//    @Secure(value = "course.quiz.save", exceptionMessage = "course.quiz.unauthorized")
-//    @PostMapping()
-//    public ResponseEntity<QuizResponse> create(@PathVariable("id") Long courseId, @RequestBody QuizSaveApi api, @RequestHeader(value = "Authorization") String token){
-//
-//        AccessToken at = accessTokenService.getAccesstokenByToken(token);
-//        User userAuthor = courseGroupService.getUserByCourseId(courseId);
-//
-//        if(!userAuthor.equals(at.getUser()))
-//            throw new UnauthorizedException("course.quiz.unauthorized");
-//
-//        return okResponse(quizService.saveQuiz(courseId, api));
-//    }
+    @ApiOperation(value = "saveQuiz", notes = "save quiz")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = CommentResponse.class),
+
+            @ApiResponse(code = 401, message = "course.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "course.comment.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "course.coursedata.notfound", response = ErrorResponse.class),
+
+            @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "course.comment.unauthorized", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class),
+    })
+    @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
+            , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
+    @Secure(value = "", exceptionMessage = "course.comment.unauthorized")
+    @PostMapping()
+    public ResponseEntity<CommentResponse> create(@PathVariable("id") Long courseId, @RequestBody CommentSaveApi api, @RequestHeader(value = "Authorization") String token){
+
+        AccessToken at = accessTokenService.getAccesstokenByToken(token);
+
+        return okResponse(commentService.saveComment(courseId, api, at.getUser()));
+    }
 
     //    delete
 //    @ApiOperation(value = "deleteQuiz", notes = "Delete quiz")

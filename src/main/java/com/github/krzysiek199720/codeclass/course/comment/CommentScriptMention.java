@@ -29,7 +29,7 @@ public class CommentScriptMention {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coursedataid", nullable = false)
-    private CourseData user;
+    private CourseData courseData;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "commentid", nullable = false)
