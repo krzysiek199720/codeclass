@@ -42,7 +42,7 @@ public class CourseData {
     @JoinColumn(name = "courseid", nullable = false)
     private Course course;
 
-    @OneToMany(mappedBy = "courseData", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "courseData", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<CourseDataLine> courseDataLineList = new LinkedList<>();
 
 }

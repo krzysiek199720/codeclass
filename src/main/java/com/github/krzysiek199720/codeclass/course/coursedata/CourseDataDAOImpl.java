@@ -22,16 +22,14 @@ public class CourseDataDAOImpl extends GenericDAO<CourseData> implements CourseD
     }
 
     public List<CourseData> getByCourseId(Long courseId){
-//        fixme need a db func for that, or just use hibernate - not sure how fast it is
 
         List<CourseData> result;
 
         result = getCurrentSession()
-                .createQuery("select cd from CourseDataElement cde " +
-                        "inner join fetch cde.courseDataLine cdl " +
-                        "inner join fetch cdl.courseData cd " +
-                        "WHERE cd.course = :courseid", CourseData.class)
+                .createQuery("select cd from CourseData cd " +
+                        "WHERE cd.course.id = :courseid", CourseData.class)
                 .setParameter("courseid", courseId).getResultList();
+
 
         return result;
     }

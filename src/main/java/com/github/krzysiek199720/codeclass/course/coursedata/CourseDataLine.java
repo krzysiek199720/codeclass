@@ -33,6 +33,6 @@ public class CourseDataLine {
     @JoinColumn(name = "coursedataid")
     private CourseData courseData;
 
-    @OneToMany(mappedBy = "courseDataLine", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "courseDataLine", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<CourseDataElement> courseDataElementList = new ArrayList<>();
 }
