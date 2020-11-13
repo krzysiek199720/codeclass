@@ -68,6 +68,8 @@ public class CommentService {
                 throw new UnauthorizedException("course.comment.notfound");
         }
 
+//        TODO sprawdzanie poziomu zagniezdzenia (max 1)
+
         Comment comment = new Comment();
         comment.setId(null);
         comment.setData(api.getData());
