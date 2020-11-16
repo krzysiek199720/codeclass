@@ -91,6 +91,7 @@ public class CourseDataController extends AbstractController {
     })
     @GetMapping("/{id}/data")
     public ResponseEntity<List<CourseData>> getCourseData(@PathVariable Long id){
+        //TODO add check if author and if yes they can use it
         if(!courseService.isPublished(id))
             throw new UnauthorizedException("course.unauthorized");
 

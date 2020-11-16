@@ -14,6 +14,8 @@ import java.util.*;
 @Scope("prototype")
 public class CourseDataParser {
 
+//    FIXME doesnt add last character in string section
+
     private CourseDataCharBuffer data = null;
 
     public int getDataPosition(){return data.getPosition();}

@@ -9,8 +9,8 @@ CREATE TABLE "course"."coursedata"
     "id"                  BIGINT                      NOT NULL    DEFAULT nextval('course.coursedata_seq_id')
     ,"createdat"          TIMESTAMP WITH TIME ZONE    NOT NULL    DEFAULT now()
     ,"type"               VARCHAR(20)                 NOT NULL
-    ,"theorder"              INTEGER                     NOT NULL    DEFAULT 0
-    ,"courseid"           BIGINT                      NOT NULL    REFERENCES course.course (id) DEFAULT 1
+    ,"theorder"              INTEGER                  NOT NULL    DEFAULT 0
+    ,"courseid"           BIGINT                      REFERENCES course.course (id) DEFAULT NULL
 );
 
 ALTER TABLE "course"."coursedata" ADD CONSTRAINT "coursedata_id_pk" PRIMARY KEY (id);

@@ -30,6 +30,7 @@ public class CommentDAOImpl extends GenericDAO<Comment> implements CommentDAO {
                 .addScalar("userFirstName", StringType.INSTANCE)
                 .addScalar("userLastName", StringType.INSTANCE)
                 .addScalar("userId", LongType.INSTANCE)
+                .addScalar("courseDataId", LongType.INSTANCE)
                 .addScalar("linesFrom", IntegerType.INSTANCE)
                 .addScalar("linesTo", IntegerType.INSTANCE)
                 .addScalar("lines", ListArrayType.INSTANCE)

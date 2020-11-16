@@ -21,6 +21,7 @@ public class CommentResponse {
     private String userLastName;
     private Long userId;
 
+    private Long courseDataId;
     private Integer linesFrom;
     private Integer linesTo;
     private List<String> lines;

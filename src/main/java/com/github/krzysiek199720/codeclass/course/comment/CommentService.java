@@ -11,6 +11,7 @@ import com.github.krzysiek199720.codeclass.course.course.CourseDAO;
 import com.github.krzysiek199720.codeclass.course.coursedata.CourseData;
 import com.github.krzysiek199720.codeclass.course.coursedata.CourseDataDAO;
 import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroupDAO;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -66,9 +67,16 @@ public class CommentService {
             root = commentDAO.getById(api.getRoot());
             if(root == null)
                 throw new UnauthorizedException("course.comment.notfound");
+
+//            sprawdzanie poziomu zagniezdzenia (max 1)
+            if(root.getRoot() != null){
+                Comment newRoot = root.getRoot();
+                Hibernate.initialize(newRoot);
+                root = newRoot;
+            }
         }
 
-//        TODO sprawdzanie poziomu zagniezdzenia (max 1)
+
 
         Comment comment = new Comment();
         comment.setId(null);
@@ -80,10 +88,11 @@ public class CommentService {
         comment.setMention(null);
         commentDAO.save(comment);
 
+        CourseData cd = null;
         List<String> lines = null;
 
         if(api.getScriptId() != null){
-            CourseData cd = courseDataDAO.getById(api.getScriptId());
+            cd = courseDataDAO.getById(api.getScriptId());
             if(cd == null)
                 throw new NotFoundException("course.coursedata.notfound");
             CommentScriptMention csm = new CommentScriptMention();
@@ -107,6 +116,7 @@ public class CommentService {
                 user.getFirstname(),
                 user.getLastname(),
                 user.getId(),
+                cd == null ? null : cd.getId(),
                 lines == null ? null : api.getLinesFrom(),
                 lines == null ? null : api.getLinesTo(),
                 lines
