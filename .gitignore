@@ -40,3 +40,5 @@ src/main/resources/application-dbcred.properties
 /logs/
 
 /course/
+
+/src/main/java/com/github/krzysiek199720/codeclass/tmp
