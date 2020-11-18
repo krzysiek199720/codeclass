@@ -131,7 +131,7 @@ public class CourseService {
     }
 
     @Transactional
-    public void publish(Long courseId, User user, Boolean isPublished){
+    public LocalDateTime publish(Long courseId, User user, Boolean isPublished){
         Course course = courseDAO.getById(courseId);
         if(course == null)
             throw new NotFoundException("course.notfound");
@@ -143,7 +143,7 @@ public class CourseService {
 
         if(isPublished){
             if(course.getIsPublished() != null && course.getIsPublished().isBefore(LocalDateTime.now()))
-                return;
+                return course.getIsPublished();
             course.setIsPublished(LocalDateTime.now());
         }else{
             course.setIsPublished(null);
@@ -162,6 +162,7 @@ public class CourseService {
                 textSb,
                 "/course/" + course.getId().toString() // i dont know how to do this dynamically
                 );
+        return course.getIsPublished();
     }
 
     @Transactional

@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @Api(tags={"Course"})
 
 @RestController
@@ -153,7 +155,7 @@ public class CourseController extends AbstractController {
 //    publish - on/off
     @ApiOperation(value = "coursedataSave", notes = "Save course data")
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "NO_CONTENT"),
+            @ApiResponse(code = 200, message = "OK", response = LocalDateTime.class),
 
             @ApiResponse(code = 401, message = "course.unauthorized", response = ErrorResponse.class),
             @ApiResponse(code = 404, message = "course.notfound", response = ErrorResponse.class),
@@ -169,9 +171,9 @@ public class CourseController extends AbstractController {
 
         AccessToken at = accessTokenService.getAccesstokenByToken(token);
 
-        courseService.publish(id, at.getUser(), isPublished);
+        LocalDateTime isPublishedRes = courseService.publish(id, at.getUser(), isPublished);
 
-        return noContent();
+        return okResponse(isPublishedRes);
     }
 
 }
