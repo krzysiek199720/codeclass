@@ -89,11 +89,17 @@ public class CourseDataController extends AbstractController {
             @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class)
     })
+    @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = false, allowEmptyValue = true
+            , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @GetMapping("/{id}/data")
-    public ResponseEntity<List<CourseData>> getCourseData(@PathVariable Long id){
-        //TODO add check if author and if yes they can use it
-        if(!courseService.isPublished(id))
-            throw new UnauthorizedException("course.unauthorized");
+    public ResponseEntity<List<CourseData>> getCourseData(@PathVariable Long id, @RequestHeader(value = "Authorization", required = false) String token){
+
+        AccessToken at = accessTokenService.getAccesstokenByToken(token);
+        User user = courseGroupService.getUserByCourseId(id);
+
+        if(!user.equals(at.getUser()))
+            if(!courseService.isPublished(id))
+                throw new UnauthorizedException("course.unauthorized");
 
         return okResponse(courseDataService.getCourseData(id));
     }
