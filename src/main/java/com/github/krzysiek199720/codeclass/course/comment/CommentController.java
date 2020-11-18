@@ -4,6 +4,7 @@ import com.github.krzysiek199720.codeclass.auth.accesstoken.AccessToken;
 import com.github.krzysiek199720.codeclass.auth.accesstoken.AccessTokenService;
 import com.github.krzysiek199720.codeclass.auth.security.annotation.Secure;
 import com.github.krzysiek199720.codeclass.core.controller.AbstractController;
+import com.github.krzysiek199720.codeclass.core.exceptions.exception.NotFoundException;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
 import com.github.krzysiek199720.codeclass.course.comment.response.CommentResponse;
 import io.swagger.annotations.*;
@@ -40,9 +41,14 @@ public class CommentController extends AbstractController {
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @GetMapping()
     public ResponseEntity<List<CommentResponse>> getByCourse(@PathVariable("id") Long courseId, @RequestHeader(value = "Authorization") String token){
-        AccessToken at = accessTokenService.getAccesstokenByToken(token);
+        AccessToken at;
+        try{
+            at = accessTokenService.getAccesstokenByToken(token);
+        }catch(NotFoundException ignored) {
+            at = null;
+        }
 
-        return okResponse(commentService.getAllComments(courseId, at.getUser() == null ? null : at.getUser()));
+        return okResponse(commentService.getAllComments(courseId, at == null ? null : at.getUser()));
     }
 
     //    save

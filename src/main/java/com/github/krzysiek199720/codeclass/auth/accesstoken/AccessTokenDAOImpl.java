@@ -16,9 +16,17 @@ import java.util.UUID;
 public class AccessTokenDAOImpl extends GenericDAO<AccessToken> implements AccessTokenDAO{
 
 
-    public AccessToken findByToken(String token){
+    public AccessToken findByToken(String tokenString){
+        UUID token;
+        try{
+            token = UUID.fromString(tokenString);
+        }catch (IllegalArgumentException e){
+            return null;
+        }
+
+
         Query<AccessToken> query = getCurrentSession().createQuery("from AccessToken where token = :token", AccessToken.class);
-        query.setParameter("token", UUID.fromString(token));
+        query.setParameter("token", token);
 
         AccessToken accessToken;
         try{
