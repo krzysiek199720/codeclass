@@ -2,6 +2,7 @@ package com.github.krzysiek199720.codeclass.course.quiz.dao;
 
 import com.github.krzysiek199720.codeclass.core.db.GenericDAO;
 import com.github.krzysiek199720.codeclass.course.quiz.QuizScore;
+import com.github.krzysiek199720.codeclass.course.quiz.response.QuizScoreResponse;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -30,12 +31,14 @@ public class QuizScoreDAOImpl extends GenericDAO<QuizScore> implements QuizScore
     }
 
     @Override
-    public Integer getByCourseAndUserId(Long courseId, Long userId) {
-        Query<Integer> query = getCurrentSession().createQuery("select qs.score from QuizScore qs where qs.quiz.course.id = :courseId and qs.user.id = :userId", Integer.class)
+    public QuizScoreResponse getByCourseAndUserId(Long courseId, Long userId) {
+        Query<QuizScoreResponse> query = getCurrentSession()
+                .createQuery("select new com.github.krzysiek199720.codeclass.course.quiz.response.QuizScoreResponse(qs.score, q.maxScore) " +
+                        "from QuizScore qs, Quiz q where q.course.id = :courseId and qs.user.id = :userId", QuizScoreResponse.class)
                 .setParameter("courseId", courseId)
                 .setParameter("userId", userId);
 
-        Integer qs;
+        QuizScoreResponse qs;
         try{
             qs = query.getSingleResult();
         } catch(NoResultException exc){

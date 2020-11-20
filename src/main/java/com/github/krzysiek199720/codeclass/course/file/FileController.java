@@ -89,7 +89,7 @@ public class FileController extends AbstractController {
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @Secure(value = "course.file.create", exceptionMessage = "course.file.unauthorized")
-    @PostMapping("/file/{id}")
+    @GetMapping("/file/{id}")
     public ResponseEntity<byte[]> create(@PathVariable("id") Long id,
                                        @RequestHeader(value = "Authorization") String token) throws IOException {
 

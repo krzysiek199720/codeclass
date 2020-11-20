@@ -10,6 +10,7 @@ import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorRespons
 import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroupService;
 import com.github.krzysiek199720.codeclass.course.quiz.api.QuizSaveApi;
 import com.github.krzysiek199720.codeclass.course.quiz.response.QuizResponse;
+import com.github.krzysiek199720.codeclass.course.quiz.response.QuizScoreResponse;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -126,7 +127,7 @@ public class QuizController extends AbstractController {
 
     @ApiOperation(value = "getQuizScore", notes = "get quiz score")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = Integer.class),
+            @ApiResponse(code = 200, message = "OK", response = QuizScoreResponse.class),
 
             @ApiResponse(code = 401, message = "course.notfound", response = ErrorResponse.class),
 
@@ -137,7 +138,7 @@ public class QuizController extends AbstractController {
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @GetMapping("/score")
-    public ResponseEntity<Integer> getScore(@PathVariable("id") Long courseId, @RequestHeader(value = "Authorization") String token){
+    public ResponseEntity<QuizScoreResponse> getScore(@PathVariable("id") Long courseId, @RequestHeader(value = "Authorization") String token){
 
         AccessToken at = accessTokenService.getAccesstokenByToken(token);
 

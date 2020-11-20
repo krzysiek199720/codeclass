@@ -12,6 +12,7 @@ import com.github.krzysiek199720.codeclass.course.quiz.dao.QuizDAO;
 import com.github.krzysiek199720.codeclass.course.quiz.dao.QuizQuestionDAO;
 import com.github.krzysiek199720.codeclass.course.quiz.dao.QuizScoreDAO;
 import com.github.krzysiek199720.codeclass.course.quiz.response.QuizResponse;
+import com.github.krzysiek199720.codeclass.course.quiz.response.QuizScoreResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -132,7 +133,7 @@ public class QuizService {
         quizScoreDAO.save(quizScore);
     }
 
-    public Integer getScore(Long courseId, User user) {
+    public QuizScoreResponse getScore(Long courseId, User user) {
         return quizScoreDAO.getByCourseAndUserId(courseId, user.getId());
     }
 }
