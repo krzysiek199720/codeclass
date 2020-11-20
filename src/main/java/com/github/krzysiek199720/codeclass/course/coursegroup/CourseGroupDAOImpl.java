@@ -17,6 +17,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,7 +27,11 @@ public class CourseGroupDAOImpl extends GenericDAO<CourseGroup> implements Cours
 
     @Override
     public List<SearchDTO> search(String searchQuery, List<CourseComplexity> complexities, Long userId) {
-        Object[] complex = complexities.stream().map(x -> x.toString()).toArray();
+        if(complexities == null || complexities.size() > 0){
+            complexities = new ArrayList<>(3);
+            complexities.addAll(Arrays.asList(CourseComplexity.values()));
+        }
+        Object[] complex = complexities.stream().map(Enum::toString).toArray();
 
         return (List<SearchDTO>) getCurrentSession()
                 .createSQLQuery("SELECT * FROM fn_search(:searchQuery, :complexities, :userId)")

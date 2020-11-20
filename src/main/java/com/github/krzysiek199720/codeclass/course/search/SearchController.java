@@ -34,7 +34,7 @@ public class SearchController extends AbstractController {
     @GetMapping()
     public ResponseEntity<List<SearchResponse>> getByCourse(@RequestHeader(value = "Authorization", required = false) String token,
                                                             @RequestParam(required = false) String searchQuery,
-                                                            @RequestParam(required = false)List<CourseComplexity> complexities){
+                                                            @RequestParam(required = false) List<CourseComplexity> complexities){
         AccessToken at = accessTokenService.getAccesstokenByToken(token);
 
         return okResponse(searchService.search(searchQuery, complexities, at == null ? null : at.getUser()));
