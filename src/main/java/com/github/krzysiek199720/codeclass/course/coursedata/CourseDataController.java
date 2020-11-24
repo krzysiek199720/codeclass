@@ -8,6 +8,7 @@ import com.github.krzysiek199720.codeclass.core.controller.AbstractController;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.UnauthorizedException;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
 import com.github.krzysiek199720.codeclass.course.course.CourseService;
+import com.github.krzysiek199720.codeclass.course.coursedata.api.CourseDataApi;
 import com.github.krzysiek199720.codeclass.course.coursedata.parser.exception.response.CourseDataParserParseErrorResponse;
 import com.github.krzysiek199720.codeclass.course.coursedata.parser.exception.response.CourseDataParserTokenizerErrorResponse;
 import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroupService;
@@ -48,8 +49,8 @@ public class CourseDataController extends AbstractController {
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @Secure("")
     @PostMapping("/data/check")
-    public ResponseEntity<List<CourseData>> checkCourseData(String input){
-        return okResponse(courseDataService.parseCourseData(input));
+    public ResponseEntity<List<CourseData>> checkCourseData(@RequestBody CourseDataApi api){
+        return okResponse(courseDataService.parseCourseData(api.getData()));
     }
 
     @ApiOperation(value = "coursedataSave", notes = "Save course data")
@@ -68,7 +69,7 @@ public class CourseDataController extends AbstractController {
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @Secure(value = "course.data.save", exceptionMessage = "course.unauthorized")
     @PostMapping("/{id}/data")
-    public ResponseEntity<List<CourseData>> saveCourseData(@PathVariable Long id, String input, @RequestHeader(value = "Authorization") String token){
+    public ResponseEntity<List<CourseData>> saveCourseData(@PathVariable Long id, @RequestBody CourseDataApi api, @RequestHeader(value = "Authorization") String token){
 
         AccessToken at = accessTokenService.getAccesstokenByToken(token);
         User user = courseGroupService.getUserByCourseId(id);
@@ -76,7 +77,7 @@ public class CourseDataController extends AbstractController {
         if(!user.equals(at.getUser()))
             throw new UnauthorizedException("course.unauthorized");
 
-        return okResponse(courseDataService.saveCourseData(id, input));
+        return okResponse(courseDataService.saveCourseData(id, api.getData()));
     }
 
     @ApiOperation(value = "get_coursedata", notes = "Get coursedata")
@@ -102,5 +103,26 @@ public class CourseDataController extends AbstractController {
                 throw new UnauthorizedException("course.unauthorized");
 
         return okResponse(courseDataService.getCourseData(id));
+    }
+
+    @ApiOperation(value = "get_coursedata", notes = "Get coursedata")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = String.class),
+
+            @ApiResponse(code = 401, message = "course.unauthorized", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "course.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "course.data.raw.notfound", response = ErrorResponse.class),
+
+            @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class)
+    })
+    @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = false, allowEmptyValue = true
+            , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
+    @GetMapping("/{id}/data/raw")
+    public ResponseEntity<String> getCourseDataRaw(@PathVariable Long id, @RequestHeader(value = "Authorization") String token){
+
+        AccessToken at = accessTokenService.getAccesstokenByToken(token);
+
+        return okResponse(courseDataService.getCourseDataRaw(id, at.getUser()));
     }
 }
