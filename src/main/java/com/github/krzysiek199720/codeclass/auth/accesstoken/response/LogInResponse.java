@@ -23,5 +23,6 @@ public class LogInResponse {
     private String lastName;
     private Long roleId;
     private String roleName;
+    private Boolean isAdmin;
     private Set<Permission> permissions;
 }

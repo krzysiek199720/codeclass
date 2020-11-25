@@ -80,6 +80,7 @@ public class AccessTokenServiceImpl implements AccessTokenService{
                 user.getLastname(),
                 user.getRole().getId(),
                 user.getRole().getName(),
+                user.getRole().getIsAdmin(),
                 user.getRole().getPermissions()
         );
     }
