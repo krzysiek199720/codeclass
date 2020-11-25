@@ -52,7 +52,7 @@ public class RoleController extends AbstractController {
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
-    @GetMapping("/")
+    @GetMapping("")
     @Secure("role.get")
     public ResponseEntity<List<Role>> getAll(){
 
@@ -71,7 +71,7 @@ public class RoleController extends AbstractController {
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
-    @PostMapping("/")
+    @PostMapping("")
     @Secure("role.create")
     public ResponseEntity<Role> create(@RequestBody RoleApi api){
 

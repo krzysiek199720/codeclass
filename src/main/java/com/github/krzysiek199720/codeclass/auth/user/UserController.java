@@ -74,7 +74,7 @@ public class UserController extends AbstractController {
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
-    @GetMapping("/")
+    @GetMapping("")
 
     @Secure("user.get")
     public ResponseEntity<List<UserResponse>> getAll(){
@@ -88,7 +88,7 @@ public class UserController extends AbstractController {
             @ApiResponse(code = 201, message = "CREATED", response = UserResponse.class),
             @ApiResponse(code = 400, message = "auth.user.email.taken", response = ErrorResponse.class),
     })
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<UserResponse> create(@Valid @RequestBody SignUpApi api){
         User user = userService.signUp(api);
 

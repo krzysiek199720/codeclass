@@ -53,6 +53,7 @@ public class RoleServiceImpl implements RoleService{
             role = new Role();
             role.setId(null);
             role.setCreatedAt(LocalDateTime.now());
+            role.setIsAdmin(api.getIsAdmin());
         } else{
             role = getById(id);
             if(role == null)
@@ -69,6 +70,7 @@ public class RoleServiceImpl implements RoleService{
         }
 
         role.setName(api.getName());
+        role.setIsAdmin(api.getIsAdmin());
         role.setPermissions(permissions);
         role.setModifiedAt(role.getCreatedAt());
 

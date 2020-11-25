@@ -38,7 +38,7 @@ public class LanguageController extends AbstractController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = Language.class, responseContainer = "List"),
     })
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<List<Language>> get(){
         return okResponse(languageService.getAll());
     }
@@ -57,7 +57,7 @@ public class LanguageController extends AbstractController {
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @Secure(value = "course.language.create", exceptionMessage = "course.language.unauthorized")
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<Language> create(@RequestBody LanguageSaveApi api){
 
         return okResponse(languageService.createLanguage(api));

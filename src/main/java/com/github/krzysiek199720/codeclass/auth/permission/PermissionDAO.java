@@ -12,5 +12,6 @@ public interface PermissionDAO extends DAO<Permission> {
     public Set<Permission> getAllIn(Set<Long> ids);
 
     public List<Permission> getAll();
+    public List<Permission> getAllOrdered();
 
 }

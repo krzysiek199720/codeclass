@@ -1,5 +1,7 @@
 package com.github.krzysiek199720.codeclass.auth.permission;
 
+import com.github.krzysiek199720.codeclass.auth.permission.response.PermissionResponse;
+
 import java.util.List;
 import java.util.Set;
 
@@ -9,5 +11,5 @@ public interface PermissionService {
 
     public Permission getByValue(String value);
 
-    public List<Permission> getAll();
+    public List<PermissionResponse> getAll();
 }

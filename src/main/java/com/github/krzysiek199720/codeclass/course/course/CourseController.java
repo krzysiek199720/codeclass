@@ -79,7 +79,7 @@ public class CourseController extends AbstractController {
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @Secure(value = "course.save", exceptionMessage = "course.unauthorized")
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<CourseResponse> create(@RequestBody CourseCreateApi api,
                                               @RequestHeader(value = "Authorization") String token){
 

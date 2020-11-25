@@ -30,6 +30,11 @@ public class PermissionDAOImpl extends GenericDAO<Permission> implements Permiss
         return role;
     }
 
+    public List<Permission> getAllOrdered() {
+        Query<Permission> query = getCurrentSession().createQuery("select p from Permission p order by p.group", Permission.class);
+        return query.getResultList();
+    }
+
     public Set<Permission> getAllIn(Set<Long> ids){
         Query<Permission> query = getCurrentSession().createQuery("from Permission where id in :ids", Permission.class)
                 .setParameterList("ids", ids);

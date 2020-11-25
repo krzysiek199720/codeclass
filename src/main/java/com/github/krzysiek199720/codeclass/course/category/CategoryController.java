@@ -41,7 +41,7 @@ public class CategoryController extends AbstractController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = Category.class, responseContainer = "List"),
     })
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<List<Category>> getAll(){
         return okResponse(categoryService.getAll());
     }
@@ -60,7 +60,7 @@ public class CategoryController extends AbstractController {
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @Secure(value = "course.category.create", exceptionMessage = "course.category.unauthorized")
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<Category> create(@RequestBody CategorySaveApi api){
 
         return okResponse(categoryService.createCategory(api));

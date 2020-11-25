@@ -35,6 +35,9 @@ public class Role extends AbstractModel {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "isadmin")
+    private Boolean isAdmin;
+
     //--------------------------------
 
     @ManyToMany(fetch = FetchType.EAGER)

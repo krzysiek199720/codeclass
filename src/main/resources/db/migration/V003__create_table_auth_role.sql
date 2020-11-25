@@ -8,6 +8,7 @@ CREATE TABLE "auth"."role"
 (
     "id"          BIGINT                     NOT NULL    DEFAULT nextval('auth.role_seq_id')
     ,"name"       VARCHAR(50)                NOT NULL
+    ,"isadmin"    BOOLEAN                    NOT NULL    DEFAULT FALSE
     ,"createdat"  TIMESTAMP WITH TIME ZONE   NOT NULL    DEFAULT now()
     ,"modifiedat" TIMESTAMP WITH TIME ZONE   NOT NULL    DEFAULT now()
     ,"deletedat"  TIMESTAMP WITH TIME ZONE
@@ -22,7 +23,7 @@ CREATE UNIQUE INDEX auth_role_iq_unique
 
 --
 
-INSERT INTO auth.role ("id", "name") VALUES (nextval('auth.role_seq_id'), 'superuser') ON CONFLICT DO NOTHING;
+INSERT INTO auth.role ("id", "name", "isadmin") VALUES (nextval('auth.role_seq_id'), 'superuser', TRUE) ON CONFLICT DO NOTHING;
 INSERT INTO auth.role ("id", "name") VALUES (nextval('auth.role_seq_id'), 'user') ON CONFLICT DO NOTHING;
 
 CREATE OR REPLACE FUNCTION defaultRole() RETURNS BIGINT LANGUAGE SQL AS

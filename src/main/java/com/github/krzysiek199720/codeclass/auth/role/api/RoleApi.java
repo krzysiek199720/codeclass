@@ -11,5 +11,6 @@ import java.util.Set;
 @NoArgsConstructor
 public class RoleApi {
     private String name;
+    private Boolean isAdmin;
     private Set<Long> permissions;
 }

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MainController extends AbstractController {
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<TimeResponse> main() {
 
         return okResponse(new TimeResponse(System.currentTimeMillis()));
