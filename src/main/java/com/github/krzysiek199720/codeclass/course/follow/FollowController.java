@@ -56,7 +56,7 @@ public class FollowController extends AbstractController {
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @Secure(value = "", exceptionMessage = "course.follow.unauthorized")
-    @PostMapping("/{id}/follow")
+    @PutMapping("/{id}/follow")
     public ResponseEntity<Object> saveByCourse(@PathVariable("id") Long courseId, Boolean doFollow, @RequestHeader(value = "Authorization") String token){
 
         AccessToken at = accessTokenService.getAccesstokenByToken(token);

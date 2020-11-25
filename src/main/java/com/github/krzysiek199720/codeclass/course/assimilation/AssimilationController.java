@@ -5,6 +5,7 @@ import com.github.krzysiek199720.codeclass.auth.accesstoken.AccessTokenService;
 import com.github.krzysiek199720.codeclass.auth.security.annotation.Secure;
 import com.github.krzysiek199720.codeclass.core.controller.AbstractController;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
+import com.github.krzysiek199720.codeclass.course.assimilation.api.AssimilationApi;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -63,11 +64,11 @@ public class AssimilationController extends AbstractController {
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @Secure(value = "", exceptionMessage = "course.assimilation.unauthorized")
     @PutMapping("/{id}/assimilation")
-    public ResponseEntity<AssimilationValue> create(@PathVariable("id") Long courseId, @RequestBody AssimilationValue value, @RequestHeader(value = "Authorization") String token){
+    public ResponseEntity<AssimilationValue> create(@PathVariable("id") Long courseId, @RequestBody AssimilationApi api, @RequestHeader(value = "Authorization") String token){
 
         AccessToken at = accessTokenService.getAccesstokenByToken(token);
 
-        Assimilation assimilation = assimilationService.updateAssimilation(courseId, value, at.getUser());
+        Assimilation assimilation = assimilationService.updateAssimilation(courseId, api.getValue(), at.getUser());
 
         return okResponse(assimilation.getValue());
     }

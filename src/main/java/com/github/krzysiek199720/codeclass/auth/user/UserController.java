@@ -7,8 +7,10 @@ import com.github.krzysiek199720.codeclass.auth.security.annotation.Secure;
 import com.github.krzysiek199720.codeclass.auth.user.api.ChangeEmailApi;
 import com.github.krzysiek199720.codeclass.auth.user.api.ChangePasswordApi;
 import com.github.krzysiek199720.codeclass.auth.user.api.SignUpApi;
+import com.github.krzysiek199720.codeclass.auth.user.api.UserRoleIdApi;
 import com.github.krzysiek199720.codeclass.auth.user.response.UserResponse;
 import com.github.krzysiek199720.codeclass.core.controller.AbstractController;
+import com.github.krzysiek199720.codeclass.core.exceptions.exception.NotFoundException;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.SessionExpiredException;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.UnauthorizedException;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
@@ -111,9 +113,9 @@ public class UserController extends AbstractController {
     @PutMapping("/{userId}/role")
 
     @Secure("user.role.update")
-    public ResponseEntity<UserResponse> updateRole(@PathVariable Long userId, @RequestBody Long roleId){
+    public ResponseEntity<UserResponse> updateRole(@PathVariable Long userId, @RequestBody UserRoleIdApi api){
 
-        User user = userService.changeRole(userId, roleId);
+        User user = userService.changeRole(userId, api.getRoleId());
         return okResponse(user.toUserResponse());
     }
 
