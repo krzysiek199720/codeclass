@@ -75,7 +75,7 @@ public class LanguageController extends AbstractController {
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
-    @Secure(value = "course.language.update", exceptionMessage = "course.language.unauthorized")
+    @Secure(value = "course.language.create", exceptionMessage = "course.language.unauthorized")
     @PutMapping("/{id}")
     public ResponseEntity<Language> update(@PathVariable Long id,
                                                       @RequestBody LanguageSaveApi api){

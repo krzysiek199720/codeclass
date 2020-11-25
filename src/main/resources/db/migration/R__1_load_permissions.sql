@@ -10,12 +10,9 @@ INSERT INTO "auth"."permission" ("group", "name", "value")
 
          ,('role', 'get_role', 'role.get')
          ,('role', 'create_role', 'role.create')
-         ,('role', 'update_role', 'role.update')
          ,('role', 'delete_role', 'role.delete')
 
          ,('user', 'get_user', 'user.get')
-         ,('user', 'get_user', 'user.passwd')
-         ,('user', 'get_user', 'user.email')
          ,('user', 'delete_user', 'user.delete')
          ,('user', 'update_role_user', 'user.role.update')
 
@@ -29,11 +26,9 @@ INSERT INTO "auth"."permission" ("group", "name", "value")
          ,('course', 'delete_course_group', 'course.group.delete')
 
          ,('language', 'save_language', 'course.language.create')
-         ,('language', 'save_language', 'course.language.update')
          ,('language', 'delete_language', 'course.language.delete')
 
          ,('category', 'save_category', 'course.category.create')
-         ,('category', 'save_category', 'course.category.update')
          ,('category', 'delete_category', 'course.category.delete')
 
          ,('link', 'save_link', 'course.link.create')

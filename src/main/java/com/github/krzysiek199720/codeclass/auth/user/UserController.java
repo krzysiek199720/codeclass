@@ -137,8 +137,7 @@ public class UserController extends AbstractController {
             throw new SessionExpiredException();
 
         if(!at.getUser().getId().equals(userId))
-            if(!securityService.checkPermission(at, "auth.user.passwd"))
-                throw new UnauthorizedException("auth.unauthorized");
+            throw new UnauthorizedException("auth.unauthorized");
 
         userService.changePassword(userId, api);
 
@@ -166,8 +165,7 @@ public class UserController extends AbstractController {
             throw new SessionExpiredException();
 
         if(!at.getUser().getId().equals(userId))
-            if(!securityService.checkPermission(at, "auth.user.email"))
-                throw new UnauthorizedException("auth.unauthorized");
+            throw new UnauthorizedException("auth.unauthorized");
 
         User user = userService.changeEmail(userId, api);
 

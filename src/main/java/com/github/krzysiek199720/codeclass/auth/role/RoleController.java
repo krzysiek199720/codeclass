@@ -93,7 +93,7 @@ public class RoleController extends AbstractController {
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @PutMapping("/{id}")
-    @Secure("role.update")
+    @Secure("role.create")
     public ResponseEntity<Role> update(@PathVariable Long id, @RequestBody RoleApi api){
 
         return okResponse(roleService.save(id, api));

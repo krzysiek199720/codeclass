@@ -78,7 +78,7 @@ public class CategoryController extends AbstractController {
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
-    @Secure(value = "course.category.update", exceptionMessage = "course.category.unauthorized")
+    @Secure(value = "course.category.create", exceptionMessage = "course.category.unauthorized")
     @PutMapping("/{id}")
     public ResponseEntity<Category> update(@PathVariable Long id,
                                            @RequestBody CategorySaveApi api){
