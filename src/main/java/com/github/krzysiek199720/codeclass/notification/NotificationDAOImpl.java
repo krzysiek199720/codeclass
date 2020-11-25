@@ -18,7 +18,7 @@ public class NotificationDAOImpl extends GenericDAO<Notification> implements Not
     public List<Notification> getAllNotifications(Long userId) {
 
         return getCurrentSession()
-                .createQuery("select n from Notification n where n.user.id = :userId group by n.isread", Notification.class)
+                .createQuery("select n from Notification n where n.user.id = :userId order by n.isread, n.id", Notification.class)
                 .setParameter("userId", userId)
                 .getResultList();
     }

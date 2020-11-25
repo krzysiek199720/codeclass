@@ -152,17 +152,19 @@ public class CourseService {
 
         courseDAO.save(course);
 
-        String textSb = "New course: " +
-                course.getTitle() +
-                " by " +
-                user.getFirstname() +
-                " " +
-                user.getLastname();
-        notificationDAO.createNotification(
-                course.getId(),
-                textSb,
-                api.getSlug()
-                );
+        if(course.getIsPublished() != null){
+            String textSb = "New course: " +
+                    course.getTitle() +
+                    " by " +
+                    user.getFirstname() +
+                    " " +
+                    user.getLastname();
+            notificationDAO.createNotification(
+                    course.getId(),
+                    textSb,
+                    api.getSlug()
+                    );
+        }
         return course.getIsPublished();
     }
 
