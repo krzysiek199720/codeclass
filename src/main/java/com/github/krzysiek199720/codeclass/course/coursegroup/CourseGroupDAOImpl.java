@@ -37,7 +37,7 @@ public class CourseGroupDAOImpl extends GenericDAO<CourseGroup> implements Cours
                 .createSQLQuery("SELECT * FROM fn_search(:searchQuery, :complexities, :userId)")
                 .setParameter("searchQuery", searchQuery, StringType.INSTANCE)
                 .setParameter("complexities", complex, StringArrayType.INSTANCE)
-                .setParameter("userId", userId)
+                .setParameter("userId", userId, LongType.INSTANCE)
                 .addScalar("courseGroupId", LongType.INSTANCE)
                 .addScalar("courseGroupName", StringType.INSTANCE)
                 .addScalar("courseCount", LongType.INSTANCE)

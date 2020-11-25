@@ -3,6 +3,7 @@ package com.github.krzysiek199720.codeclass.course.search;
 import com.github.krzysiek199720.codeclass.auth.accesstoken.AccessToken;
 import com.github.krzysiek199720.codeclass.auth.accesstoken.AccessTokenService;
 import com.github.krzysiek199720.codeclass.core.controller.AbstractController;
+import com.github.krzysiek199720.codeclass.core.exceptions.exception.NotFoundException;
 import com.github.krzysiek199720.codeclass.course.course.CourseComplexity;
 import com.github.krzysiek199720.codeclass.course.search.response.SearchResponse;
 import io.swagger.annotations.*;
@@ -35,7 +36,10 @@ public class SearchController extends AbstractController {
     public ResponseEntity<List<SearchResponse>> getByCourse(@RequestHeader(value = "Authorization", required = false) String token,
                                                             @RequestParam(required = false) String searchQuery,
                                                             @RequestParam(required = false) List<CourseComplexity> complexities){
-        AccessToken at = accessTokenService.getAccesstokenByToken(token);
+        AccessToken at = null;
+        try{
+            at = accessTokenService.getAccesstokenByToken(token);
+        }catch (NotFoundException ignored){}
 
         return okResponse(searchService.search(searchQuery, complexities, at == null ? null : at.getUser()));
     }
