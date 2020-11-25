@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface UserService {
 
-    public List<User> getAll();
+    public List<User> getAll(String searchQuery, Long roleId);
 
     public User getById(Long id);
 

@@ -35,6 +35,26 @@ public class UserDAOImpl extends GenericDAO<User> implements UserDAO{
         return query.getSingleResult() > 0;
     }
 
+    public List<User> getAll(String searchQuery, Long roleId) {
+        String baseQuery = "select u from User u where " +
+                "(u.firstname like '%'||:searchQuery||'%' OR " +
+                "u.lastname like '%'||:searchQuery||'%' OR " +
+                "u.email like '%'||:searchQuery||'%'" +
+                ") ";
+        String roleQueryAdd = " AND u.role.id = :roleId";
+
+        Query<User> query = null;
+
+        if(roleId != null){
+            query = getCurrentSession().createQuery(baseQuery + roleQueryAdd, User.class);
+            query.setParameter("roleId", roleId);
+        }else
+            query = getCurrentSession().createQuery(baseQuery, User.class);
+
+        query.setParameter("searchQuery", searchQuery);
+        return query.getResultList();
+    }
+
 //----
     @Autowired
     public UserDAOImpl(EntityManager entityManager){
@@ -46,10 +66,6 @@ public class UserDAOImpl extends GenericDAO<User> implements UserDAO{
         return getCurrentSession().get(User.class, id);
     }
 
-    public List<User> getAll() {
-        Query<User> query = getCurrentSession().createQuery("from User", User.class);
-        return query.getResultList();
-    }
 
     @Override
     public User save(User object) {

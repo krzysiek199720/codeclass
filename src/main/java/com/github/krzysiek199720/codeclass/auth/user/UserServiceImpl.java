@@ -35,8 +35,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Transactional
-    public List<User> getAll(){
-        return (List<User>) userDAO.getAll();
+    public List<User> getAll(String searchQuery, Long roleId){
+        return (List<User>) userDAO.getAll(searchQuery, roleId);
     }
 
     @Transactional

@@ -12,6 +12,6 @@ public interface UserDAO extends DAO<User> {
 
     public boolean isEmailTaken(String email);
 
-    public List<User> getAll();
+    public List<User> getAll(String searchQuery, Long roleId);
 
 }

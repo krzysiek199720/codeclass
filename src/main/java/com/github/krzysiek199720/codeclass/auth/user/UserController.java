@@ -77,9 +77,10 @@ public class UserController extends AbstractController {
     @GetMapping("")
 
     @Secure("user.get")
-    public ResponseEntity<List<UserResponse>> getAll(){
+    public ResponseEntity<List<UserResponse>> getAll(@RequestParam String searchQuery,
+                                                     @RequestParam(required = false) Long roleId){
 
-        List<UserResponse> ret = userService.getAll().stream().map(User::toUserResponse).collect(Collectors.toList());
+        List<UserResponse> ret = userService.getAll(searchQuery, roleId).stream().map(User::toUserResponse).collect(Collectors.toList());
         return okResponse(ret);
     }
 
