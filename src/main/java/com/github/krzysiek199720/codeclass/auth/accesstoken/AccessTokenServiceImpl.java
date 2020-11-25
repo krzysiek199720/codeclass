@@ -79,7 +79,8 @@ public class AccessTokenServiceImpl implements AccessTokenService{
                 user.getFirstname(),
                 user.getLastname(),
                 user.getRole().getId(),
-                user.getRole().getName()
+                user.getRole().getName(),
+                user.getRole().getPermissions()
         );
     }
 

@@ -80,7 +80,7 @@ public class LinkController extends AbstractController {
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
-    @Secure(value = "course.link.update", exceptionMessage = "course.link.unauthorized")
+    @Secure(value = "course.link.save", exceptionMessage = "course.link.unauthorized")
     @PutMapping("/link/{id}")
     public ResponseEntity<Link> update(@PathVariable Long id, @RequestBody LinkSaveApi api, @RequestHeader(value = "Authorization") String token){
 
