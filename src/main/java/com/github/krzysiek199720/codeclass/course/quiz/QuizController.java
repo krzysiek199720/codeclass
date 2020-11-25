@@ -9,6 +9,7 @@ import com.github.krzysiek199720.codeclass.core.exceptions.exception.Unauthorize
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
 import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroupService;
 import com.github.krzysiek199720.codeclass.course.quiz.api.QuizSaveApi;
+import com.github.krzysiek199720.codeclass.course.quiz.api.QuizScoreApi;
 import com.github.krzysiek199720.codeclass.course.quiz.response.QuizResponse;
 import com.github.krzysiek199720.codeclass.course.quiz.response.QuizScoreResponse;
 import io.swagger.annotations.*;
@@ -116,11 +117,11 @@ public class QuizController extends AbstractController {
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @PostMapping("/score")
-    public ResponseEntity<Object> saveScore(@PathVariable("id") Long courseId, Integer score, @RequestHeader(value = "Authorization") String token){
+    public ResponseEntity<Object> saveScore(@PathVariable("id") Long courseId, @RequestBody QuizScoreApi api, @RequestHeader(value = "Authorization") String token){
 
         AccessToken at = accessTokenService.getAccesstokenByToken(token);
 
-        quizService.setScore(courseId, score, at.getUser());
+        quizService.setScore(courseId, api.getScore(), at.getUser());
 
         return noContent();
     }
