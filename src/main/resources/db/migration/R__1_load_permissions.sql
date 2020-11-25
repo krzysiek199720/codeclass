@@ -9,7 +9,7 @@ INSERT INTO "auth"."permission" ("group", "name", "value")
     ('permission', 'get_permission', 'permission.get')
 
          ,('role', 'get_role', 'role.get')
-         ,('role', 'create_role', 'role.create')
+         ,('role', 'save_role', 'role.create')
          ,('role', 'delete_role', 'role.delete')
 
          ,('user', 'get_user', 'user.get')
