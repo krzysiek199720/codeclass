@@ -51,6 +51,24 @@ public class CourseGroupController extends AbstractController {
         return okResponse(courseGroupService.getById(id, user));
     }
 
+    //    Get by author
+    @ApiOperation(value = "getCourseGroup", notes = "Get course group")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = CourseGroupResponse.class, responseContainer = "List"),
+
+            @ApiResponse(code = 404, message = "course.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "course.unauthorized", response = ErrorResponse.class),
+    })
+    @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
+            , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
+    @GetMapping("/user")
+    @Secure(value = "", exceptionMessage = "course.group.unauthorized")
+    public ResponseEntity<List<CourseGroupResponse>> getByAuthor(@RequestHeader(value = "Authorization") String token){
+        User user = accessTokenService.getAccesstokenByToken(token).getUser();
+
+        return okResponse(courseGroupService.getByUser(user));
+    }
+
     //    save
     @ApiOperation(value = "createCourseGroup", notes = "create coursegroup")
     @ApiResponses(value = {

@@ -53,6 +53,13 @@ public class CourseGroupService {
     }
 
     @Transactional
+    public List<CourseGroupResponse> getByUser(User user) {
+        List<CourseGroup> courseGroupList = courseGroupDAO.getAllByAuthor(user.getId());
+
+        return courseGroupList.stream().map(e -> new CourseGroupResponse(e, true, null)).collect(Collectors.toList());
+    }
+
+    @Transactional
     public CourseGroupResponse createCourseGroup(CourseGroupSaveApi api, User author){
         CourseGroup courseGroup = new CourseGroup();
 

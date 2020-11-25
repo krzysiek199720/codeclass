@@ -56,6 +56,13 @@ public class CourseGroupDAOImpl extends GenericDAO<CourseGroup> implements Cours
     }
 
     @Override
+    public List<CourseGroup> getAllByAuthor(Long userId) {
+        return getCurrentSession().createQuery("select cg from CourseGroup cg where cg.user.id = :userId order by cg.id desc", CourseGroup.class)
+                .setParameter("userId", userId)
+                .getResultList();
+    }
+
+    @Override
     public CourseGroup getByCourse(Long courseId) {
         Query<CourseGroup> query= getCurrentSession()
                 .createQuery("select cg from CourseGroup cg inner join Course c ON c.courseGroup=cg.id where c.id = :courseid", CourseGroup.class)

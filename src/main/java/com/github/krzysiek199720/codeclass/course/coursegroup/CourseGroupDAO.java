@@ -13,6 +13,7 @@ public interface CourseGroupDAO extends DAO<CourseGroup> {
     public User getUserByCourseGroupId(Long courseGroupId);
     public List<Course> getCourses(Long courseGroupId, boolean showUnpublished);
     CourseGroup getByCourse(Long courseId);
+    List<CourseGroup> getAllByAuthor(Long userId);
 
     List<SearchDTO> search(String searchQuery, List<CourseComplexity> complexities, Long userId);
 }
