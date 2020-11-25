@@ -7,6 +7,7 @@ import com.github.krzysiek199720.codeclass.course.category.Category;
 import com.github.krzysiek199720.codeclass.course.category.CategoryDAO;
 import com.github.krzysiek199720.codeclass.course.course.api.CourseCreateApi;
 import com.github.krzysiek199720.codeclass.course.course.api.CourseUpdateApi;
+import com.github.krzysiek199720.codeclass.course.course.api.PublishApi;
 import com.github.krzysiek199720.codeclass.course.course.response.CourseResponse;
 import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroup;
 import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroupDAO;
@@ -131,7 +132,7 @@ public class CourseService {
     }
 
     @Transactional
-    public LocalDateTime publish(Long courseId, User user, Boolean isPublished){
+    public LocalDateTime publish(Long courseId, User user, PublishApi api){
         Course course = courseDAO.getById(courseId);
         if(course == null)
             throw new NotFoundException("course.notfound");
@@ -141,7 +142,7 @@ public class CourseService {
         if(!author.equals(user))
             throw new UnauthorizedException("course.unauthorized");
 
-        if(isPublished){
+        if(api.getIsPublished()){
             if(course.getIsPublished() != null && course.getIsPublished().isBefore(LocalDateTime.now()))
                 return course.getIsPublished();
             course.setIsPublished(LocalDateTime.now());
@@ -160,7 +161,7 @@ public class CourseService {
         notificationDAO.createNotification(
                 course.getId(),
                 textSb,
-                "/course/" + course.getId().toString() // i dont know how to do this dynamically
+                api.getSlug()
                 );
         return course.getIsPublished();
     }

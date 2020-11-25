@@ -9,6 +9,7 @@ import com.github.krzysiek199720.codeclass.core.exceptions.exception.Unauthorize
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
 import com.github.krzysiek199720.codeclass.course.course.api.CourseCreateApi;
 import com.github.krzysiek199720.codeclass.course.course.api.CourseUpdateApi;
+import com.github.krzysiek199720.codeclass.course.course.api.PublishApi;
 import com.github.krzysiek199720.codeclass.course.course.response.CourseResponse;
 import com.github.krzysiek199720.codeclass.course.coursedata.CourseDataService;
 import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroupService;
@@ -167,11 +168,11 @@ public class CourseController extends AbstractController {
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @Secure(value = "course.publish", exceptionMessage = "course.unauthorized")
     @PutMapping("/{id}/publish")
-    public ResponseEntity<Object> publish(@PathVariable Long id, Boolean isPublished, @RequestHeader(value = "Authorization") String token){
+    public ResponseEntity<Object> publish(@PathVariable Long id, @RequestBody PublishApi api, @RequestHeader(value = "Authorization") String token){
 
         AccessToken at = accessTokenService.getAccesstokenByToken(token);
 
-        LocalDateTime isPublishedRes = courseService.publish(id, at.getUser(), isPublished);
+        LocalDateTime isPublishedRes = courseService.publish(id, at.getUser(), api);
 
         return okResponse(isPublishedRes);
     }
