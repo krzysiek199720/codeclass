@@ -27,7 +27,7 @@ public class CourseGroupDAOImpl extends GenericDAO<CourseGroup> implements Cours
 
     @Override
     public List<SearchDTO> search(String searchQuery, List<CourseComplexity> complexities, Long userId) {
-        if(complexities == null || complexities.size() > 0){
+        if(complexities == null || complexities.size() == 0){
             complexities = new ArrayList<>(3);
             complexities.addAll(Arrays.asList(CourseComplexity.values()));
         }

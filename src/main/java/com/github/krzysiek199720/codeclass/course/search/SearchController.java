@@ -41,6 +41,8 @@ public class SearchController extends AbstractController {
             at = accessTokenService.getAccesstokenByToken(token);
         }catch (NotFoundException ignored){}
 
+
+
         return okResponse(searchService.search(searchQuery, complexities, at == null ? null : at.getUser()));
     }
 
