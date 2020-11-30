@@ -29,6 +29,21 @@ public class CourseDAOImpl extends GenericDAO<Course> implements CourseDAO {
         }
         return res;
     }
+
+    public Course getByCourseDataId(Long id){
+        Query<Course> query = getCurrentSession().createQuery("select distinct c from Course c " +
+                        "inner join CourseData cd on cd.course.id = c.id " +
+                        " where cd.id = :cdId"
+                , Course.class)
+                .setParameter("cdId", id);
+        Course res;
+        try{
+            res = query.getSingleResult();
+        } catch(NoResultException exc){
+            return null;
+        }
+        return res;
+    }
 //----
     @Autowired
     public CourseDAOImpl(EntityManager entityManager){

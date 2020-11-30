@@ -125,4 +125,25 @@ public class CourseDataController extends AbstractController {
 
         return okResponse(courseDataService.getCourseDataRaw(id, at.getUser()));
     }
+
+    @ApiOperation(value = "get_coursedata_plain", notes = "Get coursedata lines as plain text")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = String.class, responseContainer = "List"),
+
+            @ApiResponse(code = 401, message = "course.unauthorized", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "course.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "course.data.raw.notfound", response = ErrorResponse.class),
+
+            @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class)
+    })
+    @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = false, allowEmptyValue = true
+            , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
+    @GetMapping("/data/{id}/plain")
+    public ResponseEntity<List<String>> getCourseDataPlain(@PathVariable Long id, @RequestHeader(value = "Authorization") String token){
+
+        AccessToken at = accessTokenService.getAccesstokenByToken(token);
+
+        return okResponse(courseDataService.getCourseDataPlain(id, at.getUser()));
+    }
 }

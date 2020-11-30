@@ -136,4 +136,19 @@ public class CourseDataService {
         }
     }
 
+    @Transactional
+    public List<String> getCourseDataPlain(Long courseDataId, User user){
+        Course course = courseDAO.getByCourseDataId(courseDataId);
+
+        if(course == null)
+            throw new NotFoundException("course.notfound");
+
+        User author = courseGroupDAO.getUserByCourseId(course.getId());
+        if(!author.equals(user))
+            if(course.getIsPublished() == null)
+                throw new UnauthorizedException("course.data.unauthorized");
+
+        return courseDataDAO.getLines(courseDataId);
+    }
+
 }

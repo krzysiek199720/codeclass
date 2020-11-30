@@ -48,6 +48,17 @@ public class CourseDataDAOImpl extends GenericDAO<CourseData> implements CourseD
                 .getResultList();
     }
 
+    public List<String> getLines(Long courseDataId){
+        return (List<String>)getCurrentSession().createNativeQuery("select string_agg(cde.data, '') " +
+                " from course.coursedata cd " +
+                " inner join course.coursedataline cdl on cdl.coursedataid = cd.id " +
+                " inner join course.coursedataelement cde on cde.coursedatalineid = cdl.id " +
+                " where cd.id = :cdId " +
+                " group by cdl.id")
+                .setParameter("cdId", courseDataId)
+                .getResultList();
+    }
+
     //----
     @Autowired
     public CourseDataDAOImpl(EntityManager entityManager){
