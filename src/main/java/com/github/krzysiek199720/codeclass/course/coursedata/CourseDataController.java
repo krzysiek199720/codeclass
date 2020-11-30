@@ -9,6 +9,7 @@ import com.github.krzysiek199720.codeclass.core.exceptions.exception.Unauthorize
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
 import com.github.krzysiek199720.codeclass.course.course.CourseService;
 import com.github.krzysiek199720.codeclass.course.coursedata.api.CourseDataApi;
+import com.github.krzysiek199720.codeclass.course.coursedata.response.CourseDataResponse;
 import com.github.krzysiek199720.codeclass.course.coursedata.parser.exception.response.CourseDataParserParseErrorResponse;
 import com.github.krzysiek199720.codeclass.course.coursedata.parser.exception.response.CourseDataParserTokenizerErrorResponse;
 import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroupService;
@@ -82,7 +83,7 @@ public class CourseDataController extends AbstractController {
 
     @ApiOperation(value = "get_coursedata", notes = "Get coursedata")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = CourseData.class, responseContainer = "List"),
+            @ApiResponse(code = 200, message = "OK", response = CourseDataResponse.class, responseContainer = "List"),
 
             @ApiResponse(code = 401, message = "course.unauthorized", response = ErrorResponse.class),
             @ApiResponse(code = 404, message = "course.notfound", response = ErrorResponse.class),
@@ -93,7 +94,7 @@ public class CourseDataController extends AbstractController {
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = false, allowEmptyValue = true
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @GetMapping("/{id}/data")
-    public ResponseEntity<List<CourseData>> getCourseData(@PathVariable Long id, @RequestHeader(value = "Authorization", required = false) String token){
+    public ResponseEntity<List<CourseDataResponse>> getCourseData(@PathVariable Long id, @RequestHeader(value = "Authorization", required = false) String token){
 
         AccessToken at = accessTokenService.getAccesstokenByToken(token);
         User user = courseGroupService.getUserByCourseId(id);

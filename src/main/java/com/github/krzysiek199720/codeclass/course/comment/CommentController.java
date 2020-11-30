@@ -52,7 +52,7 @@ public class CommentController extends AbstractController {
     }
 
     //    save
-    @ApiOperation(value = "saveQuiz", notes = "save quiz")
+    @ApiOperation(value = "saveComment", notes = "save comment")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = CommentResponse.class),
 

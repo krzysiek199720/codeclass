@@ -10,6 +10,7 @@ import com.github.krzysiek199720.codeclass.course.coursedata.parser.ParserResult
 import com.github.krzysiek199720.codeclass.course.coursedata.parser.ParserState;
 import com.github.krzysiek199720.codeclass.course.coursedata.parser.exception.exception.CourseDataParserParseErrorException;
 import com.github.krzysiek199720.codeclass.course.coursedata.parser.exception.exception.CourseDataParserTokenizerErrorException;
+import com.github.krzysiek199720.codeclass.course.coursedata.response.CourseDataResponse;
 import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroupDAO;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -111,9 +113,24 @@ public class CourseDataService {
     }
 
     @Transactional
-    public List<CourseData> getCourseData(Long courseId){
+    public List<CourseDataResponse> getCourseData(Long courseId){
+        List<CourseData> courseDataList = courseDataDAO.getByCourseId(courseId);
 
-        return courseDataDAO.getByCourseId(courseId);
+        List<CourseDataResponse> response = new ArrayList<>(courseDataList.size());
+        for(CourseData cd : courseDataList){
+            CourseDataResponse res = new CourseDataResponse();
+            res.setId(cd.getId());
+            res.setType(cd.getType());
+            res.setOrder(cd.getOrder());
+            res.setCourseDataLineList(cd.getCourseDataLineList());
+
+            if(res.getType().equals(CourseDataType.CODE))
+                res.setLinesPlain(courseDataDAO.getLines(res.getId()));
+            else
+                res.setLinesPlain(new ArrayList<>());
+            response.add(res);
+        }
+        return response;
     }
 
     @Transactional
