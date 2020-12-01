@@ -131,8 +131,46 @@ public class CourseDataParserTests {
         Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
 
         List<CourseData> cd = parser.parse();
-        Assert.state(parser.getResultState() == ParserResultState.ERROR_INDENT, "Parser result should end with success");
+        Assert.state(parser.getResultState() == ParserResultState.ERROR_INDENT, "Parser result should end with error");
         Assert.isNull(cd,"Parser results should not be null");
+    }
+
+    @Test
+    void parserIndentNo(@Autowired CourseDataParser parser) {
+        String testCase = "<code> " +
+                "<line indent=\"\"> " +
+                "Here is where magic happens. " +
+                "<element desc=\"Description of magic\"> " +
+                "Magic is awesome\\<\\<>! " +
+                "</element> " +
+                "</line> " +
+                "</code>";
+
+        parser.tokenize(testCase);
+        Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
+
+        List<CourseData> cd = parser.parse();
+        Assert.state(parser.getResultState() == ParserResultState.SUCCESS, "Parser result should end with success");
+        Assert.notNull(cd,"Parser results should not be null");
+    }
+
+    @Test
+    void parserDescriptionNo(@Autowired CourseDataParser parser) {
+        String testCase = "<code> " +
+                "<line indent=\"1\"> " +
+                "Here is where magic happens. " +
+                "<element desc=\"\"> " +
+                "Magic is awesome\\<\\<>! " +
+                "</element> " +
+                "</line> " +
+                "</code>";
+
+        parser.tokenize(testCase);
+        Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
+
+        List<CourseData> cd = parser.parse();
+        Assert.state(parser.getResultState() == ParserResultState.SUCCESS, "Parser result should end with success");
+        Assert.notNull(cd,"Parser results should not be null");
     }
 
     @Test

@@ -364,8 +364,12 @@ public class CourseDataParser {
                             if(nextIndex.type == ElementType.ELEMENT_DESCRIPTION){
                                 ++resultIndex;
 //                                desc
-                                String descData = new String(data.getData(), nextIndex.position, nextIndex.length).replace("\\<", "<");
-                                element.setDescription(descData);
+                                if(nextIndex.length != 0){
+                                    String descData = new String(data.getData(), nextIndex.position, nextIndex.length).replace("\\<", "<");
+                                    element.setDescription(descData);
+                                } else{
+                                    element.setDescription(null);
+                                }
                                 try{
                                     nextIndex = indexBuffer.indexes.get(resultIndex+1);
                                 }catch (IndexOutOfBoundsException exception){
@@ -464,11 +468,13 @@ public class CourseDataParser {
                         try{
                             if(indexBuffer.indexes.get(resultIndex+1).type == ElementType.LINE_INDENT){
                                 ++resultIndex;
-                                Index indexIndent = indexBuffer.indexes.get(resultIndex);
-                                Integer indent = Integer.parseInt(
-                                        new String(data.getData(), indexIndent.position, indexIndent.length)
-                                );
-                                line.setIndent(indent);
+                                if(indexBuffer.indexes.get(resultIndex).length != 0){
+                                    Index indexIndent = indexBuffer.indexes.get(resultIndex);
+                                    Integer indent = Integer.parseInt(
+                                            new String(data.getData(), indexIndent.position, indexIndent.length)
+                                    );
+                                    line.setIndent(indent);
+                                }
                             }
                         }catch (IndexOutOfBoundsException exception){
                             resultState = ParserResultState.ERROR_MISSING_LINE_END;
