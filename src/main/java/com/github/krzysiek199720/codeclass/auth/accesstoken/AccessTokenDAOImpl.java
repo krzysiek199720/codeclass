@@ -20,7 +20,7 @@ public class AccessTokenDAOImpl extends GenericDAO<AccessToken> implements Acces
         UUID token;
         try{
             token = UUID.fromString(tokenString);
-        }catch (IllegalArgumentException e){
+        }catch (IllegalArgumentException | NullPointerException e){
             return null;
         }
 
