@@ -47,9 +47,13 @@ public class CourseGroupService {
         User author = courseGroup.getUser();
         Hibernate.initialize(author);
 
-        Follow follow = followDAO.getByCourseGroupId(courseGroup.getId(), user.getId());
+        Follow follow = null;
+        if(user != null)
+            follow = followDAO.getByCourseGroupId(courseGroup.getId(), user.getId());
 
-        return new CourseGroupResponse(courseGroup, author.equals(user), follow != null);
+        boolean isFollowing = follow != null;
+
+        return new CourseGroupResponse(courseGroup, author.equals(user), isFollowing);
     }
 
     @Transactional
@@ -109,9 +113,13 @@ public class CourseGroupService {
 
         List<Course> result = courseGroupDAO.getCourses(courseGroupId, showUnpublished);
 
-        Follow follow = followDAO.getByCourseGroupId(courseGroup.getId(), user.getId());
+        Follow follow = null;
+        if(user != null)
+            follow = followDAO.getByCourseGroupId(courseGroup.getId(), user.getId());
+
+        boolean isFollowing = follow != null;
 
         final boolean isAuthor = showUnpublished;
-        return result.stream().map(c -> new CourseResponseNoGroup(c, isAuthor, follow != null)).collect(Collectors.toList());
+        return result.stream().map(c -> new CourseResponseNoGroup(c, isAuthor, isFollowing)).collect(Collectors.toList());
     }
 }
