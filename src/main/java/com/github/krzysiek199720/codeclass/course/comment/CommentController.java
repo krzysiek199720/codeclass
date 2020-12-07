@@ -40,7 +40,7 @@ public class CommentController extends AbstractController {
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = false, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
     @GetMapping()
-    public ResponseEntity<List<CommentResponse>> getByCourse(@PathVariable("id") Long courseId, @RequestHeader(value = "Authorization") String token){
+    public ResponseEntity<List<CommentResponse>> getByCourse(@PathVariable("id") Long courseId, @RequestHeader(value = "Authorization", required = false) String token){
         AccessToken at;
         try{
             at = accessTokenService.getAccesstokenByToken(token);

@@ -5,6 +5,7 @@ import com.github.krzysiek199720.codeclass.auth.accesstoken.AccessTokenService;
 import com.github.krzysiek199720.codeclass.auth.security.annotation.Secure;
 import com.github.krzysiek199720.codeclass.auth.user.User;
 import com.github.krzysiek199720.codeclass.core.controller.AbstractController;
+import com.github.krzysiek199720.codeclass.core.exceptions.exception.NotFoundException;
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.UnauthorizedException;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
 import com.github.krzysiek199720.codeclass.course.course.CourseService;
@@ -96,12 +97,21 @@ public class CourseDataController extends AbstractController {
     @GetMapping("/{id}/data")
     public ResponseEntity<List<CourseDataResponse>> getCourseData(@PathVariable Long id, @RequestHeader(value = "Authorization", required = false) String token){
 
-        AccessToken at = accessTokenService.getAccesstokenByToken(token);
+        AccessToken at = null;
+        try{
+            at = accessTokenService.getAccesstokenByToken(token);
+        } catch (NotFoundException ignored){}
+
         User user = courseGroupService.getUserByCourseId(id);
 
+        if(courseService.isPublished(id)){
+            return okResponse(courseDataService.getCourseData(id));
+        }
+        if(at == null)
+            throw new UnauthorizedException("course.unauthorized");
+
         if(!user.equals(at.getUser()))
-            if(!courseService.isPublished(id))
-                throw new UnauthorizedException("course.unauthorized");
+            throw new UnauthorizedException("course.unauthorized");
 
         return okResponse(courseDataService.getCourseData(id));
     }
