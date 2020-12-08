@@ -52,7 +52,8 @@ public class CourseDataController extends AbstractController {
     @Secure("")
     @PostMapping("/data/check")
     public ResponseEntity<List<CourseData>> checkCourseData(@RequestBody CourseDataApi api){
-        return okResponse(courseDataService.parseCourseData(api.getData()));
+        List<CourseData> res = courseDataService.parseCourseData(api.getData());
+        return okResponse(res);
     }
 
     @ApiOperation(value = "coursedataSave", notes = "Save course data")

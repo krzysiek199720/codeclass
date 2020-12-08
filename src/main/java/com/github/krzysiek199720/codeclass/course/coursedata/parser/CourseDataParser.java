@@ -219,7 +219,10 @@ public class CourseDataParser {
         int startingPosition = data.getPosition();
 
         StringBuilder sb = new StringBuilder();
-        sb.append(data.get());
+        if(data.get() != '\n')
+            sb.append(data.get());
+        else
+            startingPosition += 1;
 
         char c;
         while(data.hasNext()){
@@ -235,7 +238,8 @@ public class CourseDataParser {
         if(sb.toString().trim().equals(""))
             return;
 
-        indexBuffer.addElement(startingPosition, data.getPosition()-startingPosition, ElementType.TEXT);
+//        indexBuffer.addElement(startingPosition, data.getPosition()-startingPosition, ElementType.TEXT);
+        indexBuffer.addElement(startingPosition, sb.length(), ElementType.TEXT);
     }
 
     public List<CourseData> parse(){
