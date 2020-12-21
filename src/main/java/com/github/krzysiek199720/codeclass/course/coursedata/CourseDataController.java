@@ -13,11 +13,17 @@ import com.github.krzysiek199720.codeclass.course.coursedata.api.CourseDataApi;
 import com.github.krzysiek199720.codeclass.course.coursedata.response.CourseDataResponse;
 import com.github.krzysiek199720.codeclass.course.coursedata.parser.exception.response.CourseDataParserParseErrorResponse;
 import com.github.krzysiek199720.codeclass.course.coursedata.parser.exception.response.CourseDataParserTokenizerErrorResponse;
+import com.github.krzysiek199720.codeclass.course.coursedata.response.DataImageResponse;
 import com.github.krzysiek199720.codeclass.course.coursegroup.CourseGroupService;
+import com.github.krzysiek199720.codeclass.course.file.File;
 import io.swagger.annotations.*;
-import org.springframework.http.ResponseEntity;
+import lombok.SneakyThrows;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.websocket.server.PathParam;
+import java.io.IOException;
 import java.util.List;
 
 @Api(tags={"Course Data"})
@@ -158,4 +164,136 @@ public class CourseDataController extends AbstractController {
 
         return okResponse(courseDataService.getCourseDataPlain(id, at.getUser()));
     }
+
+    @SneakyThrows
+    @ApiOperation(value = "get_coursedata_image", notes = "Get coursedata image")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = byte[].class),
+
+            @ApiResponse(code = 401, message = "course.unauthorized", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "course.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "course.data.image.notfound", response = ErrorResponse.class),
+
+            @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class)
+    })
+    @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = false, allowEmptyValue = true
+            , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
+    @GetMapping("/{courseId}/data/image/{image}")
+    public ResponseEntity<byte[]> getCourseDataImage(@PathVariable Long courseId, @PathVariable String image, @RequestHeader(value = "Authorization", required = false) String token){
+
+        AccessToken at = null;
+        try{
+            at = accessTokenService.getAccesstokenByToken(token);
+        } catch (NotFoundException ignored){}
+
+        User user = courseGroupService.getUserByCourseId(courseId);
+
+        if(!courseService.isPublished(courseId)){
+            if(at == null)
+                throw new UnauthorizedException("course.unauthorized");
+
+            if(!user.equals(at.getUser()))
+                throw new UnauthorizedException("course.unauthorized");
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        Image media = courseDataService.getImage(courseId, image);
+        headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+        headers.setContentType(media.getType());
+
+        return new ResponseEntity<>(media.getData(), headers, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "get_coursedata_image_list", notes = "Get coursedata image list")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = DataImageResponse.class, responseContainer = "list"),
+
+            @ApiResponse(code = 401, message = "course.unauthorized", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "course.notfound", response = ErrorResponse.class),
+
+            @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class)
+    })
+    @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = false, allowEmptyValue = true
+            , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
+    @GetMapping("/{courseId}/data/image")
+    public ResponseEntity<List<DataImageResponse>> getCourseDataImageList(@PathVariable Long courseId, @RequestHeader(value = "Authorization", required = false) String token){
+
+        AccessToken at = null;
+        try{
+            at = accessTokenService.getAccesstokenByToken(token);
+        } catch (NotFoundException ignored){}
+
+        User user = courseGroupService.getUserByCourseId(courseId);
+
+        if(!courseService.isPublished(courseId)){
+            if(at == null)
+                throw new UnauthorizedException("course.unauthorized");
+
+            if(!user.equals(at.getUser()))
+                throw new UnauthorizedException("course.unauthorized");
+        }
+
+        return okResponse(courseDataService.getImageList(courseId));
+    }
+
+    //    save
+    @ApiOperation(value = "createDataImage", notes = "create data image")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = DataImageResponse.class),
+
+            @ApiResponse(code = 401, message = "course.notfound", response = ErrorResponse.class),
+
+            @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "course.file.unauthorized", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class),
+    })
+    @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
+            , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
+    @Secure(value = "course.file.create", exceptionMessage = "course.file.unauthorized")
+    @PostMapping("/{courseId}/data/image")
+    public ResponseEntity<DataImageResponse> create(@PathVariable("courseId") Long courseId,
+                                                    @RequestParam("image") String localId,
+                                                    @RequestParam("file") MultipartFile file,
+                                                    @RequestHeader(value = "Authorization") String token) throws IOException {
+
+        AccessToken at = accessTokenService.getAccesstokenByToken(token);
+        User userAuthor = courseGroupService.getUserByCourseId(courseId);
+
+        if(!at.getUser().equals(userAuthor))
+            throw new UnauthorizedException("course.data.unauthorized");
+
+        return okResponse(new DataImageResponse(courseDataService.saveImage(courseId, localId, file)));
+    }
+
+    //    save
+    @ApiOperation(value = "deleteDataImage", notes = "delete data image")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = Object.class),
+
+            @ApiResponse(code = 401, message = "course.notfound", response = ErrorResponse.class),
+
+            @ApiResponse(code = 401, message = "auth.token.notfound", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "course.file.unauthorized", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "auth.session.expired", response = ErrorResponse.class),
+    })
+    @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
+            , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
+    @Secure(value = "course.file.create", exceptionMessage = "course.file.unauthorized")
+    @DeleteMapping("/{courseId}/data/image/{image}")
+    public ResponseEntity<Object> delete(@PathVariable Long courseId, @PathVariable String image,
+                                                    @RequestHeader(value = "Authorization") String token) throws IOException {
+
+        AccessToken at = accessTokenService.getAccesstokenByToken(token);
+        User userAuthor = courseGroupService.getUserByCourseId(courseId);
+
+        if(!at.getUser().equals(userAuthor))
+            throw new UnauthorizedException("course.data.unauthorized");
+
+        courseDataService.deleteImage(courseId, image);
+
+        return noContent();
+    }
+
 }

@@ -1,0 +1,5 @@
+package com.github.krzysiek199720.codeclass.core.exceptions.exception;
+
+public class InvalidInputException extends RuntimeException{
+    public InvalidInputException(String message){ super(message);}
+}

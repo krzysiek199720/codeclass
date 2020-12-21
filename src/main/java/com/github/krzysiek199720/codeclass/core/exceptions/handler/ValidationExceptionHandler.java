@@ -1,6 +1,7 @@
 package com.github.krzysiek199720.codeclass.core.exceptions.handler;
 
 import com.github.krzysiek199720.codeclass.core.exceptions.exception.BadTokenFormatException;
+import com.github.krzysiek199720.codeclass.core.exceptions.exception.InvalidInputException;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ErrorResponse;
 import com.github.krzysiek199720.codeclass.core.exceptions.response.ValidationErrorResponse;
 import org.springframework.core.annotation.Order;
@@ -38,5 +39,13 @@ public class ValidationExceptionHandler {
         ErrorResponse response = new ErrorResponse(HttpStatus.UNAUTHORIZED, "auth.token.bad_format");
 
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleException(InvalidInputException exc){
+
+        ErrorResponse response = new ErrorResponse(HttpStatus.BAD_REQUEST, exc.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }
