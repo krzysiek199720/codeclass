@@ -207,6 +207,42 @@ public class CourseDataParser {
                 }
                 break;
             }
+            case 'i': {
+                sb.append('i');
+                char c;
+                while(data.hasNext()){
+                    c = data.next();
+                    if(c != '>')
+                        sb.append(c);
+                    else
+                        break;
+                }
+                if(data.get() != '>'){
+                    state = ParserState.ERROR;
+                    break;
+                }
+                if(!sb.toString().startsWith("image")){
+                    state = ParserState.ERROR;
+                    break;
+                }
+                //add image index
+                indexBuffer.addElement(startingPosition, data.getPosition()-startingPosition+1, ElementType.IMAGE);
+
+                //find image localId
+                int idIndex = sb.toString().indexOf("id=");
+
+                if(idIndex < 0){
+                    state = ParserState.ERROR;
+                    break;
+                }
+
+                String idString = sb.toString().substring(idIndex+4); // without "
+                int idIndexEnd = idString.indexOf("\"");
+
+                indexBuffer.addElement(startingPosition+idIndex+4+1, data.getPosition() - (startingPosition+idIndex+4+idIndexEnd-1), ElementType.IMAGE_ID);
+
+                break;
+            }
             default: state = ParserState.ERROR;
         }
 
@@ -308,6 +344,10 @@ public class CourseDataParser {
                     resultState = ParserResultState.ERROR_UNEXPECTED_TAG;
                     return null;
                 }
+                if(index.type == ElementType.IMAGE){
+                    resultState = ParserResultState.ERROR_UNEXPECTED_TAG;
+                    return null;
+                }
 
                 if(isLineStarted){
                     if(index.type == ElementType.LINE){
@@ -382,6 +422,10 @@ public class CourseDataParser {
                                     return null;
                                 }
                             } else{
+                                if(index.type == ElementType.IMAGE){
+                                    resultState = ParserResultState.ERROR_UNEXPECTED_TAG;
+                                    return null;
+                                }
                                 element.setDescription(null);
                             }
 
@@ -480,6 +524,10 @@ public class CourseDataParser {
                                     line.setIndent(indent);
                                 }
                             }
+                            if(index.type == ElementType.IMAGE){
+                                resultState = ParserResultState.ERROR_UNEXPECTED_TAG;
+                                return null;
+                            }
                         }catch (IndexOutOfBoundsException exception){
                             resultState = ParserResultState.ERROR_MISSING_LINE_END;
                             return null;
@@ -519,6 +567,48 @@ public class CourseDataParser {
 
             result.getCourseDataLineList().add(line);
             ++resultIndex;
+        }else if(indexBuffer.indexes.get(resultIndex).type == ElementType.IMAGE){
+            result = new CourseData();
+            result.setType(CourseDataType.IMG);
+            Index index = indexBuffer.indexes.get(resultIndex);
+
+            CourseDataLine line = new CourseDataLine();
+
+            String imageLocalId = "";
+
+            try{
+                if(indexBuffer.indexes.get(resultIndex+1).type == ElementType.IMAGE_ID){
+                    ++resultIndex;
+                    if(indexBuffer.indexes.get(resultIndex).length != 0){
+                        Index indexId = indexBuffer.indexes.get(resultIndex);
+                        imageLocalId = new String(data.getData(), indexId.position, indexId.length);
+                    }
+                }
+                else{
+                    resultState = ParserResultState.ERROR_MISSING_IMG_ID;
+                    return null;
+                }
+            }catch (IndexOutOfBoundsException exception){
+                resultState = ParserResultState.ERROR_MISSING_IMG_ID;
+                return null;
+            }
+
+            CourseDataElement element = new CourseDataElement(
+                    0,
+                    0,
+                    imageLocalId,
+                    null,
+                    line
+            );
+            line.getCourseDataElementList().add(element);
+            line.setOrder(0);
+            line.setIndent(0);
+            line.setCourseData(result);
+
+            result.getCourseDataLineList().add(line);
+            ++resultIndex;
+
+            return result;
         }else{
             resultState = ParserResultState.ERROR_UNEXPECTED_TAG;
             return null;

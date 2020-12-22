@@ -10,5 +10,7 @@ public enum ElementType {
     LINE_END,
     ELEMENT,
     ELEMENT_DESCRIPTION,
-    ELEMENT_END
+    ELEMENT_END,
+    IMAGE,
+    IMAGE_ID
 }

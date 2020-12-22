@@ -267,7 +267,7 @@ public class CourseDataController extends AbstractController {
         return okResponse(new DataImageResponse(courseDataService.saveImage(courseId, localId, file)));
     }
 
-    //    save
+    //    delete
     @ApiOperation(value = "deleteDataImage", notes = "delete data image")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = Object.class),

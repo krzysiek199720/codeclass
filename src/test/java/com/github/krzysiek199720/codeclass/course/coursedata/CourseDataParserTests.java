@@ -355,6 +355,68 @@ public class CourseDataParserTests {
     }
 
     @Test
+    void parserImage(@Autowired CourseDataParser parser) {
+        String testCase = "<image id=\"arc\">";
+
+        parser.tokenize(testCase);
+        Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
+
+        List<CourseData> cd = parser.parse();
+        Assert.state(parser.getResultState() == ParserResultState.SUCCESS, "Parser result should end with success");
+    }
+
+    @Test
+    void parserImageNoId(@Autowired CourseDataParser parser) {
+        String testCase = "<image>";
+
+        parser.tokenize(testCase);
+        Assert.state(parser.getState() == ParserState.ERROR, "Parser should end with error");
+    }
+
+    @Test
+    void parserImageInCode(@Autowired CourseDataParser parser) {
+        String testCase = "<code><image id=\"arc\"></code>";
+
+        parser.tokenize(testCase);
+        Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
+
+        List<CourseData> cd = parser.parse();
+        Assert.state(parser.getResultState() == ParserResultState.ERROR_UNEXPECTED_TAG, "Parser result should end with error");
+    }
+
+    @Test
+    void parserImageInLine(@Autowired CourseDataParser parser) {
+        String testCase = "<code><line><image id=\"arc\"></line></code>";
+
+        parser.tokenize(testCase);
+        Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
+
+        List<CourseData> cd = parser.parse();
+        Assert.state(parser.getResultState() == ParserResultState.ERROR_UNEXPECTED_TAG, "Parser result should end with error");
+    }
+    @Test
+    void parserImageInLineEnd(@Autowired CourseDataParser parser) {
+        String testCase = "<code><line>sometext<image id=\"arc\"></line></code>";
+
+        parser.tokenize(testCase);
+        Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
+
+        List<CourseData> cd = parser.parse();
+        Assert.state(parser.getResultState() == ParserResultState.ERROR_UNEXPECTED_TAG, "Parser result should end with error");
+    }
+
+    @Test
+    void parserImageBetweenElements(@Autowired CourseDataParser parser) {
+        String testCase = "<code><line>sometext<image id=\"arc\">sometext</line></code>";
+
+        parser.tokenize(testCase);
+        Assert.state(parser.getState() == ParserState.SUCCESS, "Parser should end with success");
+
+        List<CourseData> cd = parser.parse();
+        Assert.state(parser.getResultState() == ParserResultState.ERROR_UNEXPECTED_TAG, "Parser result should end with error");
+    }
+
+    @Test
     void parserTokenizerUnknownTagCod(@Autowired CourseDataParser parser) {
         String testCase = "<cod> </code>";
         parser.tokenize(testCase);
