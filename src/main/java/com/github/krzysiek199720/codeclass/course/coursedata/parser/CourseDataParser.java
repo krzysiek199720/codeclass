@@ -28,7 +28,7 @@ public class CourseDataParser {
     public int getResultIndexPosition(){
         if(indexBuffer==null)
             return -1;
-        if(indexBuffer.indexes.size() < resultIndex)
+        if(resultIndex < indexBuffer.indexes.size())
             return indexBuffer.indexes.get(resultIndex).position;
         return -1;
     }
@@ -422,7 +422,8 @@ public class CourseDataParser {
                                     return null;
                                 }
                             } else{
-                                if(index.type == ElementType.IMAGE){
+                                if(nextIndex.type == ElementType.IMAGE){
+                                    ++resultIndex;
                                     resultState = ParserResultState.ERROR_UNEXPECTED_TAG;
                                     return null;
                                 }
