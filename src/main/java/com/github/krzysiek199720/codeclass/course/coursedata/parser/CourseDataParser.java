@@ -239,7 +239,11 @@ public class CourseDataParser {
                 String idString = sb.toString().substring(idIndex+4); // without "
                 int idIndexEnd = idString.indexOf("\"");
 
-                indexBuffer.addElement(startingPosition+idIndex+4+1, data.getPosition() - (startingPosition+idIndex+4+idIndexEnd-1), ElementType.IMAGE_ID);
+                int start = startingPosition+idIndex+4+1;
+                int temp = startingPosition+idIndex+4+(idString.length() - idIndexEnd)+1;
+                int end = data.getPosition() - temp;
+
+                indexBuffer.addElement(start, end, ElementType.IMAGE_ID);
 
                 break;
             }
