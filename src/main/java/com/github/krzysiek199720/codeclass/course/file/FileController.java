@@ -88,14 +88,17 @@ public class FileController extends AbstractController {
     })
     @ApiImplicitParam(name = "Authorization", value = "Authorization Token", required = true, allowEmptyValue = false
             , paramType = "header", dataTypeClass = String.class, example = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
-    @Secure(value = "course.file.create", exceptionMessage = "course.file.unauthorized")
     @GetMapping("/file/{id}")
-    public ResponseEntity<byte[]> create(@PathVariable("id") Long id,
-                                       @RequestHeader(value = "Authorization") String token) throws IOException {
+    public ResponseEntity<byte[]> download(@PathVariable("id") Long id,
+                                       @RequestHeader(value = "Authorization", required = false) String token) throws IOException {
 
-        AccessToken at = accessTokenService.getAccesstokenByToken(token);
+        AccessToken at = null;
+        if(token != null && !token.isBlank())
+            try{
+                at = accessTokenService.getAccesstokenByToken(token);
+            } catch (NotFoundException ignored){}
 
-        FileDataHolder result = fileService.downloadFile(id, at.getUser());
+        FileDataHolder result = fileService.downloadFile(id, at == null ? null : at.getUser());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
